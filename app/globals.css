@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --blue-primary: #1e40af;
+  --blue-secondary: #1e3a8a;
+  --orange-accent: #f97316;
 }
 
 @theme inline {
@@ -12,15 +15,101 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-feature-settings: "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
 }
+
+html {
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
+
+/* Curseur pointer pour tous les éléments cliquables */
+button,
+a,
+[role="button"],
+[onclick],
+label[for],
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+.cursor-pointer,
+[class*="hover:"],
+svg:hover {
+  cursor: pointer !important;
+}
+
+/* Boutons avec classes spécifiques */
+button[class*="bg-"],
+button[class*="text-"],
+[class*="hover:bg-"],
+[class*="hover:text-"],
+.group:hover {
+  cursor: pointer !important;
+}
+
+/* SVG dans les boutons et liens */
+a svg,
+button svg,
+[role="button"] svg {
+  cursor: pointer !important;
+}
+
+/* Désactiver le pointer sur les éléments disabled */
+button:disabled,
+input:disabled,
+select:disabled,
+[disabled] {
+  cursor: not-allowed !important;
+}
+
+/* Styles prose pour le contenu Portable Text */
+@layer utilities {
+  .prose {
+    max-width: 65ch;
+  }
+  
+  .prose-lg {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+  
+  .prose-blue a {
+    color: #1e40af;
+    text-decoration: underline;
+  }
+  
+  .prose-blue a:hover {
+    color: #1e3a8a;
+  }
+  
+  .prose-blue strong {
+    color: #1e3a8a;
+    font-weight: 700;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
