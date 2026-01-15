@@ -15,6 +15,7 @@ type Plat = {
   nom: string;
   description: string;
   quantite: number;
+  prix: number;
   image?: string;
   dateAjout: string;
 };
@@ -25,7 +26,8 @@ export default function AdminPlats() {
   const [nom, setNom] = useState("");
   const [description, setDescription] = useState("");
   const [quantite, setQuantite] = useState(0);
-  const [image, setImage] = useState("");
+  const [prix, setPrix] = useState(0);
+  const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [editingPlat, setEditingPlat] = useState<Plat | null>(null);
   const editFormRef = useRef<HTMLDivElement>(null);
@@ -51,14 +53,16 @@ export default function AdminPlats() {
       const id = await uploadPlat({ 
         nom, 
         description, 
-        quantite: Number(quantite), 
-        image 
+        quantite: Number(quantite),
+        prix: Number(prix), 
+        image: image?.name // Temporaire - à remplacer par l'URL après upload
       });
       setMessage(`✅ Plat ajouté avec succès (ID : ${id})`);
       setNom("");
       setDescription("");
       setQuantite(0);
-      setImage("");
+      setPrix(0);
+      setImage(null);
       
       // Rafraîchir la liste
       const data = await getPlats();
@@ -99,6 +103,7 @@ export default function AdminPlats() {
         nom: editingPlat.nom,
         description: editingPlat.description,
         quantite: Number(editingPlat.quantite),
+        prix: Number(editingPlat.prix),
         image: editingPlat.image,
       });
       setPlats((prev) =>
@@ -124,13 +129,24 @@ export default function AdminPlats() {
         {/* Header */}
         <div className="max-w-7xl mx-auto mb-8">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Vente de plats
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Gérer les plats disponibles à la vente
-              </p>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Vente de plats
+                </h1>
+                <p className="text-sm text-gray-600 mt-1">
+                  Gérer les plats disponibles à la vente
+                </p>
+              </div>
+              <Link
+                href="/admin/reservations"
+                className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors flex items-center gap-2"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Voir les réservations
+              </Link>
             </div>
           </div>
         </div>
@@ -204,15 +220,32 @@ export default function AdminPlats() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">
-                  URL de l'image
+                  Prix (€)
                 </label>
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
+                  step="0.01"
                   className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="https://exemple.com/image.jpg"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="Ex: 12.50"
+                  value={prix}
+                  onChange={(e) => setPrix(Number(e.target.value))}
+                  required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-gray-700">
+                  Image du plat
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                  onChange={(e) => setImage(e.target.files?.[0] || null)}
+                />
+                {image && (
+                  <p className="text-xs text-gray-500 mt-1">Fichier sélectionné : {image.name}</p>
+                )}
               </div>
               <div className="flex gap-3 mt-4">
                 <button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors">
@@ -284,14 +317,33 @@ export default function AdminPlats() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">
-                  URL de l'image
+                  Prix (€)
                 </label>
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
+                  step="0.01"
                   className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingPlat.image}
+                  value={editingPlat.prix || 0}
                   onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, image: e.target.value })
+                    setEditingPlat({ ...editingPlat, prix: Number(e.target.value) })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-gray-700">
+                  Image du plat
+                </label>
+                {editingPlat.image && (
+                  <p className="text-xs text-gray-500 mb-2">Image actuelle : {editingPlat.image}</p>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                  onChange={(e) =>
+                    setEditingPlat({ ...editingPlat, image: e.target.files?.[0]?.name || editingPlat.image })
                   }
                 />
               </div>
@@ -330,9 +382,13 @@ export default function AdminPlats() {
                 <p className="text-sm text-gray-700 mb-3">
                   {plat.description}
                 </p>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-3 text-xs text-gray-500">
                   <span>
-                    Quantité disponible: <strong className="text-indigo-600">{plat.quantite}</strong>
+                    Quantité: <strong className="text-indigo-600">{plat.quantite}</strong>
+                  </span>
+                  <span className="text-gray-300">•</span>
+                  <span>
+                    Prix: <strong className="text-green-600">{plat.prix}€</strong>
                   </span>
                 </div>
               </div>

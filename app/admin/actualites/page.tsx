@@ -26,7 +26,7 @@ export default function AdminActualites() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("Actualité");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [editingActualite, setEditingActualite] = useState<Actualite | null>(null);
   const editFormRef = useRef<HTMLDivElement>(null);
@@ -53,13 +53,13 @@ export default function AdminActualites() {
         title, 
         content, 
         category, 
-        image 
+        image: image?.name // Temporaire - à remplacer par l'URL après upload
       });
       setMessage(`✅ Actualité ajoutée avec succès (ID : ${id})`);
       setTitle("");
       setContent("");
       setCategory("Actualité");
-      setImage("");
+      setImage(null);
       
       // Rafraîchir la liste
       const data = await getActualites();
@@ -212,15 +212,17 @@ export default function AdminActualites() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">
-                  URL de l'image
+                  Image de l'actualité
                 </label>
                 <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="https://exemple.com/image.jpg"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                  onChange={(e) => setImage(e.target.files?.[0] || null)}
                 />
+                {image && (
+                  <p className="text-xs text-gray-500 mt-1">Fichier sélectionné : {image.name}</p>
+                )}
               </div>
               <div className="flex gap-3 mt-4">
                 <button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors">
@@ -296,14 +298,17 @@ export default function AdminActualites() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">
-                  URL de l'image
+                  Image de l'actualité
                 </label>
+                {editingActualite.image && (
+                  <p className="text-xs text-gray-500 mb-2">Image actuelle : {editingActualite.image}</p>
+                )}
                 <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingActualite.image}
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                   onChange={(e) =>
-                    setEditingActualite({ ...editingActualite, image: e.target.value })
+                    setEditingActualite({ ...editingActualite, image: e.target.files?.[0]?.name || editingActualite.image })
                   }
                 />
               </div>

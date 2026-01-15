@@ -9,6 +9,7 @@ type Plat = {
   nom: string;
   description: string;
   quantite: number;
+  prix: number;
   image?: string;
   dateAjout: string;
 };
@@ -89,9 +90,9 @@ export default function VentePlatsPage() {
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-wrap gap-8 justify-center">
             {plats.map((plat, index) => (
-              <div key={plat.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all hover:scale-105">
+              <div key={plat.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-all  w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md">
                 <div className="h-48 bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center">
                   <span className="text-8xl">{getRandomIcon(index)}</span>
                 </div>
@@ -102,17 +103,22 @@ export default function VentePlatsPage() {
                   <p className="text-gray-600 mb-4">
                     {plat.description}
                   </p>
-                  <div className="flex items-center gap-2 text-sm mb-4">
-                    {plat.quantite > 0 ? (
-                      <span className="text-green-600 font-semibold flex items-center gap-1">
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {plat.quantite} disponible{plat.quantite > 1 ? 's' : ''}
-                      </span>
-                    ) : (
-                      <span className="text-red-600 font-semibold">Épuisé</span>
-                    )}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-3xl font-bold text-orange-600">
+                      {plat.prix}€
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      {plat.quantite > 0 ? (
+                        <span className="text-green-600 font-semibold flex items-center gap-1">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {plat.quantite} dispo.
+                        </span>
+                      ) : (
+                        <span className="text-red-600 font-semibold">Épuisé</span>
+                      )}
+                    </div>
                   </div>
                   <button 
                     onClick={() => openModal(plat)}
