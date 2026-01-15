@@ -143,7 +143,7 @@ export default function HomePage() {
                 Découvrir notre action en détail →
               </Link>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-gray-200">
+            <div className="relative h-[400px] rounded-s overflow-hidden shadow-xl bg-gray-200">
               <Image 
                 src="/images/v4.jpg" // Remplace par ton image
                 alt="Qui aidons-nous"

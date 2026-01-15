@@ -48,7 +48,7 @@ export default function NousConnaitrePage() {
                 </p>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-blue-100">
+            <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-blue-100">
               <Image 
                 src="/images/distribution.jpg" // Remplace par le nom de ton image
                 alt="Notre histoire AAFD"
@@ -123,7 +123,7 @@ export default function NousConnaitrePage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-orange-100">
+            <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-orange-100">
               <Image
                 src="/images/ensemble.jpg"
                 alt="Nos valeurs"

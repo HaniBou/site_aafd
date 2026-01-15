@@ -66,7 +66,7 @@ export default function ActualitesPage() {
                 <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
                   {actualites[0].category}
                 </span>
-                <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4 mt-3 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
                   {actualites[0].title}
                 </h2>
                 <p className="text-sm text-gray-500 mb-6">
@@ -88,12 +88,12 @@ export default function ActualitesPage() {
       {/* Liste des actualités */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-16 text-center">
             Toutes nos actualités
           </h2>
 
           <div className="space-y-20">
-            {actualites.map((actu, index) => (
+            {actualites.slice(1).map((actu, index) => (
               <div
                 key={actu.id}
                 className={`grid md:grid-cols-2 gap-12 items-center ${
@@ -112,7 +112,7 @@ export default function ActualitesPage() {
                   <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
                     {actu.category}
                   </span>
-                  <h3 className="text-2xl md:text-3xl font-light text-gray-900 mb-3 mt-2 leading-tight">
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 mt-2 leading-tight">
                     {actu.title}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4">

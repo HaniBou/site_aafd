@@ -54,7 +54,7 @@ export default function NotreActionPage() {
                 </div>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-orange-100">
+            <div className="relative h-[400px] rounded overflow-hidden shadow-xl">
               <img
                 src="/images/plats.jpg"
                 alt="Ventes de plats traditionnels"
@@ -70,7 +70,7 @@ export default function NotreActionPage() {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-blue-100 order-2 md:order-1">
+            <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-blue-100 order-2 md:order-1">
               <img
                 src="/images/fete.jpg"
                 alt="Tournoi de pétanque"
@@ -124,7 +124,7 @@ export default function NotreActionPage() {
                 </p>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl bg-green-100">
+            <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-green-100">
               <img
                 src="/images/nature.jpg"
                 alt="Nettoyage Val de Saône"
