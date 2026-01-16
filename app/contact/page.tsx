@@ -15,7 +15,7 @@ export default function ContactPage() {
         {/* Image de fond */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/distribution.jpg"
+            src="/images/hero_contct.jpg"
             alt="Contactez-nous"
             fill
             className="object-cover"

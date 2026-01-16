@@ -49,7 +49,7 @@ export default function VentePlatsPage() {
         {/* Image de fond */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/plats.jpg"
+            src="/images/hero_plts.jpg"
             alt="Nos plats cuisinés"
             fill
             className="object-cover"

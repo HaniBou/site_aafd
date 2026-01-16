@@ -49,7 +49,7 @@ export default function ActualitesPage() {
         {/* Image de fond */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/distribution.jpg"
+            src="/images/hero_ctu.jpg"
             alt="Actualités"
             fill
             className="object-cover"

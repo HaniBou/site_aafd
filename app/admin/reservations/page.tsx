@@ -15,6 +15,8 @@ type Reservation = {
   quantite: number;
   message: string;
   dateReservation: any;
+  emailEnvoye?: boolean;
+  emailErreur?: string | null;
 };
 
 export default function AdminReservationsPage() {
@@ -76,6 +78,48 @@ export default function AdminReservationsPage() {
     }).format(date);
   };
 
+  const exporterCSV = () => {
+    // En-têtes du CSV
+    const headers = ['Plat', 'Quantité', 'Client', 'Email', 'Téléphone', 'Message', 'Date de réservation'];
+    
+    // Créer les lignes de données
+    const lignes = reservations.map(reservation => [
+      reservation.platNom,
+      reservation.quantite.toString(),
+      reservation.clientNom,
+      reservation.clientEmail,
+      reservation.clientTelephone,
+      reservation.message || '',
+      formatDate(reservation.dateReservation)
+    ]);
+
+    // Combiner headers et lignes
+    const csvContent = [
+      headers.join(','),
+      ...lignes.map(ligne => 
+        ligne.map(cell => 
+          // Échapper les virgules et guillemets dans les cellules
+          `"${cell.replace(/"/g, '""')}"`
+        ).join(',')
+      )
+    ].join('\n');
+
+    // Créer un Blob et télécharger
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    // Nom du fichier avec la date actuelle
+    const dateStr = new Date().toISOString().split('T')[0];
+    link.setAttribute('href', url);
+    link.setAttribute('download', `reservations_${dateStr}.csv`);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -102,9 +146,22 @@ export default function AdminReservationsPage() {
                     {reservations.length} réservation{reservations.length > 1 ? 's' : ''} • {Object.keys(reservationsParPlat).length} plat{Object.keys(reservationsParPlat).length > 1 ? 's' : ''}
                   </p>
                 </div>
-                <div className="bg-indigo-50 px-4 py-2 rounded-lg">
-                  <div className="text-xs text-indigo-600 font-medium">Total commandé</div>
-                  <div className="text-2xl font-bold text-indigo-600">{totalGeneral}</div>
+                <div className="flex items-center gap-4">
+                  {reservations.length > 0 && (
+                    <button
+                      onClick={exporterCSV}
+                      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                      Télécharger CSV
+                    </button>
+                  )}
+                  <div className="bg-indigo-50 px-4 py-2 rounded-lg">
+                    <div className="text-xs text-indigo-600 font-medium">Total commandé</div>
+                    <div className="text-2xl font-bold text-indigo-600">{totalGeneral}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,6 +200,23 @@ export default function AdminReservationsPage() {
                           <span className="text-xs text-gray-500">
                             {formatDate(reservation.dateReservation)}
                           </span>
+                          {/* Indicateur d'email */}
+                          {reservation.emailEnvoye === false && (
+                            <div className="flex items-center gap-1 bg-yellow-100 px-2 py-0.5 rounded" title={reservation.emailErreur || "Email non envoyé"}>
+                              <svg className="h-3 w-3 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                              </svg>
+                              <span className="text-xs font-semibold text-yellow-700">Email non envoyé</span>
+                            </div>
+                          )}
+                          {reservation.emailEnvoye === true && (
+                            <div className="flex items-center gap-1 bg-green-100 px-2 py-0.5 rounded">
+                              <svg className="h-3 w-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="text-xs font-semibold text-green-700">Email OK</span>
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex items-start gap-3 mb-3">

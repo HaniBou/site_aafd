@@ -29,19 +29,78 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | "warning" | null>(null);
+  const [emailError, setEmailError] = useState<string>("");
+  const [emailWarning, setEmailWarning] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Fonction de validation d'email
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    setFormData({ ...formData, email });
+    
+    if (email && !validateEmail(email)) {
+      setEmailError("Format d'email invalide");
+    } else {
+      setEmailError("");
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
 
+    // Validation finale de l'email avant envoi
+    if (!validateEmail(formData.email)) {
+      setEmailError("Veuillez entrer une adresse email valide");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // 1. Vérifier et décrémenter la quantité dans Firestore
       await updatePlatQuantite(plat!.id, formData.quantite);
 
-      // 2. Enregistrer la réservation dans Firestore
+      // 2. Envoyer l'email de confirmation d'abord
+      let emailSent = false;
+      let emailErrorMessage = "";
+      
+      try {
+        emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+
+        const templateParams = {
+          plat_nom: plat?.nom,
+          client_nom: formData.nom,
+          client_email: formData.email,
+          client_telephone: formData.telephone,
+          quantite: formData.quantite,
+          message: formData.message || "Aucun message"
+        };
+
+        const response = await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+          templateParams
+        );
+
+        // Vérifier la réponse d'EmailJS
+        if (response.status === 200) {
+          emailSent = true;
+        } else {
+          emailErrorMessage = `Erreur d'envoi (code ${response.status})`;
+        }
+      } catch (emailError: any) {
+        console.error("Erreur EmailJS:", emailError);
+        emailErrorMessage = emailError?.text || "Email invalide ou erreur de serveur";
+      }
+
+      // 3. Enregistrer la réservation dans Firestore avec le statut d'email
       await createReservation({
         platId: plat!.id,
         platNom: plat!.nom,
@@ -50,35 +109,27 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
         clientTelephone: formData.telephone,
         quantite: formData.quantite,
         message: formData.message || "",
+        emailEnvoye: emailSent,
+        emailErreur: emailErrorMessage || null,
       });
-
-      // 3. Envoyer l'email de confirmation
-      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
-
-      const templateParams = {
-        plat_nom: plat?.nom,
-        client_nom: formData.nom,
-        client_email: formData.email,
-        client_telephone: formData.telephone,
-        quantite: formData.quantite,
-        message: formData.message || "Aucun message"
-      };
-
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        templateParams
-      );
 
       setSubmitStatus("success");
       
-      // Fermer le modal et rafraîchir la page après 3 secondes
+      // Si l'email n'a pas pu être envoyé, afficher un avertissement
+      if (!emailSent) {
+        setSubmitStatus("warning");
+        setEmailWarning(emailErrorMessage);
+      }
+      
+      // Fermer le modal et rafraîchir la page après 4 secondes
       setTimeout(() => {
         window.location.reload(); // Pour mettre à jour les quantités affichées
-      }, 3000);
+      }, 4000);
     } catch (error) {
-      console.error("Erreur lors de l'envoi:", error);
+      console.error("Erreur lors de la réservation:", error);
       setSubmitStatus("error");
+      // En cas d'erreur, la quantité n'est normalement pas décrémentée
+      // ou sera remise si l'erreur se produit après la décrémentation
     } finally {
       setIsSubmitting(false);
     }
@@ -135,10 +186,20 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
               id="email"
               required
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+              onChange={handleEmailChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all ${
+                emailError ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="votre@email.com"
             />
+            {emailError && (
+              <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {emailError}
+              </p>
+            )}
           </div>
 
           {/* Téléphone */}
@@ -197,8 +258,28 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <p className="font-semibold text-green-900">Réservation envoyée ! ✅</p>
+                <p className="font-semibold text-green-900">Réservation confirmée ! ✅</p>
                 <p className="text-sm text-green-700 mt-1">Vous recevrez un email de confirmation sous peu.</p>
+              </div>
+            </div>
+          )}
+
+          {submitStatus === "warning" && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start gap-3">
+              <svg className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <p className="font-semibold text-yellow-900">Réservation enregistrée ⚠️</p>
+                <p className="text-sm text-yellow-800 mt-1">
+                  Votre réservation est bien prise en compte, mais l'email de confirmation n'a pas pu être envoyé.
+                </p>
+                <p className="text-xs text-yellow-700 mt-2">
+                  Raison : {emailWarning}
+                </p>
+                <p className="text-sm text-yellow-800 mt-2 font-medium">
+                  💡 L'association vous contactera par téléphone pour confirmer.
+                </p>
               </div>
             </div>
           )}
@@ -216,7 +297,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
           )}
 
           {/* Boutons */}
-          {submitStatus !== "success" && (
+          {submitStatus !== "success" && submitStatus !== "warning" && (
             <div className="flex gap-3 pt-4">
               <button
                 type="button"
@@ -227,7 +308,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !!emailError}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Envoi..." : "Confirmer"}
