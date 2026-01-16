@@ -17,7 +17,7 @@ export default function NousConnaitrePage() {
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Nous connaître
             </h1>
-            <p className="text-xl text-blue-100 leading-relaxed">
+            <p className="text-lg text-blue-100 leading-relaxed">
               L&apos;AAFD accompagne depuis 17 ans des familles réfugiées et des jeunes isolés 
               sur le Val de Saône dans leurs difficultés matérielles et administratives.
             </p>
@@ -68,7 +68,7 @@ export default function NousConnaitrePage() {
             <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
               Notre mission
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Nous organisons tout au long de l&apos;année des événements pour atteindre trois objectifs complémentaires
             </p>
           </div>
@@ -220,7 +220,7 @@ export default function NousConnaitrePage() {
           <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
             Envie d&apos;en savoir plus ?
           </h2>
-          <p className="mb-8 text-xl text-gray-600">
+          <p className="mb-8 text-lg text-gray-600">
             Découvrez nos actions concrètes ou rejoignez notre communauté de bénévoles
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

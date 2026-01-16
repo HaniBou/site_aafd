@@ -23,10 +23,10 @@ export default function ContactPage() {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-2xl">
-            <h1 className="mb-6 text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+            <h1 className="mb-6 text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
               Contactez-nous
             </h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-lg text-slate-600 leading-relaxed">
               Nous sommes là pour vous écouter et vous accompagner.
             </p>
           </div>

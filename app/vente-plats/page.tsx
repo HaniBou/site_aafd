@@ -53,10 +53,10 @@ export default function VentePlatsPage() {
             </svg>
             <span className="text-sm font-semibold">Réservation en ligne</span>
           </div>
-          <h1 className="mb-6 text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             Nos Plats Cuisinés 🍲
           </h1>
-          <p className="mx-auto max-w-3xl text-xl md:text-2xl leading-relaxed text-orange-100">
+          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-orange-100">
             Des plats préparés avec amour pour soutenir nos actions solidaires
           </p>
         </div>
@@ -65,10 +65,10 @@ export default function VentePlatsPage() {
       {/* Introduction */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 sm:text-4xl">
             Une cuisine qui a du cœur
           </h2>
-          <p className="text-xl text-gray-700 leading-relaxed mb-4">
+          <p className="text-lg text-gray-700 leading-relaxed mb-4">
             Nos bénévoles préparent régulièrement des plats faits maison que vous pouvez réserver. 
             En achetant nos plats, vous soutenez directement les actions de l&apos;AAFD auprès des familles en difficulté.
           </p>
@@ -82,10 +82,10 @@ export default function VentePlatsPage() {
       <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 sm:text-4xl">
               Nos Plats du Moment
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg text-gray-600">
               Découvrez nos spécialités préparées avec des produits frais
             </p>
           </div>
@@ -98,13 +98,13 @@ export default function VentePlatsPage() {
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-bold text-gray-900">{plat.nom}</h3>
+                    <h3 className="text-xl font-bold text-gray-900">{plat.nom}</h3>
                   </div>
                   <p className="text-gray-600 mb-4">
                     {plat.description}
                   </p>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="text-3xl font-bold text-orange-600">
+                    <div className="text-2xl font-bold text-orange-600">
                       {plat.prix}€
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -138,7 +138,7 @@ export default function VentePlatsPage() {
 
           {plats.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-2xl text-gray-500 mb-4">
+              <p className="text-xl text-gray-500 mb-4">
                 Aucun plat disponible pour le moment
               </p>
               <p className="text-lg text-gray-400">
@@ -160,7 +160,7 @@ export default function VentePlatsPage() {
       {/* Comment ça marche */}
       <section className="py-16 bg-blue-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-900 mb-12">
+          <h2 className="text-center text-3xl font-bold text-gray-900 mb-12 sm:text-4xl">
             Comment ça marche ?
           </h2>
 
@@ -170,7 +170,7 @@ export default function VentePlatsPage() {
               <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
                 <span className="text-4xl font-bold text-white">1</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Choisissez votre plat</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Choisissez votre plat</h3>
               <p className="text-gray-700 leading-relaxed">
                 Parcourez nos plats disponibles et cliquez sur "Réserver ce plat"
               </p>
@@ -181,7 +181,7 @@ export default function VentePlatsPage() {
               <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
                 <span className="text-4xl font-bold text-white">2</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Réservez en ligne</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Réservez en ligne</h3>
               <p className="text-gray-700 leading-relaxed">
                 Remplissez le formulaire avec vos coordonnées
               </p>
@@ -192,7 +192,7 @@ export default function VentePlatsPage() {
               <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
                 <span className="text-4xl font-bold text-white">3</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Venez retirer</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Venez retirer</h3>
               <p className="text-gray-700 leading-relaxed">
                 Récupérez votre plat à la date convenue et réglez sur place
               </p>
@@ -200,7 +200,7 @@ export default function VentePlatsPage() {
           </div>
 
           <div className="mt-12 max-w-3xl mx-auto bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
               📍 Lieu de retrait
             </h3>
             <p className="text-lg text-gray-700 text-center mb-4">
@@ -223,7 +223,7 @@ export default function VentePlatsPage() {
       {/* CTA Final */}
       <section className="py-16 bg-gradient-to-br from-orange-600 to-red-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl font-bold mb-6 sm:text-4xl">
             Une question sur nos plats ?
           </h2>
           <p className="text-xl md:text-2xl text-orange-100 mb-8">

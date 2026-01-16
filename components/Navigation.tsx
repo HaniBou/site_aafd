@@ -8,7 +8,7 @@ export function Navigation() {
 
   return (
     <nav className="hidden lg:block sticky top-0 z-50 border-t-2 border-b-2 border-gray-200 bg-white shadow-sm">
-      <div className="mx-auto w-full px-6 lg:px-12">
+      <div className="mx-auto max-w-[1920px] w-full px-6 lg:px-12">
         <div className="flex items-center justify-center">
           {/* Icône Home */}
           <Link

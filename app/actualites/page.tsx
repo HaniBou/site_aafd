@@ -66,7 +66,7 @@ export default function ActualitesPage() {
                 <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
                   {actualites[0].category}
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
                   {actualites[0].title}
                 </h2>
                 <p className="text-sm text-gray-500 mb-6">
@@ -76,7 +76,7 @@ export default function ActualitesPage() {
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-gray-600 leading-relaxed text-justify">
+                <p className="text-gray-600 text-base leading-relaxed text-justify">
                   {actualites[0].content}
                 </p>
               </div>
@@ -88,7 +88,7 @@ export default function ActualitesPage() {
       {/* Liste des actualités */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-16 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-16 text-center sm:text-4xl">
             Toutes nos actualités
           </h2>
 
@@ -112,7 +112,7 @@ export default function ActualitesPage() {
                   <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
                     {actu.category}
                   </span>
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 mt-2 leading-tight">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 mt-2 leading-tight md:text-2xl">
                     {actu.title}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4">
@@ -122,7 +122,7 @@ export default function ActualitesPage() {
                       day: "numeric",
                     })}
                   </p>
-                  <p className="text-gray-600 leading-relaxed text-justify">
+                  <p className="text-gray-600 text-base leading-relaxed text-justify">
                     {actu.content}
                   </p>
                 </div>
@@ -135,10 +135,10 @@ export default function ActualitesPage() {
       {/* CTA Newsletter ou Réseaux sociaux */}
       <section className="bg-gradient-to-br from-blue-900 to-blue-700 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-6 text-4xl font-bold sm:text-5xl">
+          <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
             Restez informé
           </h2>
-          <p className="mb-8 text-2xl text-blue-100 leading-relaxed">
+          <p className="mb-8 text-lg text-blue-100 leading-relaxed">
             Suivez-nous sur Instagram pour ne rien manquer de nos actualités et événements
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

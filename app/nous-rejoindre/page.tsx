@@ -16,7 +16,7 @@ export default function NousRejoindre() {
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Nous rejoindre
             </h1>
-            <p className="text-xl text-purple-100 leading-relaxed">
+            <p className="text-lg text-purple-100 leading-relaxed">
               Rejoignez une équipe de bénévoles engagés et participez à des actions 
               concrètes de solidarité sur le Val de Saône.
             </p>
@@ -230,7 +230,7 @@ export default function NousRejoindre() {
             <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
               Comment nous rejoindre ?
             </h2>
-            <p className="text-xl text-blue-100 mb-12">
+            <p className="text-lg text-blue-100 mb-12">
               Rejoindre l&apos;AAFD est simple et ne demande aucun engagement à long terme
             </p>
 
@@ -335,7 +335,7 @@ export default function NousRejoindre() {
           <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
             Ensemble, créons du lien et de la solidarité
           </h2>
-          <p className="mb-8 text-xl text-blue-100">
+          <p className="mb-8 text-lg text-blue-100">
             Rejoignez une communauté engagée et bienveillante
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

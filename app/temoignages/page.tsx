@@ -16,7 +16,7 @@ export default function TemoignagesPage() {
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Témoignages
             </h1>
-            <p className="text-xl text-blue-100 leading-relaxed">
+            <p className="text-lg text-blue-100 leading-relaxed">
               Ils ont été accompagnés par l&apos;AAFD ou se sont engagés comme bénévoles. 
               Découvrez leurs histoires et leurs parcours.
             </p>
@@ -27,7 +27,7 @@ export default function TemoignagesPage() {
       {/* Introduction */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xl text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-700 leading-relaxed">
             Chaque témoignage est une histoire unique. Des parcours de vie, des rencontres, 
             des moments de solidarité qui changent des vies. Découvrez les visages et les voix 
             de celles et ceux qui font vivre l&apos;AAFD au quotidien.

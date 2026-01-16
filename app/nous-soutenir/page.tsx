@@ -16,7 +16,7 @@ export default function NousSoutenirPage() {
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Nous soutenir
             </h1>
-            <p className="text-xl text-green-100 leading-relaxed">
+            <p className="text-lg text-green-100 leading-relaxed">
               Votre soutien est essentiel pour continuer à accompagner les familles en difficulté 
               et développer nos actions sur le Val de Saône.
             </p>
@@ -31,7 +31,7 @@ export default function NousSoutenirPage() {
             <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
               Pourquoi nous soutenir ?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Votre contribution permet de financer des actions concrètes et essentielles
             </p>
           </div>
@@ -261,7 +261,7 @@ export default function NousSoutenirPage() {
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
               L&apos;impact de votre soutien
             </h2>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            <p className="text-lg text-blue-100 max-w-3xl mx-auto">
               Grâce à votre générosité, nous pouvons accomplir des actions concrètes
             </p>
           </div>
@@ -301,7 +301,7 @@ export default function NousSoutenirPage() {
           <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
             Prêt à nous soutenir ?
           </h2>
-          <p className="mb-8 text-xl text-gray-600">
+          <p className="mb-8 text-lg text-gray-600">
             Contactez-nous pour échanger sur les différentes formes de soutien possibles
           </p>
           <div className="bg-gray-50 p-8 rounded-2xl max-w-2xl mx-auto">

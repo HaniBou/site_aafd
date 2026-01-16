@@ -55,7 +55,7 @@ export default function AdminPlats() {
         description, 
         quantite: Number(quantite),
         prix: Number(prix), 
-        image: image?.name // Temporaire - à remplacer par l'URL après upload
+        image: image?.name || 'none' // Utilise 'none' si pas d'image
       });
       setMessage(`✅ Plat ajouté avec succès (ID : ${id})`);
       setNom("");
