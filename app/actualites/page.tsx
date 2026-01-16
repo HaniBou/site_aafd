@@ -44,6 +44,30 @@ export default function ActualitesPage() {
 
   return (
     <main className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/distribution.jpg"
+            alt="Actualités"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/70" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
+            Actualités
+          </h1>
+          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+            Suivez nos actions, événements et témoignages tout au long de l&apos;année
+          </p>
+        </div>
+      </section>
+
       {/* Dernière actualité mise en avant */}
       {actualites.length > 0 && (
         <section className="py-16 md:py-24">

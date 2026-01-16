@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -10,17 +11,27 @@ export default function NousRejoindre() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-purple-700 to-purple-600 py-20 md:py-32 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Nous rejoindre
-            </h1>
-            <p className="text-lg text-purple-100 leading-relaxed">
-              Rejoignez une équipe de bénévoles engagés et participez à des actions 
-              concrètes de solidarité sur le Val de Saône.
-            </p>
-          </div>
+      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/union.jpg"
+            alt="Nous rejoindre"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-purple-800/70" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
+            Nous rejoindre
+          </h1>
+          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+            Rejoignez une équipe de bénévoles engagés et participez à des actions 
+            concrètes de solidarité sur le Val de Saône.
+          </p>
         </div>
       </section>
 

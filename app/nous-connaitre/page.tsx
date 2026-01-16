@@ -11,17 +11,27 @@ export default function NousConnaitrePage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-blue-900 to-blue-700 py-20 md:py-32 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Nous connaître
-            </h1>
-            <p className="text-lg text-blue-100 leading-relaxed">
-              L&apos;AAFD accompagne depuis 17 ans des familles réfugiées et des jeunes isolés 
-              sur le Val de Saône dans leurs difficultés matérielles et administratives.
-            </p>
-          </div>
+      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/union.jpg"
+            alt="Nous connaître"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/70" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
+            Nous connaître
+          </h1>
+          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+            L&apos;AAFD accompagne depuis 17 ans des familles réfugiées et des jeunes isolés 
+            sur le Val de Saône dans leurs difficultés matérielles et administratives.
+          </p>
         </div>
       </section>
 

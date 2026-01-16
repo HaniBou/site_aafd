@@ -1,140 +1,145 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 export function Navigation() {
   const pathname = usePathname()
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      if (currentScrollY < lastScrollY || currentScrollY < 50) {
+        // Scroll vers le haut ou en haut de la page
+        setIsVisible(true)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scroll vers le bas
+        setIsVisible(false)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   return (
-    <nav className="hidden lg:block sticky top-0 z-50 border-t-2 border-b-2 border-gray-200 bg-white shadow-sm">
-      <div className="mx-auto max-w-[1920px] w-full px-6 lg:px-12">
-        <div className="flex items-center justify-center">
-          {/* Icône Home */}
-          <Link
-            href="/"
-            className="px-4 py-4 hover:bg-gray-50 transition-colors"
-          >
-            <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-            </svg>
+    <nav className={`hidden lg:block sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="flex items-center justify-between py-4">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-900/20 group-hover:ring-blue-900/50 transition-all">
+              <Image
+                src="/images/test-logo.webp"
+                alt="AAFD Val de Saône Logo"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <span className="text-xl font-bold text-blue-900">AAFD Val de Saône</span>
           </Link>
 
-          <div className="h-10 w-1 bg-gray-400"></div>
+          {/* Navigation Links avec style blob */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/nous-connaitre"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/nous-connaitre'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Nous connaître
+            </Link>
 
-          <Link
-            href="/nous-connaitre"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/nous-connaitre' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Nous connaître
-            {pathname === '/nous-connaitre' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
+            <Link
+              href="/notre-action"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/notre-action'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Notre action
+            </Link>
 
-          <div className="h-10 w-1 bg-gray-400"></div>
+            <Link
+              href="/actualites"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/actualites'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Actualités
+            </Link>
 
-          <Link
-            href="/notre-action"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/notre-action' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Notre action
-            {pathname === '/notre-action' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
+            <Link
+              href="/vente-plats"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/vente-plats'
+                  ? 'bg-orange-600 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+              }`}
+            >
+              Nos plats
+            </Link>
 
-          <div className="h-10 w-1 bg-gray-400"></div>
+            <Link
+              href="/temoignages"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/temoignages'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Témoignages
+            </Link>
 
-          <Link
-            href="/actualites"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/actualites' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Actualités
-            {pathname === '/actualites' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
+            <Link
+              href="/nous-soutenir"
+              className={`px-5 py-2.5 text-sm font-bold rounded-full transition-all shadow-md ${
+                pathname === '/nous-soutenir'
+                  ? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg scale-105'
+                  : 'bg-gradient-to-r from-pink-500 to-pink-600 text-white hover:from-pink-600 hover:to-pink-700 hover:shadow-xl'
+              }`}
+            >
+              Nous soutenir
+            </Link>
 
-          <div className="h-10 w-1 bg-gray-400"></div>
+            <Link
+              href="/nous-rejoindre"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/nous-rejoindre'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Nous rejoindre
+            </Link>
 
-          <Link
-            href="/vente-plats"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/vente-plats' ? 'text-orange-600' : 'text-black hover:text-orange-600'
-            }`}
-          >
-            Nos plats
-            {pathname === '/vente-plats' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-orange-600 animate-slideIn"></span>
-            )}
-          </Link>
-
-          <div className="h-10 w-1 bg-gray-400"></div>
-
-          <Link
-            href="/temoignages"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/temoignages' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Témoignages
-            {pathname === '/temoignages' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
-
-          <div className="h-10 w-1 bg-gray-400"></div>
-
-          <Link
-            href="/nous-soutenir"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/nous-soutenir' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Nous soutenir
-            {pathname === '/nous-soutenir' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
-
-          <div className="h-10 w-1 bg-gray-400"></div>
-
-          <Link
-            href="/contact"
-            className={`relative px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all ${
-              pathname === '/contact' ? 'text-blue-900' : 'text-black hover:text-blue-600'
-            }`}
-          >
-            Contact
-            {pathname === '/contact' && (
-              <span className="absolute bottom-0 left-6 right-6 h-1 bg-blue-900 animate-slideIn"></span>
-            )}
-          </Link>
+            <Link
+              href="/contact"
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+                pathname === '/contact'
+                  ? 'bg-blue-900 text-white shadow-lg scale-105'
+                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+              }`}
+            >
+              Contact
+            </Link>
+          </div>
         </div>
       </div>
-
-      {/* Animation pour le trait */}
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-        .animate-slideIn {
-          animation: slideIn 0.3s ease-out forwards;
-          transform-origin: left;
-        }
-      `}</style>
     </nav>
   )
 }

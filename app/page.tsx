@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { HeroWithHeader } from '@/components/HeroWithHeader'
+import { SimpleHero } from '@/components/SimpleHero'
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section avec Header intégré */}
-      <HeroWithHeader />
+      {/* Hero Section simple */}
+      <SimpleHero />
 
       {/* Ce qui nous anime */}
       <section className="py-16 md:py-24">

@@ -32,11 +32,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 html {
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  scroll-behavior: smooth;
 }
 
 /* Curseur pointer pour tous les éléments cliquables */
