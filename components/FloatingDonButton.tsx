@@ -7,6 +7,12 @@ export function FloatingDonButton() {
   const [isVisible, setIsVisible] = useState(false)
   const pathname = usePathname()
   const isHomePage = pathname === '/'
+  const isAdminPage = pathname?.startsWith('/admin')
+
+  // Ne pas afficher sur les pages admin
+  if (isAdminPage) {
+    return null
+  }
 
   useEffect(() => {
     // Sur la page d'accueil, apparaît après scroll
