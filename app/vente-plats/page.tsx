@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import getPlats from "@/lib/getPlats";
 import ReservationModal from "@/components/ReservationModal";
+import { PageHero } from "@/components/PageHero";
 
 type Plat = {
   id: string;
@@ -44,35 +45,14 @@ export default function VentePlatsPage() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero_plts.jpg"
-            alt="Nos plats cuisinés"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-900/90 to-orange-800/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 mb-6 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-            <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-sm font-semibold text-white">Réservation en ligne</span>
-          </div>
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Nos Plats Cuisinés
-          </h1>
-          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-white/95 drop-shadow-lg">
-            Des plats préparés avec amour pour soutenir nos actions solidaires
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Nos Plats Cuisinés"
+        description="Des plats préparés avec amour pour soutenir nos actions solidaires"
+        imageSrc="/images/hero_plats.webp"
+        imageAlt="Nos plats cuisinés"
+        gradientFrom="from-orange-900/90"
+        gradientTo="to-orange-800/70"
+      />
 
       {/* Introduction */}
       <section className="py-16 bg-white">
@@ -105,8 +85,18 @@ export default function VentePlatsPage() {
           <div className="flex flex-wrap gap-8 justify-center">
             {plats.map((plat, index) => (
               <div key={plat.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-all  w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md">
-                <div className="h-48 bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center">
-                  <span className="text-8xl">{getRandomIcon(index)}</span>
+                <div className="relative h-48 bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center overflow-hidden">
+                  {plat.image && plat.image !== 'none' ? (
+                    <Image
+                      src={plat.image}
+                      alt={plat.nom}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <span className="text-8xl">{getRandomIcon(index)}</span>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
 import ContactForm from '@/components/ContactForm'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
   title: 'Contact - AAFD Val de Saône',
@@ -10,29 +10,14 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero_contct.jpg"
-            alt="Contactez-nous"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-800/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Contactez-nous
-          </h1>
-          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-            Nous sommes là pour vous écouter et vous accompagner.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Contactez-nous"
+        description="Nous sommes là pour vous écouter et vous accompagner."
+        imageSrc="/images/hero_contact.webp"
+        imageAlt="Contactez-nous"
+        gradientFrom="from-slate-900/90"
+        gradientTo="to-slate-800/70"
+      />
 
       {/* Section avec formulaire et infos de contact */}
       <section className="py-16 md:py-24 bg-slate-50">

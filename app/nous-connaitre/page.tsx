@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
   title: 'Nous connaître - AAFD Val de Saône',
@@ -10,30 +11,12 @@ export const metadata: Metadata = {
 export default function NousConnaitrePage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/union.jpg"
-            alt="Nous connaître"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Nous connaître
-          </h1>
-          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-            L&apos;AAFD accompagne depuis 17 ans des familles réfugiées et des jeunes isolés 
-            sur le Val de Saône dans leurs difficultés matérielles et administratives.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Nous connaître"
+        description="L'AAFD accompagne depuis 17 ans des familles réfugiées et des jeunes isolés sur le Val de Saône dans leurs difficultés matérielles et administratives."
+        imageSrc="/images/hero_nous_connaitre.webp"
+        imageAlt="Nous connaître"
+      />
 
       {/* Notre histoire */}
       <section className="py-16 md:py-24">
@@ -60,7 +43,7 @@ export default function NousConnaitrePage() {
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-blue-100">
               <Image 
-                src="/images/distribution.jpg" // Remplace par le nom de ton image
+                src="/images/distribution.webp" 
                 alt="Notre histoire AAFD"
                 fill
                 className="object-cover"
@@ -135,7 +118,7 @@ export default function NousConnaitrePage() {
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-orange-100">
               <Image
-                src="/images/ensemble.jpg"
+                src="/images/ensemble.webp"
                 alt="Nos valeurs"
                 fill
                 className="object-cover"

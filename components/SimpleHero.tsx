@@ -9,11 +9,12 @@ export function SimpleHero() {
       {/* Image de fond */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/distribution.jpg"
+          src="/images/hero_accueil.webp"
           alt="AAFD - Accompagnement des familles"
           fill
           className="object-cover"
           priority
+          
         />
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/70" />
       </div>

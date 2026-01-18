@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
   title: 'Notre action - AAFD Val de Saône',
@@ -10,30 +11,14 @@ export const metadata: Metadata = {
 export default function NotreActionPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/ensemble.jpg"
-            alt="Notre action"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-900/90 to-orange-800/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Notre action
-          </h1>
-          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-            Des événements tout au long de l&apos;année pour créer du lien, sensibiliser 
-            et récolter des fonds au profit des familles en difficulté.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Notre action"
+        description="Des événements tout au long de l'année pour créer du lien, sensibiliser et récolter des fonds au profit des familles en difficulté."
+        imageSrc="/images/hero_notre_action.webp"
+        imageAlt="Notre action"
+        gradientFrom="from-orange-900/90"
+        gradientTo="to-orange-800/70"
+      />
 
       {/* Ventes de plats */}
       <section className="py-16 md:py-24">
@@ -67,7 +52,7 @@ export default function NotreActionPage() {
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl">
               <img
-                src="/images/plats.jpg"
+                src="/images/plats.webp"
                 alt="Ventes de plats traditionnels"
                 className="object-cover w-full h-full"
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -83,7 +68,7 @@ export default function NotreActionPage() {
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-blue-100 order-2 md:order-1">
               <img
-                src="/images/fete.jpg"
+                src="/images/evenement.webp"
                 alt="Tournoi de pétanque"
                 className="object-cover w-full h-full"
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -137,7 +122,7 @@ export default function NotreActionPage() {
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-green-100">
               <img
-                src="/images/nature.jpg"
+                src="/images/nettoyons_1.webp"
                 alt="Nettoyage Val de Saône"
                 className="object-cover w-full h-full object-bottom"
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}

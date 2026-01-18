@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
   title: 'Témoignages - AAFD Val de Saône',
@@ -10,30 +11,14 @@ export const metadata: Metadata = {
 export default function TemoignagesPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/union.jpg"
-            alt="Témoignages"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-purple-900/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Témoignages
-          </h1>
-          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-            Ils ont été accompagnés par l&apos;AAFD ou se sont engagés comme bénévoles. 
-            Découvrez leurs histoires et leurs parcours.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Témoignages"
+        description="Ils ont été accompagnés par l'AAFD ou se sont engagés comme bénévoles. Découvrez leurs histoires et leurs parcours."
+        imageSrc="/images/hero_temoignages.webp"
+        imageAlt="Témoignages"
+        gradientFrom="from-blue-900/90"
+        gradientTo="to-purple-900/70"
+      />
 
       {/* Introduction */}
       <section className="py-16 md:py-20 bg-gray-50">
@@ -173,7 +158,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-purple-100 to-purple-200">
                 <img
-                  src="/images/v1.jpg"
+                  src="/images/v1.webp"
                   alt="Bénévole 1"
                   className="object-cover object-top"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -194,7 +179,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-blue-100 to-blue-200">
                 <img
-                  src="/images/v2.jpg"
+                  src="/images/v2.webp"
                   alt="Bénévole 2"
                   className="object-fill object-bottom"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -214,7 +199,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-orange-100 to-orange-200">
                 <img
-                  src="/images/v5.jpg"
+                  src="/images/v5.webp"
                   alt="Bénévole 3"
                   className="object-cover w-full h-full"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -234,7 +219,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-red-100 to-red-200">
                 <img
-                  src="/images/v6.jpg"
+                  src="/images/v6.webp"
                   alt="Bénévole 4"
                   className="object-cover w-full h-full"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -254,7 +239,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-yellow-100 to-yellow-200">
                 <img
-                  src="/images/v9.jpg"
+                  src="/images/v9.webp"
                   alt="Bénévole 5"
                   className="object-cover w-full h-full"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -274,7 +259,7 @@ export default function TemoignagesPage() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="relative h-96 bg-gradient-to-br from-green-100 to-green-200">
                 <img
-                  src="/images/v7.jpg"
+                  src="/images/v7.webp"
                   alt="Bénévole 6"
                   className="object-cover w-full h-full object-top"
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}

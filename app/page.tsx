@@ -25,7 +25,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
-                  src="/images/distribution.jpg" // Remplace par ton image
+                  src="/images/help.webp" // Remplace par ton image
                   alt="Sensibiliser"
                   fill
                   className="object-cover"
@@ -46,7 +46,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-orange-500 hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
-                  src="/images/union.jpg" // Remplace par ton image
+                  src="/images/v5.webp" // Remplace par ton image
                   alt="Créer du lien"
                   fill
                   className="object-cover"
@@ -67,7 +67,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-green-500 hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
-                  src="/images/dons.jpg" // Remplace par ton image
+                  src="/images/donate.webp" 
                   alt="Récolter des fonds"
                   fill
                   className="object-cover"
@@ -117,7 +117,7 @@ export default function HomePage() {
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-gray-200">
               <Image 
-                src="/images/v4.jpg" // Remplace par ton image
+                src="/images/v4.webp" // Remplace par ton image
                 alt="Qui aidons-nous"
                 fill
                 className="object-cover"
@@ -145,7 +145,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative h-48 w-full">
                 <Image 
-                  src="/images/plats.jpg" // Remplace par ton image
+                  src="/images/plats.webp" // Remplace par ton image
                   alt="Vente de plats"
                   fill
                   className="object-cover"
@@ -166,7 +166,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative h-48 w-full">
                 <Image 
-                  src="/images/fete.jpg" // Remplace par ton image
+                  src="/images/petanque.webp" // Remplace par ton image
                   alt="Événements festifs"
                   fill
                   className="object-cover"
@@ -187,7 +187,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative h-48 w-full ">
                 <Image 
-                  src="/images/dechet.jpg" // Remplace par ton image
+                  src="/images/nettoyons.webp" // Remplace par ton image
                   alt="Nettoyage Val de Saône"
                   fill
                   className="object-cover object-bottom"
