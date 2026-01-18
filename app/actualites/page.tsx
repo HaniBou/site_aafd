@@ -48,7 +48,7 @@ export default function ActualitesPage() {
       <PageHero
         title="Actualités"
         description="Suivez nos actions, événements et témoignages tout au long de l'année"
-        imageSrc="/images/hero_actualites.webp"
+        imageSrc="/images/hero_actu.webp"
         imageAlt="Actualités"
       />
 

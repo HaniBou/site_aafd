@@ -81,8 +81,9 @@ export default function AdminPlats() {
       // Rafraîchir la liste
       const data = await getPlats();
       setPlats(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setMessage(`❌ Erreur : ${error.message || JSON.stringify(error)}`);
       setMessage("❌ Erreur lors de l'ajout du plat.");
     } finally {
       setIsUploading(false);
