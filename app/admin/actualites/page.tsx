@@ -3,8 +3,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import uploadActualite from "@/lib/uploadActualite";
 import getActualites from "@/lib/getActualites";
+import uploadToCloudinary from "@/lib/uploadToCloudinary";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import AdminProtection from "@/components/AdminProtection";
@@ -28,6 +30,7 @@ export default function AdminActualites() {
   const [category, setCategory] = useState("Actualité");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [editingActualite, setEditingActualite] = useState<Actualite | null>(null);
   const editFormRef = useRef<HTMLDivElement>(null);
 
@@ -47,14 +50,25 @@ export default function AdminActualites() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
+    setIsUploading(true);
 
     try {
+      let imageUrl = 'none';
+      
+      // Upload l'image vers Cloudinary si elle existe
+      if (image) {
+        setMessage("📤 Upload de l'image en cours...");
+        imageUrl = await uploadToCloudinary(image);
+      }
+      
+      // Ensuite sauvegarde dans Firestore avec l'URL de l'image
       const id = await uploadActualite({ 
         title, 
         content, 
         category, 
-        image: image?.name || 'none' // Utilise 'none' si pas d'image
+        image: imageUrl
       });
+      
       setMessage(`✅ Actualité ajoutée avec succès (ID : ${id})`);
       setTitle("");
       setContent("");
@@ -65,7 +79,10 @@ export default function AdminActualites() {
       const data = await getActualites();
       setActualites(data);
     } catch (error) {
+      console.error(error);
       setMessage("❌ Erreur lors de l'ajout de l'actualité.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -225,13 +242,28 @@ export default function AdminActualites() {
                 )}
               </div>
               <div className="flex gap-3 mt-4">
-                <button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors">
-                  Publier
+                <button 
+                  type="submit" 
+                  disabled={isUploading}
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  {isUploading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Upload en cours...</span>
+                    </>
+                  ) : (
+                    'Publier'
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowAddForm(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
+                  disabled={isUploading}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
                 >
                   Annuler
                 </button>
@@ -340,6 +372,19 @@ export default function AdminActualites() {
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
           >
             <div className="flex justify-between items-start gap-4">
+              {/* Image de l'actualité */}
+              {actu.image && actu.image !== 'none' && (
+                <div className="relative h-24 w-24 rounded-lg overflow-hidden border-2 border-gray-200 shrink-0">
+                  <Image
+                    src={actu.image}
+                    alt={actu.title}
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                  />
+                </div>
+              )}
+              
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {actu.title}

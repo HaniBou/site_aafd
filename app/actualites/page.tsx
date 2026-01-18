@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import getActualites from "@/lib/getActualites";
 import { useEffect, useState } from "react";
+import { PageHero } from "@/components/PageHero";
 
 // Définir le type des actualités
 interface Actualite {
@@ -44,29 +45,12 @@ export default function ActualitesPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero_ctu.jpg"
-            alt="Actualités"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/70" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
-            Actualités
-          </h1>
-          <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-            Suivez nos actions, événements et témoignages tout au long de l&apos;année
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Actualités"
+        description="Suivez nos actions, événements et témoignages tout au long de l'année"
+        imageSrc="/images/hero_actualites.webp"
+        imageAlt="Actualités"
+      />
 
       {/* Dernière actualité mise en avant */}
       {actualites.length > 0 && (
@@ -78,11 +62,21 @@ export default function ActualitesPage() {
               </span>
             </div>
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Image SVG Placeholder */}
-              <div className="h-[350px] md:h-[450px] bg-gray-100 flex items-center justify-center rounded-sm">
-                <svg className="h-24 w-24 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
+              {/* Image de l'actualité */}
+              <div className="relative h-[350px] md:h-[450px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden">
+                {actualites[0].image && actualites[0].image !== 'none' ? (
+                  <Image
+                    src={actualites[0].image}
+                    alt={actualites[0].title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                ) : (
+                  <svg className="h-24 w-24 text-white/60" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                )}
               </div>
               
               {/* Contenu */}
@@ -124,11 +118,21 @@ export default function ActualitesPage() {
                   index % 2 === 1 ? "md:grid-flow-dense" : ""
                 }`}
               >
-                {/* Image SVG Placeholder */}
-                <div className={`h-[300px] md:h-[350px] bg-gray-100 flex items-center justify-center rounded-sm ${index % 2 === 1 ? "md:col-start-2" : ""}`}>
-                  <svg className="h-20 w-20 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
+                {/* Image de l'actualité */}
+                <div className={`relative h-[300px] md:h-[350px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden ${index % 2 === 1 ? "md:col-start-2" : ""}`}>
+                  {actu.image && actu.image !== 'none' ? (
+                    <Image
+                      src={actu.image}
+                      alt={actu.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <svg className="h-20 w-20 text-white/60" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
+                  )}
                 </div>
                 
                 {/* Contenu */}
