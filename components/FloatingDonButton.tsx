@@ -9,11 +9,6 @@ export function FloatingDonButton() {
   const isHomePage = pathname === '/'
   const isAdminPage = pathname?.startsWith('/admin')
 
-  // Ne pas afficher sur les pages admin
-  if (isAdminPage) {
-    return null
-  }
-
   useEffect(() => {
     // Sur la page d'accueil, apparaît après scroll
     // Sur les autres pages, toujours visible
@@ -38,6 +33,11 @@ export function FloatingDonButton() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isHomePage])
+
+  // Ne pas afficher sur les pages admin
+  if (isAdminPage) {
+    return null
+  }
 
   return (
     <a

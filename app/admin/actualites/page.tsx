@@ -53,7 +53,7 @@ export default function AdminActualites() {
         title, 
         content, 
         category, 
-        image: image?.name // Temporaire - à remplacer par l'URL après upload
+        image: image?.name || 'none' // Utilise 'none' si pas d'image
       });
       setMessage(`✅ Actualité ajoutée avec succès (ID : ${id})`);
       setTitle("");
