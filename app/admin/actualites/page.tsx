@@ -1,7 +1,7 @@
 // app/admin/actualites/page.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import uploadActualite from "@/lib/uploadActualite";
@@ -11,6 +11,8 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import AdminProtection from "@/components/AdminProtection";
 import AdminHeader from "@/components/AdminHeader";
+import ActualiteModal from "@/components/ActualiteModal";
+import Toast from "@/components/Toast";
 
 type Actualite = {
   id: string;
@@ -26,13 +28,16 @@ export default function AdminActualites() {
   const [actualites, setActualites] = useState<Actualite[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("Actualité");
+  const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [editingActualite, setEditingActualite] = useState<Actualite | null>(null);
-  const editFormRef = useRef<HTMLDivElement>(null);
+  const [editImage, setEditImage] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchActualites = async () => {
@@ -46,6 +51,16 @@ export default function AdminActualites() {
 
     fetchActualites();
   }, []);
+
+  // Auto-fermer le toast après 6 secondes
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,18 +84,20 @@ export default function AdminActualites() {
         image: imageUrl
       });
       
-      setMessage(`✅ Actualité ajoutée avec succès (ID : ${id})`);
+      setMessage(`Actualité ajoutée avec succès`);
+      setShowToast(true);
       setTitle("");
       setContent("");
       setCategory("Actualité");
       setImage(null);
+      setShowAddForm(false);
       
       // Rafraîchir la liste
       const data = await getActualites();
       setActualites(data);
     } catch (error) {
       console.error(error);
-      setMessage("❌ Erreur lors de l'ajout de l'actualité.");
+      setMessage("Erreur lors de l'ajout");
     } finally {
       setIsUploading(false);
     }
@@ -90,53 +107,64 @@ export default function AdminActualites() {
     try {
       await deleteDoc(doc(db, "actualites", id));
       setActualites((prev) => prev.filter((actu) => actu.id !== id));
-      setMessage("✅ Actualité supprimée avec succès.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMessage("Actualité supprimée avec succès");
+      setShowToast(true);
       console.log("Actualité supprimée avec succès.");
     } catch (error) {
       console.error("Erreur lors de la suppression de l'actualité :", error);
-      setMessage("❌ Erreur lors de la suppression de l'actualité.");
+      setMessage("Erreur lors de la suppression");
+      setShowToast(true);
     }
   };
 
   const handleEditClick = (actu: Actualite) => {
     setEditingActualite({
       ...actu,
-      category: actu.category || "Actualité", // Valeur par défaut si non définie
-      slug: actu.slug || actu.title.toLowerCase().replace(/\s+/g, "-"), // Générer un slug si absent
+      category: actu.category || "Actualité",
+      slug: actu.slug || actu.title.toLowerCase().replace(/\s+/g, "-"),
     });
-    setShowAddForm(false); // Fermer le formulaire d'ajout si ouvert
-    
-    // Scroll vers le formulaire d'édition après un court délai
-    setTimeout(() => {
-      editFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    setEditImage(null);
+    setShowAddForm(false);
   };
 
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingActualite) return;
 
+    setIsUploading(true);
     try {
+      let imageUrl = editingActualite.image;
+      
+      // Si une nouvelle image a été sélectionnée, l'uploader vers Cloudinary
+      if (editImage) {
+        setMessage("📤 Upload de la nouvelle image en cours...");
+        imageUrl = await uploadToCloudinary(editImage);
+      }
+      
       await updateDoc(doc(db, "actualites", editingActualite.id), {
         title: editingActualite.title,
         content: editingActualite.content,
         category: editingActualite.category,
-        image: editingActualite.image,
+        image: imageUrl,
         date: new Date().toISOString(), // Ajout de la date de modification
       });
       setActualites((prev) =>
         prev.map((actu) =>
-          actu.id === editingActualite.id ? editingActualite : actu
+          actu.id === editingActualite.id ? { ...editingActualite, image: imageUrl } : actu
         )
       );
       setEditingActualite(null);
-      setMessage("✅ Actualité modifiée avec succès.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setEditImage(null);
+      setShowAddForm(false);
+      setMessage("Actualité modifiée avec succès");
+      setShowToast(true);
       console.log("Actualité modifiée avec succès.");
     } catch (error) {
       console.error("Erreur lors de la modification de l'actualité :", error);
-      setMessage("❌ Erreur lors de la modification de l'actualité.");
+      setMessage("Erreur lors de la modification");
+      setShowToast(true);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -167,202 +195,58 @@ export default function AdminActualites() {
           </div>
         </div>
 
+        {/* Toast de notification */}
+        <Toast message={message} show={showToast} />
+
         {/* Bouton Ajouter */}
-      <div className="max-w-7xl mx-auto mb-6">
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
-        >
-          + Ajouter une actualité
-        </button>
-      </div>
-
-      {/* Formulaire d'ajout (si visible) */}
-      {showAddForm && (
         <div className="max-w-7xl mx-auto mb-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">
-              Nouvelle actualité
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Titre
-                </label>
-                <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Ex: Vente de plats le 15 janvier"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Contenu
-                </label>
-                <textarea
-                  rows={6}
-                  className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Décrivez l'actualité..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Catégorie
-                </label>
-                <select
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  required
-                >
-                  <option value="Actualité">Actualité</option>
-                  <option value="Événement">Événement</option>
-                  <option value="Vente de plats">Vente de plats</option>
-                  <option value="Témoignage">Témoignage</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Image de l'actualité
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                  onChange={(e) => setImage(e.target.files?.[0] || null)}
-                />
-                {image && (
-                  <p className="text-xs text-gray-500 mt-1">Fichier sélectionné : {image.name}</p>
-                )}
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  type="submit" 
-                  disabled={isUploading}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
-                >
-                  {isUploading ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Upload en cours...</span>
-                    </>
-                  ) : (
-                    'Publier'
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowAddForm(false)}
-                  disabled={isUploading}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Annuler
-                </button>
-              </div>
-            </form>
-            {message && <p className="mt-3 text-sm text-gray-700">{message}</p>}
-          </div>
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
+          >
+            + Ajouter une actualité
+          </button>
         </div>
-      )}
 
-      {/* Formulaire de modification (si une actualité est en cours d'édition) */}
-      {editingActualite && (
-        <div ref={editFormRef} className="max-w-7xl mx-auto mb-6">
-          <div className="bg-white rounded-lg shadow-sm border-2 border-indigo-500 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">
-              Modifier l'actualité
-            </h2>
-            <form onSubmit={handleEditSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Titre
-                </label>
-                <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingActualite.title}
-                  onChange={(e) =>
-                    setEditingActualite({ ...editingActualite, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Contenu
-                </label>
-                <textarea
-                  rows={6}
-                  className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingActualite.content}
-                  onChange={(e) =>
-                    setEditingActualite({ ...editingActualite, content: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Catégorie
-                </label>
-                <select
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingActualite.category}
-                  onChange={(e) =>
-                    setEditingActualite({ ...editingActualite, category: e.target.value })
-                  }
-                  required
-                >
-                  <option value="Actualité">Actualité</option>
-                  <option value="Événement">Événement</option>
-                  <option value="Vente de plats">Vente de plats</option>
-                  <option value="Témoignage">Témoignage</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Image de l'actualité
-                </label>
-                {editingActualite.image && (
-                  <p className="text-xs text-gray-500 mb-2">Image actuelle : {editingActualite.image}</p>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                  onChange={(e) =>
-                    setEditingActualite({ ...editingActualite, image: e.target.files?.[0]?.name || editingActualite.image })
-                  }
-                />
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button
-                  type="submit"
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Enregistrer
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditingActualite(null)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Annuler
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+        {/* Modal d'ajout */}
+        <ActualiteModal
+          isOpen={showAddForm}
+          onClose={() => setShowAddForm(false)}
+          onSubmit={handleSubmit}
+          title="Nouvelle actualité"
+          titre={title}
+          setTitre={setTitle}
+          contenu={content}
+          setContenu={setContent}
+          date={date}
+          setDate={setDate}
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          image={image}
+          setImage={setImage}
+        />
+
+        {/* Modal de modification */}
+        <ActualiteModal
+          isOpen={!!editingActualite}
+          onClose={() => {
+            setEditingActualite(null);
+            setEditImage(null);
+          }}
+          onSubmit={handleEditSubmit}
+          title="Modifier l'actualité"
+          titre={editingActualite?.title || ""}
+          setTitre={(value) => editingActualite && setEditingActualite({ ...editingActualite, title: value })}
+          contenu={editingActualite?.content || ""}
+          setContenu={(value) => editingActualite && setEditingActualite({ ...editingActualite, content: value })}
+          date={editingActualite?.date || ""}
+          setDate={(value) => editingActualite && setEditingActualite({ ...editingActualite, date: value })}
+          imageUrl={editingActualite?.image || ""}
+          setImageUrl={() => {}}
+          image={editImage}
+          setImage={setEditImage}
+          isEditing
+        />
 
       {/* Liste des actualités */}
       <div className="max-w-7xl mx-auto space-y-4">

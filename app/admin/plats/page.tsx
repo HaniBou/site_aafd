@@ -1,7 +1,7 @@
 // app/admin/plats/page.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import uploadPlat from "@/lib/uploadPlat";
@@ -11,6 +11,8 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import AdminProtection from "@/components/AdminProtection";
 import AdminHeader from "@/components/AdminHeader";
+import PlatModal from "@/components/PlatModal";
+import Toast from "@/components/Toast";
 
 type Plat = {
   id: string;
@@ -27,13 +29,15 @@ export default function AdminPlats() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [nom, setNom] = useState("");
   const [description, setDescription] = useState("");
-  const [quantite, setQuantite] = useState(0);
-  const [prix, setPrix] = useState(0);
+  const [quantite, setQuantite] = useState("");
+  const [prix, setPrix] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [editingPlat, setEditingPlat] = useState<Plat | null>(null);
-  const editFormRef = useRef<HTMLDivElement>(null);
+  const [editImage, setEditImage] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchPlats = async () => {
@@ -48,18 +52,28 @@ export default function AdminPlats() {
     fetchPlats();
   }, []);
 
+  // Auto-fermer le toast après 6 secondes
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
     setIsUploading(true);
 
     try {
-      let imageUrl = 'none';
+      let finalImageUrl = imageUrl;
       
       // Upload l'image vers Cloudinary si elle existe
       if (image) {
         setMessage("📤 Upload de l'image en cours...");
-        imageUrl = await uploadToCloudinary(image);
+        finalImageUrl = await uploadToCloudinary(image);
       }
       
       // Ensuite sauvegarde dans Firestore avec l'URL de l'image
@@ -68,23 +82,26 @@ export default function AdminPlats() {
         description, 
         quantite: Number(quantite),
         prix: Number(prix), 
-        image: imageUrl
+        image: finalImageUrl || 'none'
       });
       
-      setMessage(`✅ Plat ajouté avec succès (ID : ${id})`);
+      setMessage(`Plat ajouté avec succès`);
+      setShowToast(true);
       setNom("");
       setDescription("");
-      setQuantite(0);
-      setPrix(0);
+      setQuantite("");
+      setPrix("");
+      setImageUrl("");
       setImage(null);
+      setShowAddForm(false);
       
       // Rafraîchir la liste
       const data = await getPlats();
       setPlats(data);
     } catch (error: any) {
       console.error(error);
-      setMessage(`❌ Erreur : ${error.message || JSON.stringify(error)}`);
-      setMessage("❌ Erreur lors de l'ajout du plat.");
+      setMessage("Erreur lors de l'ajout");
+      setShowToast(true);
     } finally {
       setIsUploading(false);
     }
@@ -94,48 +111,60 @@ export default function AdminPlats() {
     try {
       await deleteDoc(doc(db, "plats", id));
       setPlats((prev) => prev.filter((plat) => plat.id !== id));
-      setMessage("✅ Plat supprimé avec succès.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMessage("Plat supprimé avec succès");
+      setShowToast(true);
       console.log("Plat supprimé avec succès.");
     } catch (error) {
       console.error("Erreur lors de la suppression du plat :", error);
-      setMessage("❌ Erreur lors de la suppression du plat.");
+      setMessage("Erreur lors de la suppression");
+      setShowToast(true);
     }
   };
 
   const handleEditClick = (plat: Plat) => {
     setEditingPlat(plat);
+    setEditImage(null);
     setShowAddForm(false);
-    
-    setTimeout(() => {
-      editFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
   };
 
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingPlat) return;
 
+    setIsUploading(true);
     try {
+      let imageUrl = editingPlat.image;
+      
+      // Si une nouvelle image a été sélectionnée, l'uploader vers Cloudinary
+      if (editImage) {
+        setMessage("📤 Upload de la nouvelle image en cours...");
+        imageUrl = await uploadToCloudinary(editImage);
+      }
+      
       await updateDoc(doc(db, "plats", editingPlat.id), {
         nom: editingPlat.nom,
         description: editingPlat.description,
         quantite: Number(editingPlat.quantite),
         prix: Number(editingPlat.prix),
-        image: editingPlat.image,
+        image: imageUrl,
       });
       setPlats((prev) =>
         prev.map((plat) =>
-          plat.id === editingPlat.id ? editingPlat : plat
+          plat.id === editingPlat.id ? { ...editingPlat, image: imageUrl } : plat
         )
       );
       setEditingPlat(null);
-      setMessage("✅ Plat modifié avec succès.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setEditImage(null);
+      setShowAddForm(false);
+      setMessage("Plat modifié avec succès");
+      setShowToast(true);
       console.log("Plat modifié avec succès.");
     } catch (error) {
       console.error("Erreur lors de la modification du plat :", error);
-      setMessage("❌ Erreur lors de la modification du plat.");
+      setMessage("Erreur lors de la modification");
+      setShowToast(true);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -169,236 +198,62 @@ export default function AdminPlats() {
           </div>
         </div>
 
-      {/* Message de feedback */}
-      {message && (
-        <div className="max-w-7xl mx-auto mb-6">
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
-            <p className="text-sm text-indigo-800">{message}</p>
-          </div>
-        </div>
-      )}
+      {/* Toast de notification */}
+      <Toast message={message} show={showToast} />
 
       {/* Bouton Ajouter */}
       <div className="max-w-7xl mx-auto mb-6">
         <button
-          onClick={() => setShowAddForm(!showAddForm)}
+          onClick={() => setShowAddForm(true)}
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
         >
           + Ajouter un plat
         </button>
       </div>
 
-      {/* Formulaire d'ajout */}
-      {showAddForm && (
-        <div className="max-w-7xl mx-auto mb-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">
-              Nouveau plat
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Nom du plat
-                </label>
-                <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Ex: Couscous royal"
-                  value={nom}
-                  onChange={(e) => setNom(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Description
-                </label>
-                <textarea
-                  rows={4}
-                  className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Décrivez le plat..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Quantité disponible
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Ex: 20"
-                  value={quantite}
-                  onChange={(e) => setQuantite(Number(e.target.value))}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Prix (€)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  placeholder="Ex: 12.50"
-                  value={prix}
-                  onChange={(e) => setPrix(Number(e.target.value))}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Image du plat
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                  onChange={(e) => setImage(e.target.files?.[0] || null)}
-                />
-                {image && (
-                  <p className="text-xs text-gray-500 mt-1">Fichier sélectionné : {image.name}</p>
-                )}
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button 
-                  type="submit" 
-                  disabled={isUploading}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
-                >
-                  {isUploading ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Upload en cours...</span>
-                    </>
-                  ) : (
-                    'Ajouter le plat'
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowAddForm(false)}
-                  disabled={isUploading}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Annuler
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Modal d'ajout */}
+      <PlatModal
+        isOpen={showAddForm}
+        onClose={() => setShowAddForm(false)}
+        onSubmit={handleSubmit}
+        title="Nouveau plat"
+        nom={nom}
+        setNom={setNom}
+        description={description}
+        setDescription={setDescription}
+        prix={prix}
+        setPrix={setPrix}
+        quantite={quantite}
+        setQuantite={setQuantite}
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        image={image}
+        setImage={setImage}
+      />
 
-      {/* Formulaire de modification */}
-      {editingPlat && (
-        <div ref={editFormRef} className="max-w-7xl mx-auto mb-6">
-          <div className="bg-white rounded-lg shadow-sm border-2 border-indigo-500 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">
-              Modifier le plat
-            </h2>
-            <form onSubmit={handleEditSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Nom du plat
-                </label>
-                <input
-                  type="text"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingPlat.nom}
-                  onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, nom: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Description
-                </label>
-                <textarea
-                  rows={4}
-                  className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingPlat.description}
-                  onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, description: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Quantité disponible
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingPlat.quantite}
-                  onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, quantite: Number(e.target.value) })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Prix (€)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-                  value={editingPlat.prix || 0}
-                  onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, prix: Number(e.target.value) })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">
-                  Image du plat
-                </label>
-                {editingPlat.image && (
-                  <p className="text-xs text-gray-500 mb-2">Image actuelle : {editingPlat.image}</p>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                  onChange={(e) =>
-                    setEditingPlat({ ...editingPlat, image: e.target.files?.[0]?.name || editingPlat.image })
-                  }
-                />
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button
-                  type="submit"
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Enregistrer
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditingPlat(null)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-sm transition-colors"
-                >
-                  Annuler
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Modal de modification */}
+      <PlatModal
+        isOpen={!!editingPlat}
+        onClose={() => {
+          setEditingPlat(null);
+          setEditImage(null);
+        }}
+        onSubmit={handleEditSubmit}
+        title="Modifier le plat"
+        nom={editingPlat?.nom || ""}
+        setNom={(value) => editingPlat && setEditingPlat({ ...editingPlat, nom: value })}
+        description={editingPlat?.description || ""}
+        setDescription={(value) => editingPlat && setEditingPlat({ ...editingPlat, description: value })}
+        prix={String(editingPlat?.prix || "")}
+        setPrix={(value) => editingPlat && setEditingPlat({ ...editingPlat, prix: Number(value) })}
+        quantite={String(editingPlat?.quantite || "")}
+        setQuantite={(value) => editingPlat && setEditingPlat({ ...editingPlat, quantite: Number(value) })}
+        imageUrl={editingPlat?.image || ""}
+        setImageUrl={() => {}}
+        image={editImage}
+        setImage={setEditImage}
+        isEditing
+      />
 
       {/* Liste des plats */}
       <div className="max-w-7xl mx-auto space-y-4">
