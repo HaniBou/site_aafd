@@ -31,7 +31,6 @@ export default function AdminPlats() {
   const [description, setDescription] = useState("");
   const [quantite, setQuantite] = useState("");
   const [prix, setPrix] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -68,12 +67,12 @@ export default function AdminPlats() {
     setIsUploading(true);
 
     try {
-      let finalImageUrl = imageUrl;
+      let imageUrl = 'none';
       
       // Upload l'image vers Cloudinary si elle existe
       if (image) {
         setMessage("📤 Upload de l'image en cours...");
-        finalImageUrl = await uploadToCloudinary(image);
+        imageUrl = await uploadToCloudinary(image);
       }
       
       // Ensuite sauvegarde dans Firestore avec l'URL de l'image
@@ -82,7 +81,7 @@ export default function AdminPlats() {
         description, 
         quantite: Number(quantite),
         prix: Number(prix), 
-        image: finalImageUrl || 'none'
+        image: imageUrl
       });
       
       setMessage(`Plat ajouté avec succès`);
@@ -91,7 +90,6 @@ export default function AdminPlats() {
       setDescription("");
       setQuantite("");
       setPrix("");
-      setImageUrl("");
       setImage(null);
       setShowAddForm(false);
       
@@ -199,7 +197,7 @@ export default function AdminPlats() {
         </div>
 
       {/* Toast de notification */}
-      <Toast message={message} show={showToast} />
+      <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
       {/* Bouton Ajouter */}
       <div className="max-w-7xl mx-auto mb-6">
@@ -225,10 +223,9 @@ export default function AdminPlats() {
         setPrix={setPrix}
         quantite={quantite}
         setQuantite={setQuantite}
-        imageUrl={imageUrl}
-        setImageUrl={setImageUrl}
         image={image}
         setImage={setImage}
+        isUploading={isUploading}
       />
 
       {/* Modal de modification */}
@@ -248,11 +245,10 @@ export default function AdminPlats() {
         setPrix={(value) => editingPlat && setEditingPlat({ ...editingPlat, prix: Number(value) })}
         quantite={String(editingPlat?.quantite || "")}
         setQuantite={(value) => editingPlat && setEditingPlat({ ...editingPlat, quantite: Number(value) })}
-        imageUrl={editingPlat?.image || ""}
-        setImageUrl={() => {}}
         image={editImage}
         setImage={setEditImage}
         isEditing
+        isUploading={isUploading}
       />
 
       {/* Liste des plats */}
@@ -280,7 +276,7 @@ export default function AdminPlats() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {plat.nom}
                 </h3>
-                <p className="text-sm text-gray-700 mb-3">
+                <p className="text-sm text-gray-700 mb-3 whitespace-pre-line">
                   {plat.description}
                 </p>
                 <div className="flex items-center gap-3 text-xs text-gray-500">

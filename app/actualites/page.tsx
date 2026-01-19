@@ -32,6 +32,41 @@ export default function ActualitesPage() {
     fetchData();
   }, []);
 
+  const truncateText = (text: string, maxLength: number) => {
+    // Limiter par caractères d'abord
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    
+    // Puis limiter par nombre de paragraphes (max 3)
+    const paragraphs = text.split('\n').filter(p => p.trim().length > 0);
+    if (paragraphs.length > 4) {
+      return paragraphs.slice(0, 4).join('\n\n') + "...";
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    
+    return text;
+  };
+
+  const shouldShowReadMore = (text: string) => {
+    const paragraphs = text.split('\n').filter(p => p.trim().length > 0);
+    return text.length > 300 || paragraphs.length > 3;
+  };
+
+  const getCategoryStyles = (category: string) => {
+    switch (category) {
+      case "Actualité":
+        return "bg-blue-500 text-white";
+      case "Vente de plats":
+        return "bg-orange-500 text-white";
+      case "Événement à venir":
+        return "bg-green-500 text-white";
+      case "Information":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-blue-500 text-white";
+    }
+  };
+
   const fallbackImage = "/images/placeholder.png"; // Image par défaut
 
   const isValidUrl = (url: string) => {
@@ -54,7 +89,7 @@ export default function ActualitesPage() {
 
       {/* Dernière actualité mise en avant */}
       {actualites.length > 0 && (
-        <section className="py-16 md:py-24">
+        <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
             <div className="mb-8">
               <span className="inline-block px-4 py-2 bg-orange-500 text-white text-sm font-medium tracking-wide rounded-full">
@@ -63,7 +98,7 @@ export default function ActualitesPage() {
             </div>
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Image de l'actualité */}
-              <div className="relative h-[350px] md:h-[450px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden">
+              <div className="relative h-[350px] md:h-[450px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden shadow-xl">
                 {actualites[0].image && actualites[0].image !== 'none' ? (
                   <Image
                     src={actualites[0].image}
@@ -81,7 +116,7 @@ export default function ActualitesPage() {
               
               {/* Contenu */}
               <div>
-                <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
+                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actualites[0].category)}`}>
                   {actualites[0].category}
                 </span>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
@@ -94,9 +129,33 @@ export default function ActualitesPage() {
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-gray-600 text-base leading-relaxed text-justify">
-                  {actualites[0].content}
+                <p className="text-gray-600 text-base leading-relaxed text-justify whitespace-pre-line">
+                  {truncateText(actualites[0].content, 300)}
                 </p>
+                <div className="flex flex-wrap items-center gap-3 mt-4">
+                  {shouldShowReadMore(actualites[0].content) && (
+                    <Link
+                      href={`/actualites/${actualites[0].id}`}
+                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
+                    >
+                      Lire la suite
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  )}
+                  {actualites[0].category === "Vente de plats" && (
+                    <Link
+                      href="/vente-plats"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
+                    >
+                      Commander
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -119,7 +178,7 @@ export default function ActualitesPage() {
                 }`}
               >
                 {/* Image de l'actualité */}
-                <div className={`relative h-[300px] md:h-[350px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden ${index % 2 === 1 ? "md:col-start-2" : ""}`}>
+                <div className={`relative h-[300px] md:h-[350px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden shadow-xl ${index % 2 === 1 ? "md:col-start-2" : ""}`}>
                   {actu.image && actu.image !== 'none' ? (
                     <Image
                       src={actu.image}
@@ -137,7 +196,7 @@ export default function ActualitesPage() {
                 
                 {/* Contenu */}
                 <div className={index % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}>
-                  <span className="text-blue-600 text-xs font-medium tracking-wide uppercase">
+                  <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actu.category)}`}>
                     {actu.category}
                   </span>
                   <h3 className="text-xl font-bold text-gray-900 mb-3 mt-2 leading-tight md:text-2xl">
@@ -150,9 +209,33 @@ export default function ActualitesPage() {
                       day: "numeric",
                     })}
                   </p>
-                  <p className="text-gray-600 text-base leading-relaxed text-justify">
-                    {actu.content}
+                  <p className="text-gray-600 text-base leading-relaxed text-justify whitespace-pre-line">
+                    {truncateText(actu.content, 300)}
                   </p>
+                  <div className="flex flex-wrap items-center gap-3 mt-4">
+                    {shouldShowReadMore(actu.content) && (
+                      <Link
+                        href={`/actualites/${actu.id}`}
+                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
+                      >
+                        Lire la suite
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    )}
+                    {actu.category === "Vente de plats" && (
+                      <Link
+                        href="/vente-plats"
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
+                      >
+                        Commander
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

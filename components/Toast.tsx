@@ -1,9 +1,10 @@
 interface ToastProps {
   message: string;
   show: boolean;
+  onClose?: () => void;
 }
 
-export default function Toast({ message, show }: ToastProps) {
+export default function Toast({ message, show, onClose }: ToastProps) {
   if (!show) return null;
 
   const isSuccess = message.includes('succès');
@@ -29,6 +30,16 @@ export default function Toast({ message, show }: ToastProps) {
             {message}
           </p>
         </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-full p-2 transition-colors flex-shrink-0"
+          >
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
   );

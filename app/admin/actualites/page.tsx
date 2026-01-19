@@ -28,10 +28,9 @@ export default function AdminActualites() {
   const [actualites, setActualites] = useState<Actualite[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("Actualité");
-  const [imageUrl, setImageUrl] = useState("");
+  const [category, setCategory] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -80,7 +79,8 @@ export default function AdminActualites() {
       const id = await uploadActualite({ 
         title, 
         content, 
-        category, 
+        category,
+        date: new Date(date).toISOString(),
         image: imageUrl
       });
       
@@ -88,7 +88,8 @@ export default function AdminActualites() {
       setShowToast(true);
       setTitle("");
       setContent("");
-      setCategory("Actualité");
+      setCategory("");
+      setDate(new Date().toISOString().split('T')[0]);
       setImage(null);
       setShowAddForm(false);
       
@@ -118,9 +119,13 @@ export default function AdminActualites() {
   };
 
   const handleEditClick = (actu: Actualite) => {
+    // Convertir la date au format YYYY-MM-DD pour l'input type="date"
+    const dateForInput = actu.date ? new Date(actu.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+    
     setEditingActualite({
       ...actu,
-      category: actu.category || "Actualité",
+      date: dateForInput,
+      category: actu.category || "",
       slug: actu.slug || actu.title.toLowerCase().replace(/\s+/g, "-"),
     });
     setEditImage(null);
@@ -145,8 +150,8 @@ export default function AdminActualites() {
         title: editingActualite.title,
         content: editingActualite.content,
         category: editingActualite.category,
+        date: editingActualite.date,
         image: imageUrl,
-        date: new Date().toISOString(), // Ajout de la date de modification
       });
       setActualites((prev) =>
         prev.map((actu) =>
@@ -196,7 +201,7 @@ export default function AdminActualites() {
         </div>
 
         {/* Toast de notification */}
-        <Toast message={message} show={showToast} />
+        <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
         {/* Bouton Ajouter */}
         <div className="max-w-7xl mx-auto mb-6">
@@ -216,14 +221,15 @@ export default function AdminActualites() {
           title="Nouvelle actualité"
           titre={title}
           setTitre={setTitle}
+          categorie={category}
+          setCategorie={setCategory}
           contenu={content}
           setContenu={setContent}
           date={date}
           setDate={setDate}
-          imageUrl={imageUrl}
-          setImageUrl={setImageUrl}
           image={image}
           setImage={setImage}
+          isUploading={isUploading}
         />
 
         {/* Modal de modification */}
@@ -237,15 +243,16 @@ export default function AdminActualites() {
           title="Modifier l'actualité"
           titre={editingActualite?.title || ""}
           setTitre={(value) => editingActualite && setEditingActualite({ ...editingActualite, title: value })}
+          categorie={editingActualite?.category || ""}
+          setCategorie={(value) => editingActualite && setEditingActualite({ ...editingActualite, category: value })}
           contenu={editingActualite?.content || ""}
           setContenu={(value) => editingActualite && setEditingActualite({ ...editingActualite, content: value })}
           date={editingActualite?.date || ""}
           setDate={(value) => editingActualite && setEditingActualite({ ...editingActualite, date: value })}
-          imageUrl={editingActualite?.image || ""}
-          setImageUrl={() => {}}
           image={editImage}
           setImage={setEditImage}
           isEditing
+          isUploading={isUploading}
         />
 
       {/* Liste des actualités */}
@@ -277,7 +284,7 @@ export default function AdminActualites() {
                   <p className="text-xs text-gray-500">
                     {formatDate(actu.date).toLocaleDateString('fr-FR')}
                   </p>
-                  <p className="text-sm text-gray-700 line-clamp-3">
+                  <p className="text-sm text-gray-700 line-clamp-3 whitespace-pre-line">
                     {actu.content}
                   </p>
                 </div>

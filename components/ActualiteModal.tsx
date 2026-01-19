@@ -7,15 +7,16 @@ interface ActualiteModalProps {
   title: string;
   titre: string;
   setTitre: (value: string) => void;
+  categorie: string;
+  setCategorie: (value: string) => void;
   contenu: string;
   setContenu: (value: string) => void;
   date: string;
   setDate: (value: string) => void;
-  imageUrl: string;
-  setImageUrl: (value: string) => void;
   image: File | null;
   setImage: (file: File | null) => void;
   isEditing?: boolean;
+  isUploading?: boolean;
 }
 
 export default function ActualiteModal({
@@ -25,15 +26,16 @@ export default function ActualiteModal({
   title,
   titre,
   setTitre,
+  categorie,
+  setCategorie,
   contenu,
   setContenu,
   date,
   setDate,
-  imageUrl,
-  setImageUrl,
   image,
   setImage,
-  isEditing = false
+  isEditing = false,
+  isUploading = false
 }: ActualiteModalProps) {
   if (!isOpen) return null;
 
@@ -73,8 +75,27 @@ export default function ActualiteModal({
               value={titre}
               onChange={(e) => setTitre(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Ex: Vente de plats le 25 janvier"
               required
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Catégorie
+            </label>
+            <select
+              value={categorie}
+              onChange={(e) => setCategorie(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="">Choisir une catégorie</option>
+              <option value="Actualité">Actualité</option>
+              <option value="Événement à venir">Événement à venir</option>
+              <option value="Vente de plats">Vente de plats</option>
+              <option value="Information">Information</option>
+            </select>
           </div>
 
           <div>
@@ -86,6 +107,7 @@ export default function ActualiteModal({
               onChange={(e) => setContenu(e.target.value)}
               rows={5}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Ex: Nous organisons une vente de plats traditionnels. Venez nombreux pour soutenir notre association..."
               required
             />
           </div>
@@ -103,45 +125,41 @@ export default function ActualiteModal({
             />
           </div>
 
-          {!isEditing && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                URL de l'image
-              </label>
-              <input
-                type="url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="https://..."
-                required
-              />
-            </div>
-          )}
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {isEditing ? 'Changer l\'image (optionnel)' : 'Ou télécharger une image'}
+              {isEditing ? 'Changer l\'image (optionnel)' : 'Image de l\'actualité'}
             </label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              required={!isEditing}
             />
+            {image && (
+              <p className="text-xs text-gray-500 mt-2">Fichier sélectionné : {image.name}</p>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-semibold shadow-lg"
+              disabled={isUploading}
+              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {isEditing ? 'Modifier' : 'Ajouter'}
+              {isUploading && (
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {isUploading ? 'Enregistrement...' : (isEditing ? 'Modifier' : 'Ajouter')}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+              disabled={isUploading}
+              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Annuler
             </button>
