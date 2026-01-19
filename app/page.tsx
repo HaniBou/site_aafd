@@ -1,12 +1,150 @@
+"use client";
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { SimpleHero } from '@/components/SimpleHero'
+import { useEffect, useState } from 'react'
+import getActualites from '@/lib/getActualites'
+
+interface Actualite {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  image: string;
+  content: string;
+}
 
 export default function HomePage() {
+  const [latestActualite, setLatestActualite] = useState<Actualite | null>(null);
+
+  useEffect(() => {
+    async function fetchLatestActualite() {
+      try {
+        const actualites = await getActualites();
+        if (actualites.length > 0) {
+          // Trier par date décroissante et prendre la plus récente
+          const sorted = actualites.sort((a, b) => 
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
+          setLatestActualite(sorted[0]);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération de l'actualité:", error);
+      }
+    }
+    fetchLatestActualite();
+  }, []);
+
+  const getCategoryStyles = (category: string) => {
+    switch (category) {
+      case "Actualité":
+        return "bg-blue-500 text-white";
+      case "Vente de plats":
+        return "bg-orange-500 text-white";
+      case "Événement à venir":
+        return "bg-green-500 text-white";
+      case "Information":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-blue-500 text-white";
+    }
+  };
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + "...";
+  };
+
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section simple */}
       <SimpleHero />
+
+      {/* Actualité à la une */}
+      {latestActualite && (
+        <section className="py-12 md:py-16 bg-gray-50">
+          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="inline-block px-4 py-2 bg-orange-500 text-white text-sm font-medium tracking-wide rounded-full">
+                  À la une
+                </span>
+                <h2 className="text-2xl font-bold text-gray-900">Dernière actualité</h2>
+              </div>
+              <Link
+                href="/actualites"
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors hidden sm:inline-flex items-center gap-1"
+              >
+                Voir toutes les actualités
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-2xl shadow-lg overflow-hidden">
+              {/* Image */}
+              <div className="relative h-[300px] md:h-[400px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                {latestActualite.image && latestActualite.image !== 'none' ? (
+                  <Image
+                    src={latestActualite.image}
+                    alt={latestActualite.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                ) : (
+                  <svg className="h-24 w-24 text-white/60" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                )}
+              </div>
+              
+              {/* Contenu */}
+              <div className="p-6 md:p-8">
+                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(latestActualite.category)}`}>
+                  {latestActualite.category}
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
+                  {latestActualite.title}
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  {new Date(latestActualite.date).toLocaleDateString("fr-FR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  {truncateText(latestActualite.content, 200)}
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/actualites/${latestActualite.id}`}
+                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+                  >
+                    Lire la suite
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  {latestActualite.category === "Vente de plats" && (
+                    <Link
+                      href="/vente-plats"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
+                    >
+                      Commander
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Ce qui nous anime */}
       <section className="py-16 md:py-24">
