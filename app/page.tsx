@@ -234,9 +234,12 @@ export default function HomePage() {
               </div>
               <Link
                 href="/notre-action"
-                className="mt-6 inline-block text-lg text-blue-900 font-semibold hover:underline"
+                className="mt-6 inline-flex items-center gap-2 text-lg text-blue-900 font-semibold hover:underline"
               >
-                Découvrir notre action en détail →
+                Découvrir notre action en détail
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-gray-200">

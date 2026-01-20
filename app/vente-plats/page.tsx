@@ -71,7 +71,7 @@ export default function VentePlatsPage() {
       </section>
 
       {/* Plats disponibles */}
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 bg-slate-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-gray-900">
@@ -115,7 +115,7 @@ export default function VentePlatsPage() {
       </section>
 
       {/* Comment ça marche */}
-      <section className="py-16 bg-blue-50">
+      <section className="py-16 bg-primary/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-bold text-gray-900 mb-12 sm:text-4xl">
             Comment ça marche ?
