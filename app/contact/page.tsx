@@ -26,10 +26,10 @@ export default function ContactPage() {
             
             {/* Colonne de gauche - Informations de contact */}
             <div className="lg:col-span-1 lg:pt-10">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              <h2 className="text-gray-900">
                 Restons en contact
               </h2>
-              <p className="text-slate-600 mb-8">
+              <p className="text-gray-600 mb-8 text-justify">
                 L'association AAFD s'engage à répondre dans les meilleurs délais. Chaque message est important pour nous.
               </p>
 

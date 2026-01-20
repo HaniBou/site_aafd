@@ -35,10 +35,10 @@ export default function TemoignagesPage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Témoignages des familles accompagnées
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-body-large text-gray-600">
               Des parcours de résilience et d&apos;espoir
             </p>
           </div>
@@ -62,7 +62,7 @@ export default function TemoignagesPage() {
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                   </svg>
                 </div>
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                <p className="text-lg text-gray-700 leading-relaxed mb-6 text-justify">
                   &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt 
                   ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
                   laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
@@ -84,7 +84,7 @@ export default function TemoignagesPage() {
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                   </svg>
                 </div>
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                <p className="text-lg text-gray-700 leading-relaxed mb-6 text-justify">
                   &quot;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque 
                   laudantium, totam rem aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto 
                   beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut 
@@ -125,7 +125,7 @@ export default function TemoignagesPage() {
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                   </svg>
                 </div>
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                <p className="text-lg text-gray-700 leading-relaxed mb-6 text-justify">
                   &quot;At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium 
                   voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati 
                   cupiditate non provident. Similique sunt in culpa qui officia deserunt mollitia animi, id est 
@@ -165,7 +165,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus suspendisse 
                   lectus tortor aliquam nulla facilisi cras fermentum. Dignissim enim sit amet venenatis 
                   urna cursus eget nunc scelerisque.&quot;
@@ -186,7 +186,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis 
                   egestas. Vestibulum tortor quam, feugiat vitae ultricies eget tempor sit amet.&quot;
                 </p>
@@ -206,7 +206,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil 
                   molestiae consequatur vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.&quot;
                 </p>
@@ -226,7 +226,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe 
                   eveniet ut et voluptates repudiandae sint et molestiae non recusandae.&quot;
                 </p>
@@ -246,7 +246,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Itaque earum rerum hic tenetur a sapiente delectus ut aut reiciendis voluptatibus 
                   maiores alias consequatur aut perferendis doloribus asperiores repellat.&quot;
                 </p>
@@ -266,7 +266,7 @@ export default function TemoignagesPage() {
                 />
               </div>
               <div className="p-6">
-                <p className="text-gray-700 mb-4 italic">
+                <p className="text-gray-700 mb-4 italic text-justify">
                   &quot;Nam libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus 
                   id quod maxime placeat facere possimus omnis voluptas assumenda est.&quot;
                 </p>

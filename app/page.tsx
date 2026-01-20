@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { SimpleHero } from '@/components/SimpleHero'
+import { MainHero } from '@/components/MainHero'
 import { useEffect, useState } from 'react'
 import getActualites from '@/lib/getActualites'
+import { getCategoryStyles } from '@/lib/categoryStyles'
 
 interface Actualite {
   id: string;
@@ -36,21 +37,6 @@ export default function HomePage() {
     fetchLatestActualite();
   }, []);
 
-  const getCategoryStyles = (category: string) => {
-    switch (category) {
-      case "Actualité":
-        return "bg-blue-500 text-white";
-      case "Vente de plats":
-        return "bg-orange-500 text-white";
-      case "Événement à venir":
-        return "bg-green-500 text-white";
-      case "Information":
-        return "bg-gray-500 text-white";
-      default:
-        return "bg-blue-500 text-white";
-    }
-  };
-
   const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + "...";
@@ -59,7 +45,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section simple */}
-      <SimpleHero />
+      <MainHero />
 
       {/* Actualité à la une */}
       {latestActualite && (
@@ -70,7 +56,6 @@ export default function HomePage() {
                 <span className="inline-block px-4 py-2 bg-orange-500 text-white text-sm font-medium tracking-wide rounded-full">
                   À la une
                 </span>
-                <h2 className="text-2xl font-bold text-gray-900">Dernière actualité</h2>
               </div>
               <Link
                 href="/actualites"
@@ -92,6 +77,7 @@ export default function HomePage() {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
                   />
                 ) : (
                   <svg className="h-24 w-24 text-white/60" fill="currentColor" viewBox="0 0 24 24">
@@ -105,17 +91,17 @@ export default function HomePage() {
                 <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(latestActualite.category)}`}>
                   {latestActualite.category}
                 </span>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 mt-3 leading-tight">
+                <h3 className="large text-gray-900 mt-3">
                   {latestActualite.title}
                 </h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-small text-gray-500">
                   {new Date(latestActualite.date).toLocaleDateString("fr-FR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                <p className="text-gray-600">
                   {truncateText(latestActualite.content, 200)}
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
@@ -150,10 +136,10 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Ce qui nous anime
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
               Accompagner, soutenir et créer du lien avec les familles réfugiées
             </p>
           </div>
@@ -167,14 +153,14 @@ export default function HomePage() {
                   alt="Sensibiliser"
                   fill
                   className="object-cover"
-                  priority
+                  
                 />
               </div>
               <div className="p-6 bg-white">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Sensibiliser
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Sensibiliser sur la question de l&apos;immigration et comprendre les raisons de l&apos;exil
                 </p>
               </div>
@@ -188,14 +174,14 @@ export default function HomePage() {
                   alt="Créer du lien"
                   fill
                   className="object-cover"
-                  priority
+                  
                 />
               </div>
               <div className="p-6 bg-white">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Créer du lien
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Créer des liens amicaux et festifs entre la population locale et les familles réfugiées
                 </p>
               </div>
@@ -209,14 +195,14 @@ export default function HomePage() {
                   alt="Récolter des fonds"
                   fill
                   className="object-cover"
-                  priority
+                  
                 />
               </div>
               <div className="p-6 bg-white">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Récolter des fonds
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Développer l&apos;aide matérielle : transports, assurances, avocats, hébergement...
                 </p>
               </div>
@@ -230,19 +216,19 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h2 className="text-gray-900">
                 Qui aidons-nous ?
               </h2>
-              <div className="prose prose-xl text-gray-600">
-                <p className="mb-4 text-base leading-relaxed">
+              <div className="prose prose-xl text-gray-600 text-justify">
+                <p className="text-gray-600">
                   Nous accompagnons des <strong>familles réfugiées</strong> originaires d&apos;Albanie, du Kosovo, 
                   de Bosnie, d&apos;Arménie, d&apos;Algérie, de Guinée, de République Démocratique du Congo et d&apos;autres pays.
                 </p>
-                <p className="mb-4 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Nous soutenons également des <strong>jeunes isolés</strong> localisés sur le Val de Saône 
                   dans les difficultés matérielles ou administratives qu&apos;ils rencontrent.
                 </p>
-                <p className="text-base leading-relaxed">
+                <p className="text-gray-600">
                   Les jeunes et les familles sont <strong>associés et participent</strong> activement à nos événements.
                 </p>
               </div>
@@ -259,7 +245,7 @@ export default function HomePage() {
                 alt="Qui aidons-nous"
                 fill
                 className="object-cover"
-                priority
+                
               />
             </div>
           </div>
@@ -270,10 +256,10 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Nos événements
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-body-large text-gray-600">
               Tout au long de l&apos;année, nous organisons des événements conviviaux
             </p>
           </div>
@@ -287,14 +273,14 @@ export default function HomePage() {
                   alt="Vente de plats"
                   fill
                   className="object-cover"
-                  priority
+                  
                 />
               </div>
               <div className="p-6">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Ventes de plats traditionnels
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Les familles cuisinent des plats de leurs pays. 140 à 150 menus vendus chaque mois !
                 </p>
               </div>
@@ -308,14 +294,14 @@ export default function HomePage() {
                   alt="Événements festifs"
                   fill
                   className="object-cover"
-                  priority
+                  
                 />
               </div>
               <div className="p-6">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Événements festifs
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Tout au long de l&apos;année, nous organisons des moments conviviaux pour créer du lien et sensibiliser.
                 </p>
               </div>
@@ -329,14 +315,14 @@ export default function HomePage() {
                   alt="Nettoyage Val de Saône"
                   fill
                   className="object-cover object-bottom"
-                  priority
+                  
                 />
               </div>
               <div className="p-6">
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="text-gray-900">
                   Nettoyons notre Val de Saône
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-gray-600">
                   Action environnementale avec les familles pour rendre notre environnement plus agréable.
                 </p>
               </div>
@@ -348,10 +334,10 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
+          <h2>
             Rejoignez notre communauté
           </h2>
-          <p className="mb-8 text-lg text-blue-100 leading-relaxed">
+          <p className="mb-8 text-body-large text-blue-100">
             Que vous souhaitiez devenir bénévole, faire un don ou simplement en savoir plus,
             nous serions ravis de vous accueillir.
           </p>

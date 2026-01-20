@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { PageHero } from "@/components/PageHero";
+import { getCategoryStyles } from '@/lib/categoryStyles';
 
 interface Actualite {
   id: string;
@@ -49,21 +50,6 @@ export default function ActualiteDetailPage({ params }: { params: Promise<{ id: 
     
     fetchActualite();
   }, [actualiteId]);
-
-  const getCategoryStyles = (category: string) => {
-    switch (category) {
-      case "Actualité":
-        return "bg-blue-500 text-white";
-      case "Vente de plats":
-        return "bg-orange-500 text-white";
-      case "Événement à venir":
-        return "bg-green-500 text-white";
-      case "Information":
-        return "bg-gray-500 text-white";
-      default:
-        return "bg-blue-500 text-white";
-    }
-  };
 
   if (loading) {
     return (
@@ -189,10 +175,10 @@ export default function ActualiteDetailPage({ params }: { params: Promise<{ id: 
       {/* CTA Instagram */}
       <section className="bg-gradient-to-br from-blue-900 to-blue-700 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
+          <h2>
             Restez informé
           </h2>
-          <p className="mb-8 text-lg text-blue-100 leading-relaxed">
+          <p className="mb-8 text-body-large text-blue-100">
             Suivez-nous sur Instagram pour ne rien manquer de nos actualités et événements
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

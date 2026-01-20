@@ -32,10 +32,10 @@ export function PageHero({
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-5xl text-white drop-shadow-2xl">
+        <h1 className="text-white drop-shadow-2xl">
           {title}
         </h1>
-        <p className="text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+        <p className="text-body-large text-white/95 max-w-2xl mx-auto drop-shadow-lg">
           {description}
         </p>
       </div>

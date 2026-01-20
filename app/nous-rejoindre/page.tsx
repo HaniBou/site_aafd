@@ -24,10 +24,10 @@ export default function NousRejoindre() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Pourquoi devenir bénévole ?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
               Rejoindre l&apos;AAFD, c&apos;est bien plus qu&apos;un engagement associatif
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Agir concrètement
               </h3>
               <p className="text-gray-700">
@@ -53,7 +53,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Créer des rencontres
               </h3>
               <p className="text-gray-700">
@@ -67,7 +67,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Développer vos compétences
               </h3>
               <p className="text-gray-700">
@@ -81,7 +81,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Moments conviviaux
               </h3>
               <p className="text-gray-700">
@@ -95,7 +95,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 S&apos;informer
               </h3>
               <p className="text-gray-700">
@@ -109,7 +109,7 @@ export default function NousRejoindre() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Engagement flexible
               </h3>
               <p className="text-gray-700">
@@ -124,10 +124,10 @@ export default function NousRejoindre() {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Nos différentes missions
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
               De nombreuses façons de s&apos;engager selon vos compétences et disponibilités
             </p>
           </div>
@@ -184,7 +184,7 @@ export default function NousRejoindre() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Ils témoignent
             </h2>
           </div>
@@ -196,7 +196,7 @@ export default function NousRejoindre() {
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
-              <p className="text-gray-700 mb-4 text-lg italic">
+              <p className="text-gray-700 mb-4 text-lg italic text-justify">
                 &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.&quot;
               </p>
@@ -209,7 +209,7 @@ export default function NousRejoindre() {
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
-              <p className="text-gray-700 mb-4 text-lg italic">
+              <p className="text-gray-700 mb-4 text-lg italic text-justify">
                 &quot;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque 
                 laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis.&quot;
               </p>
@@ -223,10 +223,10 @@ export default function NousRejoindre() {
       <section className="bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
+            <h2>
               Comment nous rejoindre ?
             </h2>
-            <p className="text-lg text-blue-100 mb-12">
+            <p className="text-body-large text-blue-100 mb-12">
               Rejoindre l&apos;AAFD est simple et ne demande aucun engagement à long terme
             </p>
 
@@ -276,7 +276,7 @@ export default function NousRejoindre() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Questions fréquentes
             </h2>
           </div>
@@ -328,10 +328,10 @@ export default function NousRejoindre() {
       {/* CTA Final */}
       <section className="bg-gradient-to-br from-blue-900 to-purple-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+          <h2>
             Ensemble, créons du lien et de la solidarité
           </h2>
-          <p className="mb-8 text-lg text-blue-100">
+          <p className="mb-8 text-body-large text-blue-100">
             Rejoignez une communauté engagée et bienveillante
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

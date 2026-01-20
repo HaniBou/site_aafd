@@ -23,10 +23,10 @@ export default function NousConnaitrePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h2 className="text-gray-900">
                 Notre histoire
               </h2>
-              <div className="prose prose-lg text-gray-600 space-y-4">
+              <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
                   Depuis <strong>17 ans maintenant</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté 
                   œuvre sur le territoire du Val de Saône pour accompagner les personnes en situation de précarité.
@@ -58,10 +58,10 @@ export default function NousConnaitrePage() {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Notre mission
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
               Nous organisons tout au long de l&apos;année des événements pour atteindre trois objectifs complémentaires
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function NousConnaitrePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Sensibiliser
               </h3>
               <p className="text-gray-600">
@@ -87,7 +87,7 @@ export default function NousConnaitrePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Créer des liens
               </h3>
               <p className="text-gray-600">
@@ -101,7 +101,7 @@ export default function NousConnaitrePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              <h3 className="text-gray-900">
                 Récolter des fonds
               </h3>
               <p className="text-gray-600">
@@ -126,7 +126,7 @@ export default function NousConnaitrePage() {
               />
             </div>
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h2 className="text-gray-900">
                 Nos valeurs
               </h2>
               <div className="space-y-6">
@@ -137,7 +137,7 @@ export default function NousConnaitrePage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Solidarité</h3>
+                    <h3 className="text-gray-900">Solidarité</h3>
                     <p className="text-gray-600">
                       Nous croyons en l&apos;importance de l&apos;entraide et du soutien mutuel pour construire une société plus juste.
                     </p>
@@ -151,7 +151,7 @@ export default function NousConnaitrePage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Respect</h3>
+                    <h3 className="text-gray-900">Respect</h3>
                     <p className="text-gray-600">
                       Chaque personne est unique et mérite d&apos;être traitée avec dignité, quelles que soient ses origines.
                     </p>
@@ -165,7 +165,7 @@ export default function NousConnaitrePage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Participation</h3>
+                    <h3 className="text-gray-900">Participation</h3>
                     <p className="text-gray-600">
                       Les jeunes et les familles sont associés et participent activement aux événements de l&apos;association.
                     </p>
@@ -181,7 +181,7 @@ export default function NousConnaitrePage() {
       <section className="bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+            <h2>
               L&apos;AAFD en chiffres
             </h2>
           </div>
@@ -210,10 +210,10 @@ export default function NousConnaitrePage() {
       {/* CTA */}
       <section className="py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h2 className="text-gray-900">
             Envie d&apos;en savoir plus ?
           </h2>
-          <p className="mb-8 text-lg text-gray-600">
+          <p className="mb-8 text-body-large text-gray-600">
             Découvrez nos actions concrètes ou rejoignez notre communauté de bénévoles
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

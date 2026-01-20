@@ -24,10 +24,10 @@ export default function NousSoutenirPage() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Pourquoi nous soutenir ?
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
               Votre contribution permet de financer des actions concrètes et essentielles
             </p>
           </div>
@@ -42,7 +42,7 @@ export default function NousSoutenirPage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Aide au logement</h3>
+                <h3 className="text-gray-900">Aide au logement</h3>
                 <p className="text-gray-600">
                   Financement de cautions, loyers, et frais d&apos;agence pour permettre aux familles 
                   d&apos;accéder à un logement décent.
@@ -59,7 +59,7 @@ export default function NousSoutenirPage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Frais juridiques</h3>
+                <h3 className="text-gray-900">Frais juridiques</h3>
                 <p className="text-gray-600">
                   Prise en charge des honoraires d&apos;avocats et frais de justice pour défendre 
                   les droits des familles réfugiées.
@@ -76,7 +76,7 @@ export default function NousSoutenirPage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Besoins quotidiens</h3>
+                <h3 className="text-gray-900">Besoins quotidiens</h3>
                 <p className="text-gray-600">
                   Aide pour les transports, assurances, équipements de première nécessité, 
                   et frais de scolarité.
@@ -91,7 +91,7 @@ export default function NousSoutenirPage() {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+            <h2 className="text-gray-900">
               Comment nous soutenir ?
             </h2>
           </div>

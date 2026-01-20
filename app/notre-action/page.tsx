@@ -25,10 +25,10 @@ export default function NotreActionPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h2 className="text-gray-900">
                 Ventes de plats traditionnels
               </h2>
-              <div className="prose prose-lg text-gray-600 space-y-4">
+              <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
                   Chaque mois, nous organisons des <strong>ventes de plats traditionnels</strong> cuisinés 
                   par les familles que nous accompagnons.
@@ -75,10 +75,10 @@ export default function NotreActionPage() {
               />
             </div>
             <div className="order-1 md:order-2">
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h2 className="text-gray-900">
                 Événements festifs et sportifs
               </h2>
-              <div className="prose prose-lg text-gray-600 space-y-4">
+              <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
                   Tout au long de l&apos;année, nous organisons des <strong>événements conviviaux</strong> qui 
                   rassemblent habitants du Val de Saône, familles réfugiées et sympathisants.
@@ -105,7 +105,7 @@ export default function NotreActionPage() {
               <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
                 Nettoyons notre Val de Saône
               </h2>
-              <div className="prose prose-lg text-gray-600 space-y-4">
+              <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
                   Au-delà de l&apos;aide aux familles, nous sommes engagés pour notre territoire et 
                   l&apos;environnement à travers des <strong>actions de nettoyage</strong> participatives.
