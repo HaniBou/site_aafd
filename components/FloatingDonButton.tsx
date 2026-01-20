@@ -41,6 +41,7 @@ export function FloatingDonButton() {
 
   return (
     <a
+      id="floating-don-button"
       href="https://www.helloasso.com/associations/association-d-aide-aux-familles-en-difficulte-en-val-de-saone"
       target="_blank"
       rel="noopener noreferrer"

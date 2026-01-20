@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import getPlats from "@/lib/getPlats";
 import ReservationModal from "@/components/ReservationModal";
 import { PageHero } from "@/components/PageHero";
+import PlatCard from "@/components/PlatCard";
 
 type Plat = {
   id: string;
@@ -57,10 +57,10 @@ export default function VentePlatsPage() {
       {/* Introduction */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 sm:text-4xl">
+          <h2 className="text-gray-900">
             Une cuisine qui a du cœur
           </h2>
-          <p className="text-lg text-gray-700 leading-relaxed mb-4">
+          <p className="text-body-large text-gray-700 mb-4">
             Nos bénévoles préparent régulièrement des plats faits maison que vous pouvez réserver. 
             En achetant nos plats, vous soutenez directement les actions de l&apos;AAFD auprès des familles en difficulté.
           </p>
@@ -74,67 +74,22 @@ export default function VentePlatsPage() {
       <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 sm:text-4xl">
+            <h2 className="text-gray-900">
               Nos Plats du Moment
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-body-large text-gray-600">
               Découvrez nos spécialités préparées avec des produits frais
             </p>
           </div>
 
           <div className="flex flex-wrap gap-8 justify-center">
             {plats.map((plat, index) => (
-              <div key={plat.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-all  w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md">
-                <div className="relative h-48 bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center overflow-hidden">
-                  {plat.image && plat.image !== 'none' ? (
-                    <Image
-                      src={plat.image}
-                      alt={plat.nom}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <span className="text-8xl">{getRandomIcon(index)}</span>
-                  )}
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-gray-900">{plat.nom}</h3>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    {plat.description}
-                  </p>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-2xl font-bold text-orange-600">
-                      {plat.prix}€
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      {plat.quantite > 0 ? (
-                        <span className="text-green-600 font-semibold flex items-center gap-1">
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          {plat.quantite} dispo.
-                        </span>
-                      ) : (
-                        <span className="text-red-600 font-semibold">Épuisé</span>
-                      )}
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => openModal(plat)}
-                    className={`w-full font-semibold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg ${
-                      plat.quantite > 0
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                    disabled={plat.quantite === 0}
-                  >
-                    {plat.quantite > 0 ? 'Réserver ce plat' : 'Non disponible'}
-                  </button>
-                </div>
-              </div>
+              <PlatCard 
+                key={plat.id}
+                plat={plat}
+                onReserve={openModal}
+                iconFallback={platIcons[index % platIcons.length]}
+              />
             ))}
           </div>
 

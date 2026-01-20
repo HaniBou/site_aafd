@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 
 interface PlatModalProps {
   isOpen: boolean;
@@ -37,6 +37,25 @@ export default function PlatModal({
   isEditing = false,
   isUploading = false
 }: PlatModalProps) {
+  // Cacher le bouton flottant don quand la modal est ouverte
+  useEffect(() => {
+    const floatingButton = document.getElementById('floating-don-button');
+    if (isOpen && floatingButton) {
+      floatingButton.style.opacity = '0';
+      floatingButton.style.pointerEvents = 'none';
+    } else if (floatingButton) {
+      floatingButton.style.opacity = '';
+      floatingButton.style.pointerEvents = '';
+    }
+    
+    return () => {
+      if (floatingButton) {
+        floatingButton.style.opacity = '';
+        floatingButton.style.pointerEvents = '';
+      }
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
