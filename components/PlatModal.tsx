@@ -7,6 +7,10 @@ interface PlatModalProps {
   title: string;
   nom: string;
   setNom: (value: string) => void;
+  typeMenu: string;
+  setTypeMenu: (value: string) => void;
+  cuisiniers: string;
+  setCuisiniers: (value: string) => void;
   description: string;
   setDescription: (value: string) => void;
   prix: string;
@@ -26,6 +30,10 @@ export default function PlatModal({
   title,
   nom,
   setNom,
+  typeMenu,
+  setTypeMenu,
+  cuisiniers,
+  setCuisiniers,
   description,
   setDescription,
   prix,
@@ -37,7 +45,6 @@ export default function PlatModal({
   isEditing = false,
   isUploading = false
 }: PlatModalProps) {
-  // Cacher le bouton flottant don quand la modal est ouverte
   useEffect(() => {
     const floatingButton = document.getElementById('floating-don-button');
     if (isOpen && floatingButton) {
@@ -47,7 +54,6 @@ export default function PlatModal({
       floatingButton.style.opacity = '';
       floatingButton.style.pointerEvents = '';
     }
-    
     return () => {
       if (floatingButton) {
         floatingButton.style.opacity = '';
@@ -85,6 +91,20 @@ export default function PlatModal({
 
         {/* Formulaire */}
         <form onSubmit={onSubmit} className="p-6 space-y-4">
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Type de menu (ex: Menu congolais)
+            </label>
+            <input
+              type="text"
+              value={typeMenu}
+              onChange={(e) => setTypeMenu(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Ex: Menu congolais"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Nom du plat
@@ -96,6 +116,19 @@ export default function PlatModal({
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Ex: Couscous royal"
               required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Cuisiniers
+            </label>
+            <input
+              type="text"
+              value={cuisiniers}
+              onChange={(e) => setCuisiniers(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Ex: Marie, Jean ou Marie & Jean"
             />
           </div>
 

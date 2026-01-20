@@ -17,6 +17,8 @@ import Toast from "@/components/Toast";
 type Plat = {
   id: string;
   nom: string;
+  typeMenu?: string;
+  cuisiniers?: string;
   description: string;
   quantite: number;
   prix: number;
@@ -28,6 +30,8 @@ export default function AdminPlats() {
   const [plats, setPlats] = useState<Plat[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [nom, setNom] = useState("");
+  const [typeMenu, setTypeMenu] = useState("");
+  const [cuisiniers, setCuisiniers] = useState("");
   const [description, setDescription] = useState("");
   const [quantite, setQuantite] = useState("");
   const [prix, setPrix] = useState("");
@@ -78,6 +82,8 @@ export default function AdminPlats() {
       // Ensuite sauvegarde dans Firestore avec l'URL de l'image
       const id = await uploadPlat({ 
         nom, 
+        typeMenu,
+        cuisiniers,
         description, 
         quantite: Number(quantite),
         prix: Number(prix), 
@@ -87,6 +93,8 @@ export default function AdminPlats() {
       setMessage(`Plat ajouté avec succès`);
       setShowToast(true);
       setNom("");
+      setTypeMenu("");
+      setCuisiniers("");
       setDescription("");
       setQuantite("");
       setPrix("");
@@ -141,6 +149,8 @@ export default function AdminPlats() {
       
       await updateDoc(doc(db, "plats", editingPlat.id), {
         nom: editingPlat.nom,
+        typeMenu: editingPlat.typeMenu || undefined,
+        cuisiniers: editingPlat.cuisiniers || undefined,
         description: editingPlat.description,
         quantite: Number(editingPlat.quantite),
         prix: Number(editingPlat.prix),
@@ -217,6 +227,10 @@ export default function AdminPlats() {
         title="Nouveau plat"
         nom={nom}
         setNom={setNom}
+        typeMenu={typeMenu}
+        setTypeMenu={setTypeMenu}
+        cuisiniers={cuisiniers}
+        setCuisiniers={setCuisiniers}
         description={description}
         setDescription={setDescription}
         prix={prix}
@@ -239,6 +253,10 @@ export default function AdminPlats() {
         title="Modifier le plat"
         nom={editingPlat?.nom || ""}
         setNom={(value) => editingPlat && setEditingPlat({ ...editingPlat, nom: value })}
+        typeMenu={editingPlat?.typeMenu || ""}
+        setTypeMenu={(value) => editingPlat && setEditingPlat({ ...editingPlat, typeMenu: value })}
+        cuisiniers={editingPlat?.cuisiniers || ""}
+        setCuisiniers={(value) => editingPlat && setEditingPlat({ ...editingPlat, cuisiniers: value })}
         description={editingPlat?.description || ""}
         setDescription={(value) => editingPlat && setEditingPlat({ ...editingPlat, description: value })}
         prix={String(editingPlat?.prix || "")}

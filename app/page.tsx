@@ -156,7 +156,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6 bg-white">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Sensibiliser
                 </h3>
@@ -177,7 +177,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6 bg-white">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Créer du lien
                 </h3>
@@ -198,7 +198,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6 bg-white">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Récolter des fonds
                 </h3>
@@ -279,7 +279,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Ventes de plats traditionnels
                 </h3>
@@ -300,7 +300,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Événements festifs
                 </h3>
@@ -321,7 +321,7 @@ export default function HomePage() {
                   
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-gray-900">
                   Nettoyons notre Val de Saône
                 </h3>

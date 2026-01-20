@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 type Plat = {
   id: string;
   nom: string;
+  typeMenu?: string;
+  cuisiniers?: string;
+  items?: string[];
   description: string;
   quantite: number;
   prix: number;
@@ -88,16 +91,32 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
       </div>
 
       {/* Contenu */}
-      <div className="p-4">
+      <div className="p-4 text-center">
         {/* Nom du plat */}
         <h3 className="text-gray-900 mb-2">
-          {plat.nom}
+          {plat.typeMenu || plat.nom}
         </h3>
-
-        {/* Description */}
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-          {plat.description}
-        </p>
+        {/* Cuisiniers */}
+        {plat.cuisiniers && (
+          <p className="text-gray-500 text-xs italic mb-2">
+            concocté par {plat.cuisiniers}
+          </p>
+        )}
+        {/* Items ou Description */}
+        {plat.items && plat.items.length > 0 ? (
+          <ul className="text-gray-600 text-sm mb-3 text-left space-y-1">
+            {plat.items.slice(0, 2).map((item, index) => (
+              <li key={index} className="line-clamp-1">- {item}</li>
+            ))}
+            {plat.items.length > 2 && (
+              <li className="text-gray-400 italic">...</li>
+            )}
+          </ul>
+        ) : (
+          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+            {plat.description}
+          </p>
+        )}
 
         {/* Prix et quantité */}
         <div className="flex items-center justify-between">
@@ -167,18 +186,46 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
             <div className="p-6">
               {/* Titre et prix */}
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-gray-900">{plat.nom}</h2>
+                <div>
+                  <h2 className="text-gray-900">{plat.typeMenu || plat.nom}</h2>
+                  {plat.cuisiniers && (
+                    <p className="text-gray-500 text-sm italic mt-1">
+                      concocté par {plat.cuisiniers}
+                    </p>
+                  )}
+                </div>
                 <div className="text-3xl font-bold text-orange-600 ml-4">
                   {plat.prix}€
                 </div>
               </div>
 
-              {/* Description complète */}
+              {/* Items ou Description complète */}
               <div className="mb-6">
-                <h3 className="text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-600 leading-relaxed text-justify">
-                  {plat.description}
-                </p>
+                {plat.items && plat.items.length > 0 ? (
+                  <>
+                    <h3 className="text-gray-900 mb-2">Composition du menu</h3>
+                    <ul className="text-gray-600 leading-relaxed space-y-2">
+                      {plat.items.map((item, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-orange-500 mr-2">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {plat.description && plat.description.trim() && (
+                      <p className="text-gray-500 text-sm mt-4 italic">
+                        {plat.description}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-gray-900 mb-2">Description</h3>
+                    <p className="text-gray-600 leading-relaxed text-justify">
+                      {plat.description}
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Bouton réserver */}
