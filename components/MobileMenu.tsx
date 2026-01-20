@@ -136,15 +136,6 @@ export function MobileMenu() {
               Témoignages
             </Link>
             <Link
-              href="/nous-soutenir"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-bold rounded-full transition-all bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-md ${
-                pathname === '/nous-soutenir' && 'shadow-lg scale-105'
-              }`}
-            >
-              Nous soutenir
-            </Link>
-            <Link
               href="/nous-rejoindre"
               onClick={() => setMobileMenuOpen(false)}
               className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${

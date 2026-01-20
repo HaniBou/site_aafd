@@ -106,17 +106,6 @@ export function Navigation() {
             </Link>
 
             <Link
-              href="/nous-soutenir"
-              className={`px-5 py-2.5 text-sm font-bold rounded-full transition-all shadow-md ${
-                pathname === '/nous-soutenir'
-                  ? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg scale-105'
-                  : 'bg-gradient-to-r from-pink-500 to-pink-600 text-white hover:from-pink-600 hover:to-pink-700 hover:shadow-xl'
-              }`}
-            >
-              Nous soutenir
-            </Link>
-
-            <Link
               href="/nous-rejoindre"
               className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
                 pathname === '/nous-rejoindre'
