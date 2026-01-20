@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import emailjs from '@emailjs/browser'
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -34,28 +33,20 @@ export default function ContactForm() {
     setErrorMessage('')
 
     try {
-      // Configuration EmailJS pour le formulaire de contact
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID'
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID || 'YOUR_TEMPLATE_ID'
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+      // Envoi via l'API route Resend
+      const response = await fetch('/api/send-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-      // Préparation des données pour le template EmailJS
-      const templateParams = {
-        from_nom: formData.nom,
-        from_prenom: formData.prenom,
-        from_email: formData.email,
-        from_telephone: formData.telephone,
-        sujet: formData.sujet,
-        message: formData.message,
-        to_email: 'aafd@gmx.fr' // Email de l'association
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'envoi')
       }
-
-      await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        publicKey
-      )
 
       setStatus('success')
       // Réinitialiser le formulaire

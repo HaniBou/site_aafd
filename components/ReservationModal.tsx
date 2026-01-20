@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, FormEvent } from "react";
-import emailjs from "@emailjs/browser";
 import createReservation from "@/lib/createReservation";
 import updatePlatQuantite from "@/lib/updatePlatQuantite";
 
@@ -64,43 +63,50 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
     }
 
     try {
-      // 1. Vérifier et décrémenter la quantité dans Firestore
-      await updatePlatQuantite(plat!.id, formData.quantite);
-
-      // 2. Envoyer l'email de confirmation d'abord
+      // 1. Envoyer l'email d'abord via l'API Resend
       let emailSent = false;
       let emailErrorMessage = "";
       
       try {
-        emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+        const emailResponse = await fetch('/api/send-reservation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            platNom: plat?.nom,
+            clientNom: formData.nom,
+            clientEmail: formData.email,
+            clientTelephone: formData.telephone,
+            quantite: formData.quantite,
+            message: formData.message || "Aucun message"
+          }),
+        });
 
-        const templateParams = {
-          plat_nom: plat?.nom,
-          client_nom: formData.nom,
-          client_email: formData.email,
-          client_telephone: formData.telephone,
-          quantite: formData.quantite,
-          message: formData.message || "Aucun message"
-        };
+        const emailData = await emailResponse.json();
 
-        const response = await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-          templateParams
-        );
-
-        // Vérifier la réponse d'EmailJS
-        if (response.status === 200) {
+        if (emailResponse.ok && emailData.success) {
           emailSent = true;
         } else {
-          emailErrorMessage = `Erreur d'envoi (code ${response.status})`;
+          emailErrorMessage = emailData.error || `Erreur d'envoi`;
         }
-      } catch (emailError: any) {
-        console.error("Erreur EmailJS:", emailError);
-        emailErrorMessage = emailError?.text || "Email invalide ou erreur de serveur";
+      } catch (error: any) {
+        console.error("Erreur lors de l'envoi de l'email:", error);
+        emailErrorMessage = error?.message || "Erreur de connexion";
       }
 
-      // 3. Enregistrer la réservation dans Firestore avec le statut d'email
+      // 2. Si l'email n'a pas été envoyé, on bloque la réservation
+      if (!emailSent) {
+        setSubmitStatus("error");
+        setEmailWarning(emailErrorMessage);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 3. Email OK → on valide la réservation dans Firestore
+      await updatePlatQuantite(plat!.id, formData.quantite);
+
+      // 4. Enregistrer la réservation dans Firestore
       await createReservation({
         platId: plat!.id,
         platNom: plat!.nom,
@@ -109,17 +115,11 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
         clientTelephone: formData.telephone,
         quantite: formData.quantite,
         message: formData.message || "",
-        emailEnvoye: emailSent,
-        emailErreur: emailErrorMessage || null,
+        emailEnvoye: true,
+        emailErreur: null,
       });
 
       setSubmitStatus("success");
-      
-      // Si l'email n'a pas pu être envoyé, afficher un avertissement
-      if (!emailSent) {
-        setSubmitStatus("warning");
-        setEmailWarning(emailErrorMessage);
-      }
       
       // Fermer le modal et rafraîchir la page après 4 secondes
       setTimeout(() => {
@@ -128,8 +128,6 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
     } catch (error) {
       console.error("Erreur lors de la réservation:", error);
       setSubmitStatus("error");
-      // En cas d'erreur, la quantité n'est normalement pas décrémentée
-      // ou sera remise si l'erreur se produit après la décrémentation
     } finally {
       setIsSubmitting(false);
     }
