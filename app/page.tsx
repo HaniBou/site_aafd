@@ -270,7 +270,7 @@ export default function HomePage() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Vente de plats */}
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative h-48 w-full">
+              <div className="relative aspect-[4/3] w-full">
                 <Image 
                   src="/images/plats.webp" // Remplace par ton image
                   alt="Vente de plats"
@@ -291,7 +291,7 @@ export default function HomePage() {
 
             {/* Événements festifs */}
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative h-48 w-full">
+              <div className="relative aspect-[4/3] w-full">
                 <Image 
                   src="/images/petanque.webp" // Remplace par ton image
                   alt="Événements festifs"
@@ -312,7 +312,7 @@ export default function HomePage() {
 
             {/* Nettoyage */}
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative h-48 w-full ">
+              <div className="relative aspect-[4/3] w-full ">
                 <Image 
                   src="/images/nettoyons.webp" // Remplace par ton image
                   alt="Nettoyage Val de Saône"

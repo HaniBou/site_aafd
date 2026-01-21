@@ -46,7 +46,7 @@ export function FloatingDonButton() {
       target="_blank"
       rel="noopener noreferrer"
       style={{ willChange: isVisible ? 'auto' : 'transform, opacity' }}
-      className={`fixed bottom-14 right-6 md:bottom-18 md:right-8 z-[50] group transition-all duration-500 ease-out ${
+      className={`fixed bottom-14 right-6 md:bottom-24 md:right-8 z-[50] group transition-all duration-500 ease-out ${
         isVisible 
           ? 'opacity-100 scale-100 translate-y-0' 
           : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
