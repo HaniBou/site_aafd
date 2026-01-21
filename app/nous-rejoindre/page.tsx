@@ -150,59 +150,7 @@ export default function NousRejoindre() {
   </div>
 </section>
 
-{/* Le Mot de la Présidente */}
-<section className="py-20 bg-white overflow-hidden">
-  <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
-      
-      {/* Côté Image / Portrait */}
-<div className="relative w-48 h-48 md:w-64 md:h-64 flex-shrink-0">
-  <div className="absolute inset-0 bg-blue-300 rounded-2xl rotate-6"></div>
-  <div className="relative inset-0 w-full h-full bg-blue-900 rounded-2xl overflow-hidden border-2 border-white shadow-lg flex items-center justify-center">
-    
-    {/* On retire le onError pour éviter l'erreur Next.js */}
-    <img 
-      src="/images/photo-presidente.webp" 
-      alt="Portrait de la Présidente"
-      className="w-full h-full object-cover z-10"
-    />
 
-    {/* Texte de secours : il sera caché DERRIÈRE l'image si elle charge */}
-    <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-2xl z-0">
-      AAFD
-    </span>
-    
-  </div>
-</div>
-
-      {/* Côté Texte */}
-      <div className="flex-1">
-        <div className="mb-6">
-          <svg className="h-12 w-12 text-blue-600/20" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-          </svg>
-        </div>
-        
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">Le mot de la présidente</h2>
-        
-        <div className="space-y-4 text-gray-600 text-lg leading-relaxed italic">
-          <p>
-            &quot;Depuis la création de l&apos;AAFD, notre mission est restée la même : tisser des liens de solidarité concrets au sein de notre territoire. Chaque bénévole apporte une pierre unique à cet édifice.&quot;
-          </p>
-          <p>
-            &quot;Rejoindre notre association, c&apos;est choisir l&apos;humain, l&apos;échange et l&apos;action de proximité. Nous avons hâte de vous accueillir parmi nous.&quot;
-          </p>
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-gray-100">
-          <p className="text-xl font-bold text-gray-900">Nom de la Présidente</p>
-          <p className="text-blue-600 font-medium">Présidente de l&apos;AAFD</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
       {/* Comment nous rejoindre - RESTE IMPACTANT */}
       <section className="bg-blue-900 py-24 text-white overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
@@ -269,13 +217,13 @@ export default function NousRejoindre() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:aafd@gmx.fr?subject=Devenir bénévole AAFD"
+              href="/contact"
               className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-500 transition-colors"
             >
               Devenir bénévole
             </a>
             <Link
-              href="/notre-action"
+              href="/actualites"
               className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
             >
               Découvrir nos actions

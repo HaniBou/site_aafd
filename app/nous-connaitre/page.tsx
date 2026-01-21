@@ -21,7 +21,7 @@ export default function NousConnaitrePage() {
       {/* Notre histoire */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 md:grid-cols-2 items-center">
+          <div className="grid gap-16 md:grid-cols-2 items-center">
             <div>
               <h2 className="text-gray-900">
                 Notre histoire
@@ -111,6 +111,59 @@ export default function NousConnaitrePage() {
           </div>
         </div>
       </section>
+     {/* Section : Le Mot de la Présidente (Style Élégant & Épuré) */}
+<section className="py-20 bg-white">
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    {/* items-center pour mobile, md:items-start pour PC */}
+    <div className="flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20">
+      
+      {/* Photo minimaliste */}
+      <div className="relative group w-64 md:w-80 flex-shrink-0">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+          <Image 
+            src="/images/hero_actu.webp" 
+            alt="Portrait de la Présidente"
+            fill
+            className="object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-in-out"
+          />
+        </div>
+        <div className="absolute -bottom-4 -right-4 w-full h-full border-b border-r border-blue-900/20 -z-10"></div>
+      </div>
+
+      {/* Texte style éditorial - Centré sur mobile (text-center) et à gauche sur PC (md:text-left) */}
+      <div className="flex-1 mt-4 text-center md:text-left">
+        <span className="text-blue-900 font-medium tracking-[0.2em] uppercase text-sm mb-6 block">
+          L&apos;édito de la présidente
+        </span>
+        
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-8">
+          « Au cœur de notre engagement, <br className="hidden md:block" /> 
+          <span className="text-blue-900">l&apos;humain avant tout.</span> »
+        </h2>
+        
+        <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-light italic">
+          <p>
+            Depuis 17 ans, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union. 
+            Nous ne nous contentons pas d&apos;accompagner, nous tissons des liens de fraternité qui 
+            dépassent les frontières et les parcours de vie.
+          </p>
+          <p>
+            Chaque rencontre est une leçon de courage, chaque projet une pierre ajoutée à notre édifice 
+            commun du Val de Saône. Nous vous invitons à partager cette aventure humaine avec nous.
+          </p>
+        </div>
+
+        {/* Signature : Centrée sur mobile (items-center) et à gauche sur PC (md:items-start) */}
+        <div className="mt-12 flex flex-col items-center md:items-start">
+          <p className="text-xl font-semibold text-gray-900 mb-0">Nom de la Présidente</p>
+          <p className="text-gray-500 font-light tracking-wide">Présidente de l&apos;AAFD</p>
+          <div className="mt-4 w-12 h-px bg-blue-900/30"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* Nos valeurs */}
       <section className="py-16 md:py-24">
