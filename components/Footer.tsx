@@ -114,13 +114,18 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} AAFD Val de Saône. Tous droits réservés.</p>
-            <p className="text-xs">
-              Association loi 1901 à but non lucratif
-            </p>
-          </div>
-        </div>
+  <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+    {/* text-center centre le texte sur mobile, md:text-left le remet à gauche sur PC */}
+    <p className="text-center md:text-left">
+      &copy; {new Date().getFullYear()} AAFD Val de Saône. Tous droits réservés.
+    </p>
+    
+    {/* text-center centre le texte sur mobile, md:text-right le pousse à droite sur PC */}
+    <p className="text-xs text-center md:text-right">
+      Association loi 1901 à but non lucratif
+    </p>
+  </div>
+</div>
       </div>
     </footer>
   )

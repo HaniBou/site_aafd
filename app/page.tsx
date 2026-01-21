@@ -49,7 +49,7 @@ export default function HomePage() {
 
       {/* Actualité à la une */}
       {latestActualite && (
-        <section className="py-12 md:py-16 bg-gray-50">
+        <section className="py-12 md:py-16 bg-slate-50">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -212,7 +212,7 @@ export default function HomePage() {
       </section>
 
       {/* Qui aidons-nous */}
-      <section className="bg-gray-50 py-16 md:py-24">
+      <section className="bg-slate-50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div>
@@ -256,7 +256,7 @@ export default function HomePage() {
       </section>
 
       {/* Nos événements */}
-      <section className="py-16 md:py-24">
+      <section className=" bg-whitepy-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-gray-900">
