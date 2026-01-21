@@ -109,19 +109,6 @@ export function MainHero() {
           </a>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <button 
-        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 cursor-pointer hover:scale-110 transition-transform"
-        aria-label="Défiler vers le bas"
-      >
-        <div className="animate-bounce">
-          <svg className="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
-      </button>
     </section>
   )
 }
