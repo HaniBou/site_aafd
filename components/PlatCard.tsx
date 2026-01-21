@@ -21,53 +21,44 @@ interface PlatCardProps {
 }
 
 export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: PlatCardProps) {
-  const [showImageModal, setShowImageModal] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   // Bloquer le scroll de la page quand la modal est ouverte
-  useEffect(() => {
-    if (showImageModal) {
-      document.body.style.overflow = 'hidden';
-      // Cacher le bouton flottant don
-      const floatingButton = document.getElementById('floating-don-button');
-      if (floatingButton) {
-        floatingButton.style.opacity = '0';
-        floatingButton.style.pointerEvents = 'none';
-      }
-    } else {
-      document.body.style.overflow = 'unset';
-      // Réafficher le bouton flottant don
-      const floatingButton = document.getElementById('floating-don-button');
-      if (floatingButton) {
-        floatingButton.style.opacity = '';
-        floatingButton.style.pointerEvents = '';
-      }
+  // Pas besoin d'effet pour overlay
+
+  // Gestion overlay mobile : clic affiche/masque overlay
+  const handleImageClick = (e: React.MouseEvent) => {
+    // Ne déclenche que sur mobile
+    if (window.innerWidth < 768) {
+      e.stopPropagation();
+      setShowOverlay((v) => !v);
     }
-    
-    // Cleanup : remettre le scroll et le bouton quand le composant est démonté
-    return () => {
-      document.body.style.overflow = 'unset';
-      const floatingButton = document.getElementById('floating-don-button');
-      if (floatingButton) {
-        floatingButton.style.opacity = '';
-        floatingButton.style.pointerEvents = '';
-      }
-    };
-  }, [showImageModal]);
+  };
+
+  // Pour desktop : overlay uniquement au hover de l'image (pas toute la carte)
+  const [isImageHovered, setIsImageHovered] = useState(false);
 
   return (
-    <>
-      <div 
-        className="group bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm cursor-pointer"
-        onClick={() => setShowImageModal(true)}
+    <div
+      className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm cursor-pointer"
+    >
+      {/* Image + overlay */}
+      <div
+        className="relative aspect-[4/3] bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden"
+        onClick={handleImageClick}
+        onMouseEnter={() => setIsImageHovered(true)}
+        onMouseLeave={() => setIsImageHovered(false)}
       >
-        {/* Image */}
-        <div className="relative h-48 bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden">
         {plat.image && plat.image !== 'none' ? (
           <Image
             src={plat.image}
             alt={plat.nom}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
+            className={
+              `object-cover transition-transform duration-500 w-full h-full` +
+              ` group-hover:scale-110` +
+              ` ${showOverlay ? 'blur-sm scale-105' : ''}`
+            }
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
@@ -75,7 +66,32 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
             <span className="text-6xl opacity-90">{iconFallback}</span>
           </div>
         )}
-        
+        {/* Overlay description : hover (desktop) ou showOverlay (mobile) */}
+        <div
+          className={
+            `absolute inset-0 flex flex-col justify-center items-center p-6 text-white text-center transition-opacity duration-300 backdrop-blur-sm bg-black/70`
+            + ` ${showOverlay || isImageHovered ? 'opacity-100' : 'opacity-0'}`
+          }
+          style={{ pointerEvents: showOverlay || isImageHovered ? 'auto' : 'none' }}
+          onClick={e => {
+            // Sur mobile, cliquer l'overlay le masque
+            if (window.innerWidth < 768) {
+              e.stopPropagation();
+              setShowOverlay(false);
+            }
+          }}
+        >
+          <p className="text-sm leading-relaxed mb-4">
+            {plat.description}
+          </p>
+          {plat.items && plat.items.length > 0 && (
+            <ul className="text-xs space-y-1 border-t border-white/20 pt-2">
+              {plat.items.map((item, i) => (
+                <li key={i}>• {item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
         {/* Badge disponibilité */}
         <div className="absolute top-4 right-4">
           {plat.quantite > 0 ? (
@@ -89,165 +105,49 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
           )}
         </div>
       </div>
-
       {/* Contenu */}
-      <div className="p-4 text-center">
+      <div className="p-2 text-center flex flex-col gap-1">
         {/* Nom du plat */}
-        <h3 className="text-gray-900 mb-2">
-          {plat.typeMenu || plat.nom}
+        <h3 className="text-gray-900 mb-1 font-bold text-base leading-tight">
+          {plat.nom}
         </h3>
+        {/* Type de menu en sous-titre si présent */}
+        {plat.typeMenu && (
+          <div className="text-orange-600 text-[16px] mb-1 font-semibold">{plat.typeMenu}</div>
+        )}
         {/* Cuisiniers */}
         {plat.cuisiniers && (
-          <p className="text-gray-500 text-xs italic mb-2">
+          <p className="text-gray-700 text-md italic mb-1">
             concocté par {plat.cuisiniers}
           </p>
         )}
-        {/* Items ou Description */}
-        {plat.items && plat.items.length > 0 ? (
-          <ul className="text-gray-600 text-sm mb-3 text-left space-y-1">
-            {plat.items.slice(0, 2).map((item, index) => (
-              <li key={index} className="line-clamp-1">- {item}</li>
-            ))}
-            {plat.items.length > 2 && (
-              <li className="text-gray-400 italic">...</li>
-            )}
-          </ul>
-        ) : (
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-            {plat.description}
-          </p>
-        )}
-
         {/* Prix et quantité */}
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-orange-600">
+        <div className="flex items-center justify-between mt-1 mb-1">
+          <div className="text-lg font-bold text-orange-600">
             {plat.prix}€
           </div>
           {plat.quantite > 0 && (
-            <div className="text-sm text-gray-500">
+            <div className="text-xs text-gray-500">
               <span className="font-semibold text-gray-700">{plat.quantite}</span> restant{plat.quantite > 1 ? 's' : ''}
             </div>
           )}
         </div>
+        {/* Bouton réserver (miniature) */}
+        <button
+          onClick={e => {
+            e.stopPropagation();
+            onReserve(plat);
+          }}
+          className={`w-full font-semibold py-2 px-3 rounded-lg text-sm transition-all mt-1 ${
+            plat.quantite > 0
+              ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-md hover:shadow-lg'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+          disabled={plat.quantite === 0}
+        >
+          {plat.quantite > 0 ? 'Réserver ce plat' : 'Non disponible'}
+        </button>
       </div>
     </div>
-
-      {/* Modal détail du plat */}
-      {showImageModal && (
-        <div 
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-          onClick={() => setShowImageModal(false)}
-        >
-          <div 
-            className="relative max-w-2xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Bouton fermer */}
-            <button 
-              onClick={() => setShowImageModal(false)}
-              className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-colors"
-            >
-              <svg className="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Image */}
-            <div className="relative h-80 bg-gradient-to-br from-orange-400 to-red-500">
-              {plat.image && plat.image !== 'none' ? (
-                <Image
-                  src={plat.image}
-                  alt={plat.nom}
-                  fill
-                  className="object-cover"
-                  sizes="800px"
-                />
-              ) : (
-                <div className="h-full flex items-center justify-center">
-                  <span className="text-9xl opacity-90">{iconFallback}</span>
-                </div>
-              )}
-              
-              {/* Badge disponibilité */}
-              <div className="absolute top-4 left-4">
-                {plat.quantite > 0 ? (
-                  <span className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
-                    ✓ Disponible ({plat.quantite} restant{plat.quantite > 1 ? 's' : ''})
-                  </span>
-                ) : (
-                  <span className="bg-red-500 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
-                    Épuisé
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Contenu */}
-            <div className="p-6">
-              {/* Titre et prix */}
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h2 className="text-gray-900">{plat.typeMenu || plat.nom}</h2>
-                  {plat.cuisiniers && (
-                    <p className="text-gray-500 text-sm italic mt-1">
-                      concocté par {plat.cuisiniers}
-                    </p>
-                  )}
-                </div>
-                <div className="text-3xl font-bold text-orange-600 ml-4">
-                  {plat.prix}€
-                </div>
-              </div>
-
-              {/* Items ou Description complète */}
-              <div className="mb-6">
-                {plat.items && plat.items.length > 0 ? (
-                  <>
-                    <h3 className="text-gray-900 mb-2">Composition du menu</h3>
-                    <ul className="text-gray-600 leading-relaxed space-y-2">
-                      {plat.items.map((item, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="text-orange-500 mr-2">•</span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    {plat.description && plat.description.trim() && (
-                      <p className="text-gray-500 text-sm mt-4 italic">
-                        {plat.description}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <h3 className="text-gray-900 mb-2">Description</h3>
-                    <p className="text-gray-600 leading-relaxed text-justify">
-                      {plat.description}
-                    </p>
-                  </>
-                )}
-              </div>
-
-              {/* Bouton réserver */}
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowImageModal(false);
-                  onReserve(plat);
-                }}
-                className={`w-full font-semibold py-3 px-6 rounded-lg transition-all ${
-                  plat.quantite > 0
-                    ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-md hover:shadow-lg'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-                disabled={plat.quantite === 0}
-              >
-                {plat.quantite > 0 ? 'Réserver ce plat' : 'Non disponible'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
   );
 }
