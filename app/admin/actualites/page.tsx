@@ -1,13 +1,12 @@
-// app/admin/actualites/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import uploadActualite from "@/lib/uploadActualite";
 import getActualites from "@/lib/getActualites";
 import uploadToCloudinary from "@/lib/uploadToCloudinary";
-import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+// Ajout des imports nécessaires pour la logique "À la une"
+import { doc, deleteDoc, updateDoc, collection, query, where, getDocs, writeBatch } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import AdminProtection from "@/components/AdminProtection";
 import AdminHeader from "@/components/AdminHeader";
@@ -22,6 +21,7 @@ type Actualite = {
   category: string;
   slug: string;
   image?: string;
+  aLaUne?: boolean; // Ajouté au type
 };
 
 export default function AdminActualites() {
@@ -37,112 +37,93 @@ export default function AdminActualites() {
   const [isUploading, setIsUploading] = useState(false);
   const [editingActualite, setEditingActualite] = useState<Actualite | null>(null);
   const [editImage, setEditImage] = useState<File | null>(null);
+  const [aLaUne, setALaUne] = useState(false);
+
+  // Fonction utilitaire pour s'assurer qu'une seule actu est à la une
+  const cleanOtherALaUne = async () => {
+    const q = query(collection(db, "actualites"), where("aLaUne", "==", true));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const batch = writeBatch(db);
+      querySnapshot.forEach((docSnap) => {
+        batch.update(docSnap.ref, { aLaUne: false });
+      });
+      await batch.commit();
+    }
+  };
+
+  const fetchActualites = async () => {
+    try {
+      const data = await getActualites();
+      setActualites(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération :", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchActualites = async () => {
-      try {
-        const data = await getActualites();
-        setActualites(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des actualités :", error);
-      }
-    };
-
     fetchActualites();
   }, []);
 
-  // Auto-fermer le toast après 6 secondes
   useEffect(() => {
     if (showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-      }, 6000);
+      const timer = setTimeout(() => setShowToast(false), 6000);
       return () => clearTimeout(timer);
     }
   }, [showToast]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessage("");
     setIsUploading(true);
-
     try {
+      // 1. Gérer l'exclusivité "À la une"
+      if (aLaUne) {
+        setMessage("🧹 Nettoyage des anciennes mises à la une...");
+        await cleanOtherALaUne();
+      }
+
+      // 2. Upload Image
       let imageUrl = 'none';
-      
-      // Upload l'image vers Cloudinary si elle existe
       if (image) {
-        setMessage("📤 Upload de l'image en cours...");
+        setMessage("📤 Upload de l'image...");
         imageUrl = await uploadToCloudinary(image);
       }
       
-      // Ensuite sauvegarde dans Firestore avec l'URL de l'image
-      const id = await uploadActualite({ 
+      // 3. Sauvegarde Firestore
+      await uploadActualite({ 
         title, 
         content, 
         category,
         date: new Date(date).toISOString(),
-        image: imageUrl
+        image: imageUrl,
+        aLaUne: aLaUne // On passe la valeur ici
       });
       
       setMessage(`Actualité ajoutée avec succès`);
       setShowToast(true);
-      setTitle("");
-      setContent("");
-      setCategory("");
-      setDate(new Date().toISOString().split('T')[0]);
-      setImage(null);
-      setShowAddForm(false);
-      
-      // Rafraîchir la liste
-      const data = await getActualites();
-      setActualites(data);
+      resetForm();
+      fetchActualites();
     } catch (error) {
-      console.error(error);
       setMessage("Erreur lors de l'ajout");
     } finally {
       setIsUploading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteDoc(doc(db, "actualites", id));
-      setActualites((prev) => prev.filter((actu) => actu.id !== id));
-      setMessage("Actualité supprimée avec succès");
-      setShowToast(true);
-      console.log("Actualité supprimée avec succès.");
-    } catch (error) {
-      console.error("Erreur lors de la suppression de l'actualité :", error);
-      setMessage("Erreur lors de la suppression");
-      setShowToast(true);
-    }
-  };
-
-  const handleEditClick = (actu: Actualite) => {
-    // Convertir la date au format YYYY-MM-DD pour l'input type="date"
-    const dateForInput = actu.date ? new Date(actu.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
-    
-    setEditingActualite({
-      ...actu,
-      date: dateForInput,
-      category: actu.category || "",
-      slug: actu.slug || actu.title.toLowerCase().replace(/\s+/g, "-"),
-    });
-    setEditImage(null);
-    setShowAddForm(false);
-  };
-
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingActualite) return;
-
     setIsUploading(true);
+
     try {
+      // 1. Si on active la une sur cette modif, on nettoie les autres
+      if (editingActualite.aLaUne) {
+        await cleanOtherALaUne();
+      }
+
       let imageUrl = editingActualite.image;
-      
-      // Si une nouvelle image a été sélectionnée, l'uploader vers Cloudinary
       if (editImage) {
-        setMessage("📤 Upload de la nouvelle image en cours...");
+        setMessage("📤 Upload de la nouvelle image...");
         imageUrl = await uploadToCloudinary(editImage);
       }
       
@@ -152,30 +133,50 @@ export default function AdminActualites() {
         category: editingActualite.category,
         date: editingActualite.date,
         image: imageUrl,
+        aLaUne: editingActualite.aLaUne || false
       });
-      setActualites((prev) =>
-        prev.map((actu) =>
-          actu.id === editingActualite.id ? { ...editingActualite, image: imageUrl } : actu
-        )
-      );
+
       setEditingActualite(null);
-      setEditImage(null);
-      setShowAddForm(false);
       setMessage("Actualité modifiée avec succès");
       setShowToast(true);
-      console.log("Actualité modifiée avec succès.");
+      fetchActualites();
     } catch (error) {
-      console.error("Erreur lors de la modification de l'actualité :", error);
       setMessage("Erreur lors de la modification");
-      setShowToast(true);
     } finally {
       setIsUploading(false);
     }
   };
 
+  const resetForm = () => {
+    setTitle("");
+    setContent("");
+    setCategory("");
+    setDate(new Date().toISOString().split('T')[0]);
+    setImage(null);
+    setALaUne(false);
+    setShowAddForm(false);
+  };
+
+  const handleEditClick = (actu: Actualite) => {
+    const dateForInput = actu.date ? new Date(actu.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+    setEditingActualite({ ...actu, date: dateForInput });
+    setEditImage(null);
+    setShowAddForm(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Supprimer cette actualité ?")) return;
+    try {
+      await deleteDoc(doc(db, "actualites", id));
+      setActualites((prev) => prev.filter((actu) => actu.id !== id));
+      setMessage("Supprimé avec succès");
+      setShowToast(true);
+    } catch (error) {
+      setMessage("Erreur lors de la suppression");
+    }
+  };
+
   const formatDate = (date: any) => {
-    if (date instanceof Date) return date;
-    if (date?.toDate) return date.toDate();
     return new Date(date);
   };
 
@@ -183,32 +184,10 @@ export default function AdminActualites() {
     <AdminProtection>
       <main className="min-h-screen bg-gray-50 p-8">
         <AdminHeader />
-        
-        {/* Header */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Actualités
-                </h1>
-                <p className="text-sm text-gray-600 mt-1">
-                  Publier des nouvelles et des événements
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Toast de notification */}
         <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
-        {/* Bouton Ajouter */}
         <div className="max-w-7xl mx-auto mb-6">
-          <button
-            onClick={() => setShowAddForm(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
-          >
+          <button onClick={() => setShowAddForm(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors">
             + Ajouter une actualité
           </button>
         </div>
@@ -216,111 +195,63 @@ export default function AdminActualites() {
         {/* Modal d'ajout */}
         <ActualiteModal
           isOpen={showAddForm}
-          onClose={() => setShowAddForm(false)}
+          onClose={resetForm}
           onSubmit={handleSubmit}
           title="Nouvelle actualité"
-          titre={title}
-          setTitre={setTitle}
-          categorie={category}
-          setCategorie={setCategory}
-          contenu={content}
-          setContenu={setContent}
-          date={date}
-          setDate={setDate}
-          image={image}
-          setImage={setImage}
+          titre={title} setTitre={setTitle}
+          categorie={category} setCategorie={setCategory}
+          contenu={content} setContenu={setContent}
+          date={date} setDate={setDate}
+          image={image} setImage={setImage}
           isUploading={isUploading}
+          aLaUne={aLaUne} setALaUne={setALaUne}
         />
 
         {/* Modal de modification */}
         <ActualiteModal
           isOpen={!!editingActualite}
-          onClose={() => {
-            setEditingActualite(null);
-            setEditImage(null);
-          }}
+          onClose={() => setEditingActualite(null)}
           onSubmit={handleEditSubmit}
           title="Modifier l'actualité"
           titre={editingActualite?.title || ""}
-          setTitre={(value) => editingActualite && setEditingActualite({ ...editingActualite, title: value })}
+          setTitre={(v) => editingActualite && setEditingActualite({ ...editingActualite, title: v })}
           categorie={editingActualite?.category || ""}
-          setCategorie={(value) => editingActualite && setEditingActualite({ ...editingActualite, category: value })}
+          setCategorie={(v) => editingActualite && setEditingActualite({ ...editingActualite, category: v })}
           contenu={editingActualite?.content || ""}
-          setContenu={(value) => editingActualite && setEditingActualite({ ...editingActualite, content: value })}
+          setContenu={(v) => editingActualite && setEditingActualite({ ...editingActualite, content: v })}
           date={editingActualite?.date || ""}
-          setDate={(value) => editingActualite && setEditingActualite({ ...editingActualite, date: value })}
-          image={editImage}
-          setImage={setEditImage}
+          setDate={(v) => editingActualite && setEditingActualite({ ...editingActualite, date: v })}
+          image={editImage} setImage={setEditImage}
           isEditing
           isUploading={isUploading}
+          aLaUne={editingActualite?.aLaUne || false}
+          setALaUne={(v) => editingActualite && setEditingActualite({ ...editingActualite, aLaUne: v })}
         />
 
-      {/* Liste des actualités */}
-      <div className="max-w-7xl mx-auto space-y-4">
-        {actualites.map((actu) => (
-          <div
-            key={actu.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div className="flex justify-between items-start gap-4">
-              {/* Image de l'actualité */}
-              {actu.image && actu.image !== 'none' && (
-                <div className="relative h-24 w-24 rounded-lg overflow-hidden border-2 border-gray-200 shrink-0">
-                  <Image
-                    src={actu.image}
-                    alt={actu.title}
-                    fill
-                    className="object-cover"
-                    sizes="96px"
-                  />
+        {/* Liste des cartes */}
+        <div className="max-w-7xl mx-auto space-y-4">
+          {actualites.map((actu) => (
+            <div key={actu.id} className={`bg-white rounded-lg shadow-sm border p-6 ${actu.aLaUne ? 'border-orange-500 ring-1 ring-orange-500' : 'border-gray-200'}`}>
+              <div className="flex justify-between items-start gap-4">
+                {actu.aLaUne && <span className="absolute -top-2 left-4 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded">À LA UNE</span>}
+                {actu.image && actu.image !== 'none' && (
+                  <div className="relative h-24 w-24 rounded-lg overflow-hidden border shrink-0">
+                    <Image src={actu.image} alt={actu.title} fill className="object-cover" />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">{actu.title}</h3>
+                  <p className="text-xs text-gray-500 mb-2">{formatDate(actu.date).toLocaleDateString('fr-FR')}</p>
+                  <p className="text-sm text-gray-700 line-clamp-2">{actu.content}</p>
                 </div>
-              )}
-              
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {actu.title}
-                </h3>
-                <div className="space-y-2">
-                  <p className="text-xs text-gray-500">
-                    {formatDate(actu.date).toLocaleDateString('fr-FR')}
-                  </p>
-                  <p className="text-sm text-gray-700 line-clamp-3 whitespace-pre-line">
-                    {actu.content}
-                  </p>
+                <div className="flex flex-col gap-2">
+                  <button onClick={() => handleEditClick(actu)} className="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs">Modifier</button>
+                  <button onClick={() => handleDelete(actu.id)} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs">Supprimer</button>
                 </div>
-              </div>
-              <div className="flex flex-col gap-2 shrink-0">
-                <button
-                  onClick={() => handleEditClick(actu)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
-                >
-                  Modifier
-                </button>
-                <button
-                  onClick={() => handleDelete(actu.id)}
-                  className="bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
-                >
-                  Supprimer
-                </button>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Message si pas d'actualités */}
-      {actualites.length === 0 && (
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-            <p className="text-gray-500">
-              Aucune actualité pour le moment
-            </p>
-            <p className="text-sm text-gray-400 mt-2">
-              Cliquez sur "Ajouter une actualité" pour commencer
-            </p>
-          </div>
+          ))}
         </div>
-      )}
       </main>
     </AdminProtection>
   );

@@ -10,15 +10,17 @@ import { getCategoryStyles } from '@/lib/categoryStyles'
 interface Actualite {
   id: string;
   title: string;
-  date: string;
+  date: string; // date de l'événement
+  uploadedAt: string; // date/heure d'upload
   category: string;
   image: string;
   content: string;
+  aLaUne: boolean;
 }
 
 export default function HomePage() {
   const [actualites, setActualites] = useState<Actualite[]>([]);
-  const [latestActualite, setLatestActualite] = useState<Actualite | null>(null);
+  const [featuredActu, setFeaturedActu] = useState<Actualite | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,11 +28,18 @@ export default function HomePage() {
         const data = await getActualites();
         if (data.length > 0) {
           setActualites(data);
-          // Trier par date décroissante pour la "Une"
-          const sorted = [...data].sort((a, b) => 
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-          );
-          setLatestActualite(sorted[0]);
+
+          // 1. LOGIQUE "À LA UNE"
+          // On cherche l'actu cochée dans l'admin
+          let aLaUne = data.find(actu => actu.aLaUne === true);
+          
+          // Si rien n'est coché, on prend la plus récente par date
+          if (!aLaUne) {
+            aLaUne = [...data].sort((a, b) => 
+              new Date(b.date).getTime() - new Date(a.date).getTime()
+            )[0];
+          }
+          setFeaturedActu(aLaUne);
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des données:", error);
@@ -39,13 +48,17 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  // --- LOGIQUE POUR L'AGENDA ---
+  // --- LOGIQUE POUR L'AGENDA (Événements futurs uniquement) ---
   const evenementsAgenda = actualites
-    .filter(actu => 
-      (actu.category === "Vente de plats" || actu.category === "Événement à venir") &&
-      new Date(actu.date).setHours(0,0,0,0) >= new Date().setHours(0,0,0,0)
-    )
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .filter(actu => {
+      const isEventCategory = actu.category === "Vente de plats" || actu.category === "Événement à venir";
+      const eventDate = new Date(actu.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // On compare uniquement le jour
+      
+      return isEventCategory && eventDate >= today;
+    })
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) // Plus proche en premier
     .slice(0, 2);
 
   const truncateText = (text: string, maxLength: number) => {
@@ -58,7 +71,7 @@ export default function HomePage() {
       <MainHero />
 
       {/* Actualité à la une */}
-      {latestActualite && (
+      {featuredActu && (
         <section className="py-12 md:py-16 bg-slate-50">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
             <div className="mb-6 flex items-center justify-between">
@@ -80,10 +93,10 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-2xl shadow-lg overflow-hidden">
               {/* Image */}
               <div className="relative h-[300px] md:h-[400px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                {latestActualite.image && latestActualite.image !== 'none' ? (
+                {featuredActu.image && featuredActu.image !== 'none' ? (
                   <Image
-                    src={latestActualite.image}
-                    alt={latestActualite.title}
+                    src={featuredActu.image}
+                    alt={featuredActu.title}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -98,25 +111,25 @@ export default function HomePage() {
               
               {/* Contenu */}
               <div className="p-6 md:p-8">
-                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(latestActualite.category)}`}>
-                  {latestActualite.category}
+                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(featuredActu.category)}`}>
+                  {featuredActu.category}
                 </span>
                 <h3 className="large text-gray-900 mt-3">
-                  {latestActualite.title}
+                  {featuredActu.title}
                 </h3>
                 <p className="text-small text-gray-500">
-                  {new Date(latestActualite.date).toLocaleDateString("fr-FR", {
+                  {new Date(featuredActu.date).toLocaleDateString("fr-FR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </p>
                 <p className="text-gray-600">
-                  {truncateText(latestActualite.content, 200)}
+                  {truncateText(featuredActu.content, 200)}
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
                   <Link
-                    href={`/actualites/${latestActualite.id}`}
+                    href={`/actualites/${featuredActu.id}`}
                     className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-semibold text-sm transition-colors"
                   >
                     Lire la suite
@@ -124,7 +137,7 @@ export default function HomePage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
-                  {latestActualite.category === "Vente de plats" && (
+                  {featuredActu.category === "Vente de plats" && (
                     <Link
                       href="/vente-plats"
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
@@ -272,8 +285,7 @@ export default function HomePage() {
       
       {/* En-tête de section centré */}
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold">Prochains rendez-vous</h2>
-        <div className="h-1 w-20 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+        <h2>Prochains rendez-vous</h2>
       </div>
 
       {/* Grille d'événements */}
@@ -282,11 +294,11 @@ export default function HomePage() {
           <Link 
             key={evt.id} 
             href={`/actualites/${evt.id}`} 
-            className="group bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex items-center gap-6 transition-all shadow-xl"
+            className="group bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 transition-all shadow-xl"
           >
-            {/* Carré Date */}
+            {/* Carré Date - Centré sur mobile, à gauche sur desktop */}
             <div className="bg-orange-500 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
-              <span className="text-3xl font-black">
+              <span className="text-3xl font-black leading-none">
                 {new Date(evt.date).getDate()}
               </span>
               <span className="text-[11px] uppercase font-bold">
@@ -294,21 +306,20 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* Texte centré au milieu */}
-            <div className="flex-1 text-center">
+            {/* Contenu Texte - Centré sur mobile, à gauche sur desktop */}
+            <div className="flex-1 text-center sm:text-left">
               <span className="text-orange-400 text-[11px] font-bold uppercase tracking-wider italic">
                 {evt.category}
               </span>
-              {/* Suppression du group-hover:text-orange-300 pour garder le texte blanc */}
-              <h3 className="text-xl font-bold text-white mt-1">
+              <h3 className="text-lg sm:text-xl font-bold text-white mt-1 leading-snug">
                 {evt.title}
               </h3>
             </div>
 
-            {/* Bouton qui change de orange-500 vers 600 */}
-            <div className="p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg">
+            {/* Bouton - Masqué sur petit mobile pour gagner de la place, ou affiché en desktop */}
+            <div className="hidden sm:flex p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg shrink-0">
               <svg 
-                className="w-6 h-6 text-white transform transition-transform group-hover:translate-x-1" 
+                className="w-6 h-6 text-white transform transition-transform" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -323,7 +334,7 @@ export default function HomePage() {
   </section>
 )}
       {/* Nos événements */}
-      <section className=" bg-whitepy-16 md:py-24">
+      <section className="py-20 bg-whitepy-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-gray-900">

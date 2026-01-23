@@ -11,10 +11,12 @@ import { getCategoryStyles } from '@/lib/categoryStyles';
 interface Actualite {
   id: string;
   title: string;
-  date: string;
+  date: string; // date de l'événement
+  uploadedAt: string; // date/heure d'upload
   category: string;
   image: string;
   content: string;
+  aLaUne: boolean;
 }
 
 export default function ActualiteDetailPage({ params }: { params: Promise<{ id: string }> }) {

@@ -11,26 +11,43 @@ import { getCategoryStyles } from '@/lib/categoryStyles';
 interface Actualite {
   id: string;
   title: string;
-  date: string;
+  date: string; // date de l'événement
+  uploadedAt: string; // date/heure d'upload
   category: string;
   image: string;
   content: string;
   slug: string;
+  aLaUne: boolean;
 }
 
 export default function ActualitesPage() {
-  const [actualites, setActualites] = useState<Actualite[]>([]);
+  const [actuALaUne, setActuALaUne] = useState<Actualite | null>(null);
+  const [autresActus, setAutresActus] = useState<Actualite[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await getActualites();
-      // Trier les actualités par date décroissante (la plus récente en premier)
-      const sortedData = data.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
-      setActualites(sortedData);
+  async function fetchData() {
+    const data = await getActualites();
+    
+    // 1. On trie tout par date décroissante
+    const sortedData = data.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+
+    // 2. On cherche celle qui est cochée "À la une"
+    let featured = sortedData.find(actu => actu.aLaUne === true);
+    
+    // 3. Si aucune n'est cochée, on prend la plus récente par défaut
+    if (!featured) {
+      featured = sortedData[0];
     }
-    fetchData();
+
+    // 4. On filtre "autresActus" pour retirer celle qui est à la une
+    const remaining = sortedData.filter(actu => actu.id !== featured?.id);
+
+    setActuALaUne(featured);
+    setAutresActus(remaining);
+  }
+  fetchData();
   }, []);
 
   const truncateText = (text: string, maxLength: number) => {
@@ -74,7 +91,7 @@ export default function ActualitesPage() {
       />
 
       {/* Dernière actualité mise en avant */}
-      {actualites.length > 0 && (
+      {actuALaUne && (
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
             <div className="mb-8">
@@ -85,10 +102,10 @@ export default function ActualitesPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Image de l'actualité */}
               <div className="relative h-[350px] md:h-[450px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden shadow-xl">
-                {actualites[0].image && actualites[0].image !== 'none' ? (
+                {actuALaUne.image && actuALaUne.image !== 'none' ? (
                   <Image
-                    src={actualites[0].image}
-                    alt={actualites[0].title}
+                    src={actuALaUne.image}
+                    alt={actuALaUne.title}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -102,26 +119,26 @@ export default function ActualitesPage() {
               
               {/* Contenu */}
               <div>
-                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actualites[0].category)}`}>
-                  {actualites[0].category}
+                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actuALaUne.category)}`}>
+                  {actuALaUne.category}
                 </span>
                 <h3 className="large text-gray-900 mt-3">
-                  {actualites[0].title}
+                  {actuALaUne.title}
                 </h3>
                 <p className="text-small text-gray-500">
-                  {new Date(actualites[0].date).toLocaleDateString("fr-FR", {
+                  {new Date(actuALaUne.date).toLocaleDateString("fr-FR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </p>
                 <p className="text-gray-600 text-justify whitespace-pre-line">
-                  {truncateText(actualites[0].content, 300)}
+                  {truncateText(actuALaUne.content, 300)}
                 </p>
                 <div className="flex flex-wrap items-center gap-3 mt-4">
-                  {shouldShowReadMore(actualites[0].content) && (
+                  {shouldShowReadMore(actuALaUne.content) && (
                     <Link
-                      href={`/actualites/${actualites[0].id}`}
+                      href={`/actualites/${actuALaUne.id}`}
                       className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-medium text-sm transition-colors"
                     >
                       Lire la suite
@@ -130,7 +147,7 @@ export default function ActualitesPage() {
                       </svg>
                     </Link>
                   )}
-                  {actualites[0].category === "Vente de plats" && (
+                  {actuALaUne.category === "Vente de plats" && (
                     <Link
                       href="/vente-plats"
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
@@ -156,7 +173,7 @@ export default function ActualitesPage() {
           </h2>
 
           <div className="space-y-20">
-            {actualites.slice(1).map((actu, index) => (
+            {autresActus.map((actu, index) => (
               <div
                 key={actu.id}
                 className={`grid md:grid-cols-2 gap-12 items-center ${
