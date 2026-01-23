@@ -20,72 +20,36 @@ export default function NousSoutenirPage() {
         gradientTo="to-green-800/70"
       />
 
-      {/* Pourquoi nous soutenir */}
-      <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-gray-900">
-              Pourquoi nous soutenir ?
-            </h2>
-            <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
-              Votre contribution permet de financer des actions concrètes et essentielles
-            </p>
-          </div>
+      {/* Pourquoi nous soutenir : Style Épuré */}
+<section className="py-20 bg-white">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Votre impact concret</h2>
+      <div className="w-12 h-1 bg-blue-900 mx-auto"></div>
+    </div>
 
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="flex items-start gap-4 p-6 border-l-4 border-blue-900 bg-white shadow-sm">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center">
-                  <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-gray-900">Aide au logement</h3>
-                <p className="text-gray-600">
-                  Financement de cautions, loyers, et frais d&apos;agence pour permettre aux familles 
-                  d&apos;accéder à un logement décent.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-6 border-l-4 border-orange-600 bg-white shadow-sm">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-orange-600 flex items-center justify-center">
-                  <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-gray-900">Frais juridiques</h3>
-                <p className="text-gray-600">
-                  Prise en charge des honoraires d&apos;avocats et frais de justice pour défendre 
-                  les droits des familles réfugiées.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-6 border-l-4 border-green-700 bg-white shadow-sm">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-green-700 flex items-center justify-center">
-                  <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-gray-900">Besoins quotidiens</h3>
-                <p className="text-gray-600">
-                  Aide pour les transports, assurances, équipements de première nécessité, 
-                  et frais de scolarité.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="grid md:grid-cols-3 gap-12">
+      <div className="text-center md:text-left">
+        <h3 className="text-xl font-bold text-blue-900 mb-4 tracking-tight">Aide au logement</h3>
+        <p className="text-gray-600 leading-relaxed font-light">
+          Financement de cautions et loyers pour permettre aux familles d'accéder à un foyer décent.
+        </p>
+      </div>
+      <div className="text-center md:text-left">
+        <h3 className="text-xl font-bold text-orange-600 mb-4 tracking-tight">Frais juridiques</h3>
+        <p className="text-gray-600 leading-relaxed font-light">
+          Prise en charge des honoraires pour défendre les droits fondamentaux des familles réfugiées.
+        </p>
+      </div>
+      <div className="text-center md:text-left">
+        <h3 className="text-xl font-bold text-green-700 mb-4 tracking-tight">Besoins quotidiens</h3>
+        <p className="text-gray-600 leading-relaxed font-light">
+          Soutien pour les transports, les assurances et l'équipement de première nécessité.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Comment nous soutenir */}
       <section className="bg-gray-50 py-16 md:py-24">
@@ -250,69 +214,70 @@ export default function NousSoutenirPage() {
         </div>
       </section>
 
-      {/* Impact de votre soutien */}
-      <section className="bg-blue-900 py-16 md:py-24 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
-              L&apos;impact de votre soutien
-            </h2>
-            <p className="text-lg text-blue-100 max-w-3xl mx-auto">
-              Grâce à votre générosité, nous pouvons accomplir des actions concrètes
-            </p>
-          </div>
+     {/* Section Impact : L'AAFD en chiffres (Style harmonisé) */}
+<section className="bg-blue-900 py-16 md:py-24 text-white">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-white">
+        L&apos;impact de votre soutien
+      </h2>
+    </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center">
-              <div className="mb-4 text-4xl font-bold text-orange-400">30€</div>
-              <p className="text-lg text-blue-100">
-                = 1 mois d&apos;assurance habitation pour une famille
-              </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center">
-              <div className="mb-4 text-4xl font-bold text-orange-400">100€</div>
-              <p className="text-lg text-blue-100">
-                = Transport et frais pour 1 rendez-vous juridique
-              </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center">
-              <div className="mb-4 text-4xl font-bold text-orange-400">500€</div>
-              <p className="text-lg text-blue-100">
-                = Aide au paiement d&apos;une caution pour un logement
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-blue-100 text-lg">
-              <strong>Chaque don compte</strong> et fait une réelle différence dans la vie des familles que nous accompagnons.
-            </p>
-          </div>
+    <div className="grid gap-12 md:grid-cols-3">
+      {/* Palier 1 */}
+      <div className="text-center">
+        <div className="mb-2 text-5xl font-bold text-orange-400">30€</div>
+        <div className="text-lg text-blue-100 ">
+          = 1 mois d&apos;assurance habitation pour une famille
         </div>
-      </section>
+      </div>
 
-      {/* CTA */}
-      <section className="py-16 md:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
-            Prêt à nous soutenir ?
-          </h2>
-          <p className="mb-8 text-lg text-gray-600">
-            Contactez-nous pour échanger sur les différentes formes de soutien possibles
-          </p>
-          <div className="bg-gray-50 p-8 rounded-2xl max-w-2xl mx-auto">
-            <p className="text-lg mb-4 text-gray-900">
-              <strong>Association d&apos;Aide aux Familles en Difficulté</strong>
-            </p>
-            <p className="text-gray-600 mb-2">
-              📧 Email : <a href="mailto:aafd@gmx.fr" className="text-blue-900 hover:text-blue-700 font-semibold">aafd@gmx.fr</a>
-            </p>
-            <p className="text-gray-600">
-              📱 Instagram : <a href="https://www.instagram.com/aafd_asso/" target="_blank" rel="noopener noreferrer" className="text-blue-900 hover:text-blue-700 font-semibold">@aafd_asso</a>
-            </p>
-          </div>
+      {/* Palier 2 */}
+      <div className="text-center">
+        <div className="mb-2 text-5xl font-bold text-orange-400">100€</div>
+        <div className="text-lg text-blue-100 ">
+          = Frais pour un dossier de recours juridique
         </div>
-      </section>
+      </div>
+
+      {/* Palier 3 */}
+      <div className="text-center">
+        <div className="mb-2 text-5xl font-bold text-orange-400">500€</div>
+        <div className="text-lg text-blue-100">
+          = Aide au paiement d&apos;une caution pour un logement
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+     {/* CTA */}
+<section className="py-16 md:py-20">
+  <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-gray-900">
+      Prêt à agir à nos côtés ?
+    </h2>
+    <p className="mb-8 text-body-large text-gray-600">
+      Que ce soit par un don ou en donnant de votre temps, votre soutien est précieux.
+    </p>
+    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <Link
+        href="https://www.helloasso.com/associations/association-d-aide-aux-familles-en-difficulte-en-val-de-saone"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block rounded-full bg-blue-900 px-8 py-4 text-lg font-semibold text-white hover:bg-blue-800 transition-colors"
+      >
+        Faire un don
+      </Link>
+      <Link
+        href="/nous-rejoindre"
+        className="inline-block rounded-full border-2 border-blue-900 px-8 py-4 text-lg font-semibold text-blue-900 hover:bg-blue-900 hover:text-white transition-colors"
+      >
+        Nous rejoindre
+      </Link>
+    </div>
+  </div>
+</section>
     </main>
   )
 }

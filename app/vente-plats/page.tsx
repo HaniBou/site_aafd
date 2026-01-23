@@ -178,32 +178,23 @@ export default function VentePlatsPage() {
       />
 
       {/* CTA Final */}
-      <section className="py-16 bg-gradient-to-br from-orange-600 to-red-600 text-white">
+      <section className="py-16 bg-blue-900 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6 sm:text-4xl">
+          <h2>
             Une question sur nos plats ?
           </h2>
-          <p className="text-xl md:text-2xl text-orange-100 mb-8">
+          <p className="text-xl md:text-2xl text-blue-100 mb-8">
             N&apos;hésitez pas à nous contacter pour plus d&apos;informations
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:aafd@gmx.fr"
-              className="inline-flex items-center justify-center gap-3 rounded-full bg-white text-orange-600 px-8 py-4 text-lg font-semibold hover:bg-orange-50 transition-colors shadow-lg"
+              href="/contact"
+              className="inline-flex items-center justify-center gap-3 rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               Nous contacter
-            </a>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center gap-3 rounded-full bg-orange-800 text-white px-8 py-4 text-lg font-semibold hover:bg-orange-900 transition-colors shadow-lg"
-            >
-              Voir les coordonnées
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
             </a>
           </div>
         </div>

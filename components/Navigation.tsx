@@ -37,7 +37,7 @@ export function Navigation() {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-900/20 group-hover:ring-blue-900/50 transition-all">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-700/20 group-hover:ring-blue-900/50 transition-all">
               <Image
                 src="/images/test-logo.webp"
                 alt="AAFD Val de Saône Logo"
@@ -45,7 +45,7 @@ export function Navigation() {
                 className="object-cover"
               />
             </div>
-            <span className="text-xl font-bold text-blue-900">AAFD Val de Saône</span>
+            <span className="text-xl font-bold text-blue-700">AAFD Val de Saône</span>
           </Link>
 
           {/* Navigation Links avec style blob */}

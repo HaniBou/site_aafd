@@ -16,8 +16,6 @@ export default function NousRejoindre() {
         description="Rejoignez une équipe de bénévoles engagés et participez à des actions concrètes de solidarité sur le Val de Saône."
         imageSrc="/images/hero_nous_rejoindre.webp"
         imageAlt="Nous rejoindre"
-        gradientFrom="from-purple-900/90"
-        gradientTo="to-purple-800/70"
       />
 
       {/* Pourquoi nous rejoindre */}
@@ -30,7 +28,6 @@ export default function NousRejoindre() {
       <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
         Rejoindre l&apos;AAFD, c&apos;est bien plus qu&apos;un engagement associatif
       </p>
-      <div className="mt-4 w-16 h-1 bg-orange-500 mx-auto rounded-full"></div>
     </div>
 
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -119,7 +116,7 @@ export default function NousRejoindre() {
 <section className="bg-slate-50 py-20 md:py-28 overflow-hidden">
   <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
-      <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+      <h2 className="text-gray-900">
         Nos différentes missions
       </h2>
       <p className="mt-4 text-gray-600">S'engager selon vos compétences et vos envies</p>
@@ -136,10 +133,10 @@ export default function NousRejoindre() {
       ].map((mission, idx) => (
         <div key={idx} className="mb-12 last:mb-0 relative group">
           {/* Le point sur la ligne */}
-          <div className="absolute -left-[11px] top-1.25 w-5 h-5 rounded-full bg-blue-600 "></div>
+          <div className="absolute -left-[11px] top-1.25 w-5 h-5 rounded-full bg-blue-700 "></div>
           
           <div className="pl-8 md:group-odd:text-right md:group-odd:pr-8 md:group-odd:pl-0 md:group-odd:-translate-x-full">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">{mission.title}</h3>
+            <h3 className="text-xl font-bold text-blue-700 mb-2">{mission.title}</h3>
             <p className="text-gray-600 text-sm leading-relaxed max-w-md md:group-odd:ml-auto">
               {mission.desc}
             </p>
@@ -174,7 +171,7 @@ export default function NousRejoindre() {
           </div>
           <a 
             href="/contact"
-            className="inline-block rounded-full bg-orange-600 px-10 py-4 text-lg font-bold text-white hover:bg-orange-500 hover:scale-105 transition-all shadow-lg"
+            className="inline-block rounded-full bg-orange-500 px-10 py-4 text-lg font-bold text-white hover:bg-orange-600 hover:scale-105 transition-all shadow-lg"
           >
             Nous rejoindre
           </a>
@@ -207,18 +204,18 @@ export default function NousRejoindre() {
       </section>
 
       {/* CTA Final */}
-      <section className="bg-gradient-to-br from-blue-900 to-purple-900 py-16 md:py-20 text-white">
+      <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>
             Ensemble, créons du lien et de la solidarité
           </h2>
-          <p className="mb-8 text-body-large text-blue-100">
+          <p className="mb-8 text-xl text-blue-100">
             Rejoignez une communauté engagée et bienveillante
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-500 transition-colors"
+              className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors"
             >
               Devenir bénévole
             </a>

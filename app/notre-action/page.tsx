@@ -16,8 +16,6 @@ export default function NotreActionPage() {
         description="Des événements tout au long de l'année pour créer du lien, sensibiliser et récolter des fonds au profit des familles en difficulté."
         imageSrc="/images/hero_notre_action.webp"
         imageAlt="Notre action"
-        gradientFrom="from-orange-900/90"
-        gradientTo="to-orange-800/70"
       />
 
       {/* Ventes de plats */}
@@ -224,24 +222,24 @@ export default function NotreActionPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gray-50 py-16 md:py-20">
+      <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h2>
             Envie de participer ?
           </h2>
-          <p className="mb-8 text-xl text-gray-600">
+          <p className="mb-8 text-xl text-blue-100">
             Rejoignez-nous lors de nos prochains événements ou soutenez nos actions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/nous-soutenir"
-              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-500 transition-colors"
+              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
             >
               Nous soutenir
             </Link>
             <Link
               href="/nous-rejoindre"
-              className="inline-block rounded-full border-2 border-orange-600 px-8 py-4 text-lg font-semibold text-orange-600 hover:bg-orange-600 hover:text-white transition-colors"
+              className="inline-block rounded-full gap-3 bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors"
             >
               Devenir bénévole
             </Link>

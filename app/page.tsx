@@ -59,10 +59,10 @@ export default function HomePage() {
               </div>
               <Link
                 href="/actualites"
-                className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors hidden sm:inline-flex items-center gap-1"
+                className="group text-blue-700 hover:underline font-medium text-sm transition-colors hidden sm:inline-flex items-center gap-1"
               >
                 Voir toutes les actualités
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
@@ -107,10 +107,10 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <Link
                     href={`/actualites/${latestActualite.id}`}
-                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+                    className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-semibold text-sm transition-colors"
                   >
                     Lire la suite
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
@@ -146,10 +146,10 @@ export default function HomePage() {
 
           <div className="grid gap-8 md:grid-cols-3">
             {/* Objectif 1 */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-2xl transition-all hover:-translate-y-1">
+            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
-                  src="/images/help.webp" // Remplace par ton image
+                  src="/images/help.webp" 
                   alt="Sensibiliser"
                   fill
                   className="object-cover"
@@ -167,10 +167,10 @@ export default function HomePage() {
             </div>
 
             {/* Objectif 2 */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-orange-500 hover:shadow-2xl transition-all hover:-translate-y-1">
+            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
-                  src="/images/v5.webp" // Remplace par ton image
+                  src="/images/v5.webp" 
                   alt="Créer du lien"
                   fill
                   className="object-cover"
@@ -188,7 +188,7 @@ export default function HomePage() {
             </div>
 
             {/* Objectif 3 */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-green-500 hover:shadow-2xl transition-all hover:-translate-y-1">
+            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all hover:-translate-y-1">
               <div className="relative h-80 w-full">
                 <Image 
                   src="/images/donate.webp" 
@@ -234,17 +234,17 @@ export default function HomePage() {
               </div>
               <Link
                 href="/notre-action"
-                className="mt-6 inline-flex items-center gap-2 text-lg text-blue-900 font-semibold hover:underline"
+                className="group mt-6 inline-flex items-center gap-2 text-lg text-blue-700 font-semibold hover:underline"
               >
                 Découvrir notre action en détail
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
             <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-gray-200">
               <Image 
-                src="/images/v4.webp" // Remplace par ton image
+                src="/images/v4.webp" 
                 alt="Qui aidons-nous"
                 fill
                 className="object-cover"
@@ -272,7 +272,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative aspect-[4/3] w-full">
                 <Image 
-                  src="/images/plats.webp" // Remplace par ton image
+                  src="/images/plats.webp" 
                   alt="Vente de plats"
                   fill
                   className="object-cover"
@@ -293,7 +293,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative aspect-[4/3] w-full">
                 <Image 
-                  src="/images/petanque.webp" // Remplace par ton image
+                  src="/images/petanque.webp" 
                   alt="Événements festifs"
                   fill
                   className="object-cover"
@@ -314,7 +314,7 @@ export default function HomePage() {
             <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
               <div className="relative aspect-[4/3] w-full ">
                 <Image 
-                  src="/images/nettoyons.webp" // Remplace par ton image
+                  src="/images/nettoyons.webp" 
                   alt="Nettoyage Val de Saône"
                   fill
                   className="object-cover object-bottom"
@@ -340,7 +340,7 @@ export default function HomePage() {
           <h2>
             Rejoignez notre communauté
           </h2>
-          <p className="mb-8 text-body-large text-blue-100">
+          <p className="mb-8 text-xl text-blue-100">
             Que vous souhaitiez devenir bénévole, faire un don ou simplement en savoir plus,
             nous serions ravis de vous accueillir.
           </p>

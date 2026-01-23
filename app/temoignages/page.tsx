@@ -16,8 +16,6 @@ export default function TemoignagesPage() {
         description="Ils ont été accompagnés par l'AAFD ou se sont engagés comme bénévoles. Découvrez leurs histoires et leurs parcours."
         imageSrc="/images/hero_temoignages.webp"
         imageAlt="Témoignages"
-        gradientFrom="from-blue-900/90"
-        gradientTo="to-purple-900/70"
       />
 
       {/* Introduction */}
@@ -361,9 +359,9 @@ export default function TemoignagesPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-blue-900 to-purple-900 py-16 md:py-20 text-white">
+      <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+          <h2>
             Vous aussi, écrivez votre histoire avec l&apos;AAFD
           </h2>
           <p className="mb-8 text-xl text-blue-100">
@@ -372,7 +370,7 @@ export default function TemoignagesPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/nous-rejoindre"
-              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-500 transition-colors"
+              className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors"
             >
               Devenir bénévole
             </Link>

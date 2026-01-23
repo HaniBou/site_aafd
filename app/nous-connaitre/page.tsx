@@ -164,6 +164,35 @@ export default function NousConnaitrePage() {
     </div>
   </div>
 </section>
+      {/* Chiffres clés */}
+      <section className="bg-blue-900 py-16 md:py-24 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2>
+              L&apos;AAFD en chiffres
+            </h2>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">17</div>
+              <div className="text-lg text-blue-100">années d&apos;expérience</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">150</div>
+              <div className="text-lg text-blue-100">repas vendus par mois</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">10+</div>
+              <div className="text-lg text-blue-100">nationalités accompagnées</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">100%</div>
+              <div className="text-lg text-blue-100">bénévoles</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Nos valeurs */}
       <section className="py-16 md:py-24">
@@ -230,55 +259,26 @@ export default function NousConnaitrePage() {
         </div>
       </section>
 
-      {/* Chiffres clés */}
-      <section className="bg-blue-900 py-16 md:py-24 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2>
-              L&apos;AAFD en chiffres
-            </h2>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-4">
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400">17</div>
-              <div className="text-lg text-blue-100">années d&apos;expérience</div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400">150</div>
-              <div className="text-lg text-blue-100">repas vendus par mois</div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400">10+</div>
-              <div className="text-lg text-blue-100">nationalités accompagnées</div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400">100%</div>
-              <div className="text-lg text-blue-100">bénévoles</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20">
+      <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-gray-900">
+          <h2>
             Envie d&apos;en savoir plus ?
           </h2>
-          <p className="mb-8 text-body-large text-gray-600">
+          <p className="mb-8 text-body-large text-blue-100">
             Découvrez nos actions concrètes ou rejoignez notre communauté de bénévoles
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/notre-action"
-              className="inline-block rounded-full bg-blue-900 px-8 py-4 text-lg font-semibold text-white hover:bg-blue-800 transition-colors"
+              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
             >
               Nos actions
             </Link>
             <Link
               href="/nous-rejoindre"
-              className="inline-block rounded-full border-2 border-blue-900 px-8 py-4 text-lg font-semibold text-blue-900 hover:bg-blue-900 hover:text-white transition-colors"
+              className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors shadow-lg"
             >
               Nous rejoindre
             </Link>

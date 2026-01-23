@@ -122,10 +122,10 @@ export default function ActualitesPage() {
                   {shouldShowReadMore(actualites[0].content) && (
                     <Link
                       href={`/actualites/${actualites[0].id}`}
-                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
+                      className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-medium text-sm transition-colors"
                     >
                       Lire la suite
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </Link>
@@ -202,10 +202,10 @@ export default function ActualitesPage() {
                     {shouldShowReadMore(actu.content) && (
                       <Link
                         href={`/actualites/${actu.id}`}
-                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
+                        className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-medium text-sm transition-colors"
                       >
                         Lire la suite
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </Link>

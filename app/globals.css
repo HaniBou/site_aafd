@@ -80,7 +80,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Curseur pointer pour tous les éléments cliquables */
+
+/* Curseur pointer pour les vrais éléments interactifs uniquement */
 button,
 a,
 [role="button"],
@@ -90,18 +91,7 @@ select,
 input[type="checkbox"],
 input[type="radio"],
 input[type="submit"],
-.cursor-pointer,
-[class*="hover:"],
-svg:hover {
-  cursor: pointer !important;
-}
-
-/* Boutons avec classes spécifiques */
-button[class*="bg-"],
-button[class*="text-"],
-[class*="hover:bg-"],
-[class*="hover:text-"],
-.group:hover {
+.cursor-pointer {
   cursor: pointer !important;
 }
 
