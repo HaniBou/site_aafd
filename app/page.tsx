@@ -17,25 +17,36 @@ interface Actualite {
 }
 
 export default function HomePage() {
+  const [actualites, setActualites] = useState<Actualite[]>([]);
   const [latestActualite, setLatestActualite] = useState<Actualite | null>(null);
 
   useEffect(() => {
-    async function fetchLatestActualite() {
+    async function fetchData() {
       try {
-        const actualites = await getActualites();
-        if (actualites.length > 0) {
-          // Trier par date décroissante et prendre la plus récente
-          const sorted = actualites.sort((a, b) => 
+        const data = await getActualites();
+        if (data.length > 0) {
+          setActualites(data);
+          // Trier par date décroissante pour la "Une"
+          const sorted = [...data].sort((a, b) => 
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
           setLatestActualite(sorted[0]);
         }
       } catch (error) {
-        console.error("Erreur lors de la récupération de l'actualité:", error);
+        console.error("Erreur lors de la récupération des données:", error);
       }
     }
-    fetchLatestActualite();
+    fetchData();
   }, []);
+
+  // --- LOGIQUE POUR L'AGENDA ---
+  const evenementsAgenda = actualites
+    .filter(actu => 
+      (actu.category === "Vente de plats" || actu.category === "Événement à venir") &&
+      new Date(actu.date).setHours(0,0,0,0) >= new Date().setHours(0,0,0,0)
+    )
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 2);
 
   const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
@@ -44,7 +55,6 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section simple */}
       <MainHero />
 
       {/* Actualité à la une */}
@@ -255,6 +265,63 @@ export default function HomePage() {
         </div>
       </section>
 
+{/* 3. AGENDA - Cette section ne s'affiche QUE s'il y a des événements */}
+{evenementsAgenda.length > 0 && (
+  <section className="py-20 bg-blue-900 text-white">
+    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      
+      {/* En-tête de section centré */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold">Prochains rendez-vous</h2>
+        <div className="h-1 w-20 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      {/* Grille d'événements */}
+      <div className="grid gap-8 md:grid-cols-2">
+        {evenementsAgenda.map((evt) => (
+          <Link 
+            key={evt.id} 
+            href={`/actualites/${evt.id}`} 
+            className="group bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex items-center gap-6 transition-all shadow-xl"
+          >
+            {/* Carré Date */}
+            <div className="bg-orange-500 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
+              <span className="text-3xl font-black">
+                {new Date(evt.date).getDate()}
+              </span>
+              <span className="text-[11px] uppercase font-bold">
+                {new Date(evt.date).toLocaleDateString("fr-FR", { month: 'short' }).replace('.', '')}
+              </span>
+            </div>
+
+            {/* Texte centré au milieu */}
+            <div className="flex-1 text-center">
+              <span className="text-orange-400 text-[11px] font-bold uppercase tracking-wider italic">
+                {evt.category}
+              </span>
+              {/* Suppression du group-hover:text-orange-300 pour garder le texte blanc */}
+              <h3 className="text-xl font-bold text-white mt-1">
+                {evt.title}
+              </h3>
+            </div>
+
+            {/* Bouton qui change de orange-500 vers 600 */}
+            <div className="p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg">
+              <svg 
+                className="w-6 h-6 text-white transform transition-transform group-hover:translate-x-1" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
       {/* Nos événements */}
       <section className=" bg-whitepy-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
