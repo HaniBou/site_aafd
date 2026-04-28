@@ -182,12 +182,12 @@ export default function AdminActualites() {
 
   return (
     <AdminProtection>
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 px-4 py-6 md:p-8">
         <AdminHeader />
         <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
-        <div className="max-w-7xl mx-auto mb-6">
-          <button onClick={() => setShowAddForm(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors">
+        <div className="max-w-7xl mx-auto mb-4 md:mb-6">
+          <button onClick={() => setShowAddForm(true)} className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors">
             + Ajouter une actualité
           </button>
         </div>
@@ -229,24 +229,24 @@ export default function AdminActualites() {
         />
 
         {/* Liste des cartes */}
-        <div className="max-w-7xl mx-auto space-y-4">
+        <div className="max-w-7xl mx-auto space-y-3 md:space-y-4">
           {actualites.map((actu) => (
-            <div key={actu.id} className={`bg-white rounded-lg shadow-sm border p-6 ${actu.aLaUne ? 'border-orange-500 ring-1 ring-orange-500' : 'border-gray-200'}`}>
-              <div className="flex justify-between items-start gap-4">
-                {actu.aLaUne && <span className="absolute -top-2 left-4 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded">À LA UNE</span>}
+            <div key={actu.id} className={`relative bg-white rounded-lg shadow-sm border p-4 md:p-6 ${actu.aLaUne ? 'border-orange-500 ring-1 ring-orange-500' : 'border-gray-200'}`}>
+              {actu.aLaUne && <span className="absolute -top-2 left-4 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded">À LA UNE</span>}
+              <div className="flex flex-col sm:flex-row gap-4">
                 {actu.image && actu.image !== 'none' && (
-                  <div className="relative h-24 w-24 rounded-lg overflow-hidden border shrink-0">
-                    <Image src={actu.image} alt={actu.title} fill className="object-cover" />
+                  <div className="relative h-32 w-full sm:h-24 sm:w-24 rounded-lg overflow-hidden border shrink-0">
+                    <Image src={actu.image} alt={actu.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 96px" />
                   </div>
                 )}
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold">{actu.title}</h3>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base md:text-lg font-semibold">{actu.title}</h3>
                   <p className="text-xs text-gray-500 mb-2">{formatDate(actu.date).toLocaleDateString('fr-FR')}</p>
-                  <p className="text-sm text-gray-700 line-clamp-2">{actu.content}</p>
+                  <p className="text-xs md:text-sm text-gray-700 line-clamp-2">{actu.content}</p>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <button onClick={() => handleEditClick(actu)} className="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs">Modifier</button>
-                  <button onClick={() => handleDelete(actu.id)} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs">Supprimer</button>
+                <div className="flex flex-row sm:flex-col gap-2 shrink-0">
+                  <button onClick={() => handleEditClick(actu)} className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 sm:py-1.5 rounded text-xs transition-colors">Modifier</button>
+                  <button onClick={() => handleDelete(actu.id)} className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white px-3 py-2 sm:py-1.5 rounded text-xs transition-colors">Supprimer</button>
                 </div>
               </div>
             </div>

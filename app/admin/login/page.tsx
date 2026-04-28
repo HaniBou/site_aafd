@@ -57,13 +57,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-10 w-full max-w-md">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8 md:p-10 w-full max-w-md">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Administration
           </h1>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600">
             Connectez-vous pour continuer
           </p>
         </div>

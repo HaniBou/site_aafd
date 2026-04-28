@@ -8,23 +8,23 @@ import AdminHeader from "@/components/AdminHeader";
 export default function AdminHome() {
   return (
     <AdminProtection>
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 px-4 py-6 md:p-8">
         <AdminHeader />
         
         {/* Header simple */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="max-w-7xl mx-auto mb-6 md:mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Tableau de bord
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm md:text-base text-gray-600">
               Gérez votre contenu et vos paramètres
             </p>
           </div>
         </div>
 
       {/* Boutons principaux */}
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Link
           href="/admin/actualites"
           className="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-indigo-300 transition-all"
