@@ -9,7 +9,7 @@ export function Footer() {
           {/* À propos avec logo */}
           <div className="md:col-span-2">
             <Link href="#top" className="flex items-center space-x-3 group mb-4" scroll={true} aria-label="Remonter en haut de la page">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-200/20 group-hover:ring-white transition-all">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-blue-200/20 group-hover:ring-white transition-all">
                 <Image
                   src="/images/test-logo.webp"
                   alt="AAFD Val de Saône Logo"
