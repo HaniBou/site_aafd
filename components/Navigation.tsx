@@ -30,14 +30,14 @@ export function Navigation() {
   }, [lastScrollY])
 
   return (
-    <nav className={`hidden lg:block sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
+    <nav className={`hidden lg:block sticky top-0 z-50 bg-white/98 backdrop-blur-lg border-b border-gray-100 transition-all duration-500 ${
+      isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
     }`}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-700/20 group-hover:ring-blue-900/50 transition-all">
+            <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-[#1e3a5f]/10 group-hover:ring-[#1e3a5f]/30 transition-all duration-300">
               <Image
                 src="/images/test-logo.webp"
                 alt="AAFD Val de Saône Logo"
@@ -45,17 +45,17 @@ export function Navigation() {
                 className="object-cover"
               />
             </div>
-            <span className="text-xl font-bold text-blue-700">AAFD Val de Saône</span>
+            <span className="text-lg font-bold text-[#1e3a5f] tracking-tight">AAFD Val de Saône</span>
           </Link>
 
-          {/* Navigation Links avec style blob */}
-          <div className="flex items-center gap-3">
+          {/* Navigation Links - refined minimal style */}
+          <div className="flex items-center gap-1">
             <Link
               href="/nous-connaitre"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/nous-connaitre'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white'
+                  : 'text-gray-600 hover:text-[#1e3a5f] hover:bg-gray-50'
               }`}
             >
               Nous connaître
@@ -63,10 +63,10 @@ export function Navigation() {
 
             <Link
               href="/notre-action"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/notre-action'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white'
+                  : 'text-gray-600 hover:text-[#1e3a5f] hover:bg-gray-50'
               }`}
             >
               Notre action
@@ -74,10 +74,10 @@ export function Navigation() {
 
             <Link
               href="/actualites"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/actualites'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white'
+                  : 'text-gray-600 hover:text-[#1e3a5f] hover:bg-gray-50'
               }`}
             >
               Actualités
@@ -85,10 +85,10 @@ export function Navigation() {
 
             <Link
               href="/vente-plats"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/vente-plats'
-                  ? 'bg-orange-600 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+                  ? 'bg-[#e67e22] text-white'
+                  : 'text-[#e67e22] hover:bg-[#fdf3e8]'
               }`}
             >
               Nos plats
@@ -96,10 +96,10 @@ export function Navigation() {
 
             <Link
               href="/temoignages"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/temoignages'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white'
+                  : 'text-gray-600 hover:text-[#1e3a5f] hover:bg-gray-50'
               }`}
             >
               Témoignages
@@ -107,10 +107,10 @@ export function Navigation() {
 
             <Link
               href="/nous-rejoindre"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 pathname === '/nous-rejoindre'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white'
+                  : 'text-gray-600 hover:text-[#1e3a5f] hover:bg-gray-50'
               }`}
             >
               Nous rejoindre
@@ -118,10 +118,10 @@ export function Navigation() {
 
             <Link
               href="/contact"
-              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
+              className={`ml-2 px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 border-2 ${
                 pathname === '/contact'
-                  ? 'bg-blue-900 text-white shadow-lg scale-105'
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white border-[#1e3a5f]'
+                  : 'text-[#1e3a5f] border-[#1e3a5f]/20 hover:border-[#1e3a5f] hover:bg-[#1e3a5f] hover:text-white'
               }`}
             >
               Contact

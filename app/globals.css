@@ -9,18 +9,33 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --blue-primary: #1e40af;
-  --blue-secondary: #1e3a8a;
-  --orange-accent: #f97316;
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  --blue-primary: #1e3a5f;
+  --blue-secondary: #152a45;
+  --blue-light: #e8f0f8;
+  --orange-accent: #e67e22;
+  --orange-light: #fdf3e8;
+  --warm-white: #fffcf9;
+  --warm-gray: #f5f3f0;
+  --border-subtle: #e5e2de;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--blue-primary);
+  --color-primary-dark: var(--blue-secondary);
+  --color-accent: var(--orange-accent);
+  --color-accent-light: var(--orange-light);
+  --color-muted: var(--warm-gray);
+  --color-border: var(--border-subtle);
   --font-sans: DINSchriftRegular, Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
 }
 
 body {
@@ -148,7 +163,73 @@ select:disabled,
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Smooth hover transitions for cards */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+}
+
+/* Refined link underline animation */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-subtle), transparent);
 }
 

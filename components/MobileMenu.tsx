@@ -41,14 +41,14 @@ export function MobileMenu() {
   }, [lastScrollY])
 
   return (
-    <div className={`lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
+    <div className={`lg:hidden sticky top-0 z-50 bg-white/98 backdrop-blur-lg border-b border-gray-100 transition-all duration-500 ${
+      isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
     }`}>
-      <div className="mx-auto w-full px-6">
-        <div className="flex items-center justify-between py-4">
+      <div className="mx-auto w-full px-5">
+        <div className="flex items-center justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-blue-900/20">
+            <div className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-[#1e3a5f]/10">
               <Image
                 src="/images/test-logo.webp"
                 alt="AAFD Val de Saône Logo"
@@ -56,13 +56,13 @@ export function MobileMenu() {
                 className="object-cover"
               />
             </div>
-            <span className="text-lg font-bold text-blue-900">AAFD Val de Saône</span>
+            <span className="text-base font-bold text-[#1e3a5f]">AAFD</span>
           </Link>
           
-          {/* Bouton Menu */}
+          {/* Menu Button */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-full text-gray-700 hover:bg-blue-50 transition-colors"
+            className="p-2 rounded-lg text-[#1e3a5f] hover:bg-gray-50 transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -79,14 +79,14 @@ export function MobileMenu() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <nav className="py-4 space-y-2 border-t border-gray-100">
+          <nav className="py-4 space-y-1 border-t border-gray-100">
             <Link
               href="/nous-connaitre"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/nous-connaitre' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#1e3a5f]'
               }`}
             >
               Nous connaître
@@ -94,10 +94,10 @@ export function MobileMenu() {
             <Link
               href="/notre-action"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/notre-action' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#1e3a5f]'
               }`}
             >
               Notre action
@@ -105,10 +105,10 @@ export function MobileMenu() {
             <Link
               href="/actualites"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/actualites' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#1e3a5f]'
               }`}
             >
               Actualités
@@ -116,10 +116,10 @@ export function MobileMenu() {
             <Link
               href="/vente-plats"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/vente-plats' 
-                  ? 'bg-orange-600 text-white' 
-                  : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+                  ? 'bg-[#e67e22] text-white' 
+                  : 'text-[#e67e22] hover:bg-[#fdf3e8]'
               }`}
             >
               Nos plats
@@ -127,10 +127,10 @@ export function MobileMenu() {
             <Link
               href="/temoignages"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/temoignages' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#1e3a5f]'
               }`}
             >
               Témoignages
@@ -138,10 +138,10 @@ export function MobileMenu() {
             <Link
               href="/nous-rejoindre"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 pathname === '/nous-rejoindre' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#1e3a5f]'
               }`}
             >
               Nous rejoindre
@@ -149,10 +149,10 @@ export function MobileMenu() {
             <Link
               href="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
+              className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all border-2 mt-2 ${
                 pathname === '/contact' 
-                  ? 'bg-blue-900 text-white' 
-                  : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
+                  ? 'bg-[#1e3a5f] text-white border-[#1e3a5f]' 
+                  : 'text-[#1e3a5f] border-[#1e3a5f]/20 hover:border-[#1e3a5f] hover:bg-[#1e3a5f] hover:text-white'
               }`}
             >
               Contact
