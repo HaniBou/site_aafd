@@ -178,24 +178,24 @@ export default function AdminPlats() {
 
   return (
     <AdminProtection>
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 px-4 py-6 md:p-8">
         <AdminHeader />
         
         {/* Header */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-between items-center">
+        <div className="max-w-7xl mx-auto mb-6 md:mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900">
                   Vente de plats
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   Gérer les plats disponibles à la vente
                 </p>
               </div>
               <Link
                 href="/admin/reservations"
-                className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors flex items-center gap-2"
+                className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 md:py-2.5 px-3 md:px-4 rounded-lg text-xs md:text-sm transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -210,10 +210,10 @@ export default function AdminPlats() {
       <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
       {/* Bouton Ajouter */}
-      <div className="max-w-7xl mx-auto mb-6">
+      <div className="max-w-7xl mx-auto mb-4 md:mb-6">
         <button
           onClick={() => setShowAddForm(true)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
+          className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
         >
           + Ajouter un plat
         </button>
@@ -270,34 +270,34 @@ export default function AdminPlats() {
       />
 
       {/* Liste des plats */}
-      <div className="max-w-7xl mx-auto space-y-4">
+      <div className="max-w-7xl mx-auto space-y-3 md:space-y-4">
         {plats.map((plat) => (
           <div
             key={plat.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6"
           >
-            <div className="flex justify-between items-start gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {/* Image du plat */}
               {plat.image && plat.image !== 'none' && (
-                <div className="relative h-24 w-24 rounded-lg overflow-hidden border-2 border-gray-200 shrink-0">
+                <div className="relative h-32 w-full sm:h-24 sm:w-24 rounded-lg overflow-hidden border-2 border-gray-200 shrink-0">
                   <Image
                     src={plat.image}
                     alt={plat.nom}
                     fill
                     className="object-cover"
-                    sizes="96px"
+                    sizes="(max-width: 640px) 100vw, 96px"
                   />
                 </div>
               )}
               
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
                   {plat.nom}
                 </h3>
-                <p className="text-sm text-gray-700 mb-3 whitespace-pre-line">
+                <p className="text-xs md:text-sm text-gray-700 mb-3 whitespace-pre-line line-clamp-2">
                   {plat.description}
                 </p>
-                <div className="flex items-center gap-3 text-xs text-gray-500">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 text-xs text-gray-500">
                   <span>
                     Quantité: <strong className="text-indigo-600">{plat.quantite}</strong>
                   </span>
@@ -307,16 +307,17 @@ export default function AdminPlats() {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col gap-2 shrink-0">
+              
+              <div className="flex flex-row sm:flex-col gap-2 shrink-0">
                 <button
                   onClick={() => handleEditClick(plat)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
+                  className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-3 py-2 sm:py-1.5 rounded text-xs transition-colors"
                 >
                   Modifier
                 </button>
                 <button
                   onClick={() => handleDelete(plat.id)}
-                  className="bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
+                  className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-2 sm:py-1.5 rounded text-xs transition-colors"
                 >
                   Supprimer
                 </button>
@@ -329,12 +330,12 @@ export default function AdminPlats() {
       {/* Message si pas de plats */}
       {plats.length === 0 && (
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-            <p className="text-gray-500">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8 text-center">
+            <p className="text-gray-500 text-sm md:text-base">
               Aucun plat pour le moment
             </p>
-            <p className="text-sm text-gray-400 mt-2">
-              Cliquez sur "Ajouter un plat" pour commencer
+            <p className="text-xs md:text-sm text-gray-400 mt-2">
+              Cliquez sur &quot;Ajouter un plat&quot; pour commencer
             </p>
           </div>
         </div>
