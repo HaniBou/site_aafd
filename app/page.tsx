@@ -48,7 +48,7 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  // --- LOGIQUE POUR L'AGENDA (Événements futurs uniquement) ---
+  //  Evenements futurs uniquement
   const evenementsAgenda = actualites
     .filter(actu => {
       const isEventCategory = actu.category === "Vente de plats" || actu.category === "Événement à venir";

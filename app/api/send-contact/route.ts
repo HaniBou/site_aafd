@@ -17,8 +17,8 @@ export async function POST(request: Request) {
 
     // Envoi de l'email
     const { data, error } = await resend.emails.send({
-      from: 'AAFD Contact <onboarding@resend.dev>', // Remplacer par votre domaine vérifié
-      to: ['bounouahani1@gmail.com'], // Email de l'association
+      from: 'AAFD Contact <onboarding@resend.dev>',
+      to: ['aafd@gmx.fr'],
       replyTo: email, // L'email du contact pour faciliter la réponse
       subject: `[Contact AAFD] ${sujet}`,
       html: `

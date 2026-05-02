@@ -7,7 +7,14 @@ interface ToastProps {
 export default function Toast({ message, show, onClose }: ToastProps) {
   if (!show) return null;
 
-  const isSuccess = message.includes('succès');
+  const normalizedMessage = message
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+  const hasErrorKeyword = /(erreur|echec|fail|failed)/.test(normalizedMessage);
+  const hasSuccessKeyword = /(succes|success|effectue|effectuee|ajoute|modifie|supprime)/.test(normalizedMessage);
+  const isSuccess = hasSuccessKeyword && !hasErrorKeyword;
 
   return (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[100] animate-in fade-in zoom-in-95 duration-300">
