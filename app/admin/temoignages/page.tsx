@@ -172,21 +172,21 @@ export default function AdminTemoignages() {
 
   return (
     <AdminProtection>
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 px-4 py-6 md:p-8">
         <AdminHeader />
         <Toast message={message} show={showToast} onClose={() => setShowToast(false)} />
 
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h1 className="text-2xl font-bold text-gray-900">Témoignages</h1>
-            <p className="text-sm text-gray-600 mt-1">Gérer les témoignages des familles accompagnées et des bénévoles</p>
+        <div className="max-w-7xl mx-auto mb-6 md:mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Témoignages</h1>
+            <p className="text-xs md:text-sm text-gray-600 mt-1">Gérer les témoignages des familles accompagnées et des bénévoles</p>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mb-6">
+        <div className="max-w-7xl mx-auto mb-4 md:mb-6">
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
           >
             + Ajouter un témoignage
           </button>
@@ -233,18 +233,18 @@ export default function AdminTemoignages() {
           isUploading={isUploading}
         />
 
-        <div className="max-w-7xl mx-auto space-y-4">
+        <div className="max-w-7xl mx-auto space-y-3 md:space-y-4">
           {temoignages.map((item, index) => (
-            <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div className="flex justify-between items-start gap-4">
+            <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+              <div className="flex flex-col sm:flex-row gap-4">
                 {item.image && item.image !== "none" && (
-                  <div className="relative h-24 w-24 rounded-lg overflow-hidden border shrink-0">
-                    <Image src={item.image} alt={item.nom} fill className="object-cover" sizes="96px" />
+                  <div className="relative h-32 w-full sm:h-24 sm:w-24 rounded-lg overflow-hidden border shrink-0">
+                    <Image src={item.image} alt={item.nom} fill className="object-cover" sizes="(max-width: 640px) 100vw, 96px" />
                   </div>
                 )}
                 {(!item.image || item.image === "none") && (
                   <div
-                    className={`relative h-24 w-24 rounded-lg overflow-hidden border shrink-0 flex items-center justify-center ${fallbackThumbStyles[index % fallbackThumbStyles.length]}`}
+                    className={`relative h-32 w-full sm:h-24 sm:w-24 rounded-lg overflow-hidden border shrink-0 flex items-center justify-center ${fallbackThumbStyles[index % fallbackThumbStyles.length]}`}
                     aria-label="Image de remplacement"
                   >
                     <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,26 +253,23 @@ export default function AdminTemoignages() {
                   </div>
                 )}
 
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{item.nom}</h3>
-                    <span className="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-800 font-medium">{item.type}</span>
-                  </div>
-                  {item.role && <p className="text-sm text-gray-600 mb-1">{item.role}</p>}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">{item.nom} ({item.type})</h3>
+                  {item.role && <p className="text-xs md:text-sm text-gray-600 mb-1">{item.role}</p>}
                   <p className="text-xs text-gray-500 mb-2">{new Date(item.date).toLocaleDateString("fr-FR")}</p>
-                  <p className="text-sm text-gray-700 line-clamp-3 whitespace-pre-line">{item.contenu}</p>
+                  <p className="text-xs md:text-sm text-gray-700 line-clamp-3 whitespace-pre-line">{item.contenu}</p>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-row sm:flex-col gap-2 shrink-0">
                   <button
                     onClick={() => handleEditClick(item)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
+                    className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-3 py-2 sm:py-1.5 rounded text-xs transition-colors"
                   >
                     Modifier
                   </button>
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded text-xs transition-colors"
+                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-2 sm:py-1.5 rounded text-xs transition-colors"
                   >
                     Supprimer
                   </button>
@@ -283,10 +280,10 @@ export default function AdminTemoignages() {
         </div>
 
         {temoignages.length === 0 && (
-          <div className="max-w-7xl mx-auto mt-8">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-              <p className="text-gray-500">Aucun témoignage pour le moment</p>
-              <p className="text-sm text-gray-400 mt-2">Cliquez sur "Ajouter un témoignage" pour commencer</p>
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8 text-center">
+              <p className="text-sm md:text-base text-gray-500">Aucun témoignage pour le moment</p>
+              <p className="text-xs md:text-sm text-gray-400 mt-2">Cliquez sur "Ajouter un témoignage" pour commencer</p>
             </div>
           </div>
         )}
