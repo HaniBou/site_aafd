@@ -7,12 +7,11 @@ import { useEffect, useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { getCategoryStyles } from '@/lib/categoryStyles';
 
-// Définir le type des actualités
 interface Actualite {
   id: string;
   title: string;
-  date: string; // date de l'événement
-  uploadedAt: string; // date/heure d'upload
+  date: string;
+  uploadedAt: string;
   category: string;
   image: string;
   content: string;
@@ -20,66 +19,33 @@ interface Actualite {
   aLaUne: boolean;
 }
 
+const CATEGORIES = ["Tout", "Actualité", "Vente", "Événement", "Annonce"];
+
+const formatDate = (dateStr: string) =>
+  new Date(dateStr).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
+
+const truncate = (text: string, max: number) =>
+  text.length > max ? text.substring(0, max) + "…" : text;
+
 export default function ActualitesPage() {
   const [actuALaUne, setActuALaUne] = useState<Actualite | null>(null);
   const [autresActus, setAutresActus] = useState<Actualite[]>([]);
+  const [activeCategory, setActiveCategory] = useState("Tout");
 
   useEffect(() => {
-  async function fetchData() {
-    const data = await getActualites();
-    
-    // 1. On trie tout par date décroissante
-    const sortedData = data.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-    // 2. On cherche celle qui est cochée "À la une"
-    let featured = sortedData.find(actu => actu.aLaUne === true);
-    
-    // 3. Si aucune n'est cochée, on prend la plus récente par défaut
-    if (!featured) {
-      featured = sortedData[0];
+    async function fetchData() {
+      const data = await getActualites();
+      const sorted = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      const featured = sorted.find(a => a.aLaUne) ?? sorted[0];
+      setActuALaUne(featured ?? null);
+      setAutresActus(sorted.filter(a => a.id !== featured?.id));
     }
-
-    // 4. On filtre "autresActus" pour retirer celle qui est à la une
-    const remaining = sortedData.filter(actu => actu.id !== featured?.id);
-
-    setActuALaUne(featured);
-    setAutresActus(remaining);
-  }
-  fetchData();
+    fetchData();
   }, []);
 
-  const truncateText = (text: string, maxLength: number) => {
-    // Limiter par caractères d'abord
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    
-    // Puis limiter par nombre de paragraphes (max 3)
-    const paragraphs = text.split('\n').filter(p => p.trim().length > 0);
-    if (paragraphs.length > 4) {
-      return paragraphs.slice(0, 4).join('\n\n') + "...";
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    
-    return text;
-  };
-
-  const shouldShowReadMore = (text: string) => {
-    const paragraphs = text.split('\n').filter(p => p.trim().length > 0);
-    return text.length > 300 || paragraphs.length > 3;
-  };
-
-  const fallbackImage = "/images/placeholder.png"; // Image par défaut
-
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
+  const filtered = activeCategory === "Tout"
+    ? autresActus
+    : autresActus.filter(a => a.category === activeCategory);
 
   return (
     <main className="min-h-screen bg-white">
@@ -90,72 +56,63 @@ export default function ActualitesPage() {
         imageAlt="Actualités"
       />
 
-      {/* Dernière actualité mise en avant */}
+      {/* À la une */}
       {actuALaUne && (
-        <section className="py-12 md:py-16">
-          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-            <div className="mb-8">
-              <span className="inline-block px-4 py-2 bg-orange-500 text-white text-sm font-medium tracking-wide rounded-full">
+        <section className="py-16 md:py-20 bg-white">
+          <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
+            <div className="flex items-center gap-4 mb-10">
+              <span className="px-4 py-1.5 bg-orange-500 text-white text-xs font-bold tracking-widest uppercase rounded-full">
                 À la une
               </span>
+              <div className="h-px flex-1 bg-gray-100" />
             </div>
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Image de l'actualité */}
-              <div className="relative h-[350px] md:h-[450px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden shadow-xl">
+
+            <div className="group grid md:grid-cols-5 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              {/* Image */}
+              <Link href={`/actualites/${actuALaUne.id}`} className="relative md:col-span-3 h-[260px] md:h-[460px] block bg-gray-200 overflow-hidden">
                 {actuALaUne.image && actuALaUne.image !== 'none' ? (
                   <Image
                     src={actuALaUne.image}
                     alt={actuALaUne.title}
                     fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 60vw"
                   />
                 ) : (
-                  <svg className="h-24 w-24 text-white/60" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
+                  <div className="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700" />
                 )}
-              </div>
-              
+              </Link>
+
               {/* Contenu */}
-              <div>
-                <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actuALaUne.category)}`}>
+              <div className="md:col-span-2 flex flex-col justify-center p-8 md:p-12 bg-gray-50">
+                <span className={`self-start mb-3 px-3 py-1 text-xs font-bold tracking-wider uppercase rounded-full ${getCategoryStyles(actuALaUne.category)}`}>
                   {actuALaUne.category}
                 </span>
-                <h3 className="large text-gray-900 mt-3">
-                  {actuALaUne.title}
-                </h3>
-                <p className="text-small text-gray-500">
-                  {new Date(actuALaUne.date).toLocaleDateString("fr-FR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                <p className="text-xs text-gray-400 mb-3 uppercase tracking-wide">{formatDate(actuALaUne.date)}</p>
+                <Link href={`/actualites/${actuALaUne.id}`}>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-4 hover:text-blue-900 transition-colors">
+                    {actuALaUne.title}
+                  </h2>
+                </Link>
+                <p className="text-gray-600 leading-relaxed mb-6 text-sm md:text-base">
+                  {truncate(actuALaUne.content, 240)}
                 </p>
-                <p className="text-gray-600 text-justify whitespace-pre-line">
-                  {truncateText(actuALaUne.content, 300)}
-                </p>
-                <div className="flex flex-wrap items-center gap-3 mt-4">
-                  {shouldShowReadMore(actuALaUne.content) && (
-                    <Link
-                      href={`/actualites/${actuALaUne.id}`}
-                      className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-medium text-sm transition-colors"
-                    >
-                      Lire la suite
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  )}
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/actualites/${actuALaUne.id}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:underline"
+                  >
+                    Lire la suite
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
                   {actuALaUne.category === "Vente de plats" && (
                     <Link
                       href="/vente-plats"
-                      className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
+                      className="ml-auto inline-flex items-center gap-2 bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition-colors font-semibold text-sm shadow"
                     >
                       Commander
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
                     </Link>
                   )}
                 </div>
@@ -165,93 +122,92 @@ export default function ActualitesPage() {
         </section>
       )}
 
-      {/* Liste des actualités */}
-      <section className="py-16 md:py-24 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2 className="large text-gray-900 mb-16 text-center">
-            Toutes nos actualités
-          </h2>
+      {/* Filtres + grille */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
 
-          <div className="space-y-20">
-            {autresActus.map((actu, index) => (
-              <div
-                key={actu.id}
-                className={`grid md:grid-cols-2 gap-12 items-center ${
-                  index % 2 === 1 ? "md:grid-flow-dense" : ""
+          {/* Filtres */}
+          <div className="flex flex-wrap gap-2 mb-12">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeCategory === cat
+                    ? 'bg-blue-900 text-white shadow-md scale-105'
+                    : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-900 hover:text-blue-900'
                 }`}
               >
-                {/* Image de l'actualité */}
-                <div className={`relative h-[300px] md:h-[350px] bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg overflow-hidden shadow-xl ${index % 2 === 1 ? "md:col-start-2" : ""}`}>
-                  {actu.image && actu.image !== 'none' ? (
-                    <Image
-                      src={actu.image}
-                      alt={actu.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  ) : (
-                    <svg className="h-20 w-20 text-white/60" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                  )}
-                </div>
-                
-                {/* Contenu */}
-                <div className={index % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}>
-                  <span className={`inline-block px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full ${getCategoryStyles(actu.category)}`}>
-                    {actu.category}
-                  </span>
-                  <h3 className="large text-gray-900 mt-2">
-                    {actu.title}
-                  </h3>
-                  <p className="text-small text-gray-500">
-                    {new Date(actu.date).toLocaleDateString("fr-FR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <p className="text-gray-600 text-justify whitespace-pre-line">
-                    {truncateText(actu.content, 300)}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-3 mt-4">
-                    {shouldShowReadMore(actu.content) && (
-                      <Link
-                        href={`/actualites/${actu.id}`}
-                        className="group inline-flex items-center gap-1 text-blue-700 hover:underline font-medium text-sm transition-colors"
-                      >
-                        Lire la suite
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    )}
-                    {actu.category === "Vente de plats" && (
-                      <Link
-                        href="/vente-plats"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
-                      >
-                        Commander
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
+                {cat}
+              </button>
             ))}
           </div>
+
+          {/* Grille */}
+          {filtered.length === 0 ? (
+            <p className="text-center text-gray-400 py-24">Aucune actualité dans cette catégorie.</p>
+          ) : (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map(actu => (
+                <article key={actu.id} className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                  {/* Image */}
+                  <div className="relative h-52 bg-gray-200 overflow-hidden">
+                    {actu.image && actu.image !== 'none' ? (
+                      <Image
+                        src={actu.image}
+                        alt={actu.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700" />
+                    )}
+                    <span className={`absolute top-3 left-3 px-3 py-1 text-xs font-bold tracking-wide uppercase rounded-full ${getCategoryStyles(actu.category)}`}>
+                      {actu.category}
+                    </span>
+                  </div>
+
+                  {/* Contenu */}
+                  <div className="flex flex-col flex-1 p-6">
+                    <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">{formatDate(actu.date)}</p>
+                    <h3 className="text-lg font-bold text-gray-900 leading-snug mb-3 group-hover:text-blue-900 transition-colors">
+                      {actu.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed flex-1">
+                      {truncate(actu.content, 140)}
+                    </p>
+                    <div className="mt-5 flex items-center justify-between">
+                      <Link
+                        href={`/actualites/${actu.id}`}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline"
+                      >
+                        Lire la suite
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      {actu.category === "Vente" && (
+                        <Link
+                          href="/vente-plats"
+                          className="relative z-10 inline-flex items-center gap-1.5 bg-orange-500 text-white px-4 py-1.5 rounded-full hover:bg-orange-600 transition-colors font-semibold text-xs shadow"
+                        >
+                          Commander
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* CTA Newsletter ou Réseaux sociaux */}
+      {/* CTA */}
       <section className="bg-gradient-to-br from-blue-900 to-blue-700 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>
-            Restez informé
-          </h2>
+          <h2>Restez informé</h2>
           <p className="mb-8 text-body-large text-blue-100">
             Suivez-nous sur Instagram pour ne rien manquer de nos actualités et événements
           </p>

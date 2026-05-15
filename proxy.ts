@@ -8,7 +8,7 @@ function getSecret() {
   return new TextEncoder().encode(process.env.ADMIN_SESSION_SECRET!);
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === '/admin/login') {

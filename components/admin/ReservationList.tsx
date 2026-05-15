@@ -82,8 +82,16 @@ export default function ReservationList({ reservations }: { reservations: Reserv
 
       <div className="max-w-4xl mx-auto px-4 py-8">
 
+        {/* En-tête impression uniquement */}
+        <div className="hidden print:block mb-6 border-b-2 border-gray-800 pb-4">
+          <h1 className="text-2xl font-bold">Liste des réservations — AAFD</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Imprimé le {new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })} · {reservations.length} réservation{reservations.length > 1 ? 's' : ''} · {total} portion{total > 1 ? 's' : ''} au total
+          </p>
+        </div>
+
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 print:hidden">
           <div>
             <h1 className="text-xl font-bold text-gray-900">Réservations</h1>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -91,24 +99,33 @@ export default function ReservationList({ reservations }: { reservations: Reserv
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 print:hidden">
             {/* Total badge */}
             <div className="bg-purple-50 border border-purple-200 rounded-xl px-4 py-2 text-center">
               <p className="text-xs font-medium text-purple-600">Total commandé</p>
               <p className="text-2xl font-black text-purple-700 leading-none mt-0.5">{total}</p>
             </div>
 
-            {/* Export */}
             {reservations.length > 0 && (
-              <button onClick={() => exportCSV(reservations)}
-                className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                <span className="hidden sm:inline">Télécharger CSV</span>
-                <span className="sm:hidden">CSV</span>
-              </button>
+              <>
+                <button onClick={() => exportCSV(reservations)}
+                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span className="hidden sm:inline">CSV</span>
+                </button>
+
+                <button onClick={() => window.print()}
+                  className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                  </svg>
+                  <span className="hidden sm:inline">Imprimer</span>
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -127,8 +144,50 @@ export default function ReservationList({ reservations }: { reservations: Reserv
           </div>
         )}
 
+        {/* Vue impression compacte */}
+        {reservations.length > 0 && (
+          <div className="hidden print:block">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
+              <thead>
+                <tr style={{ background: '#f3f4f6', borderBottom: '2px solid #111' }}>
+                  <th style={{ padding: '4px 6px', textAlign: 'left' }}>Plat</th>
+                  <th style={{ padding: '4px 6px', textAlign: 'center' }}>Qté</th>
+                  <th style={{ padding: '4px 6px', textAlign: 'left' }}>Client</th>
+                  <th style={{ padding: '4px 6px', textAlign: 'left' }}>Téléphone</th>
+                  <th style={{ padding: '4px 6px', textAlign: 'left' }}>Email</th>
+                  <th style={{ padding: '4px 6px', textAlign: 'left' }}>Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(byPlat).map(([platNom, platReservations]) => {
+                  const platTotal = platReservations.reduce((s, r) => s + r.quantite, 0);
+                  return platReservations.map((r, i) => (
+                    <tr key={r.id} style={{ borderBottom: '1px solid #e5e7eb', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
+                      {i === 0 ? (
+                        <td rowSpan={platReservations.length} style={{ padding: '4px 6px', fontWeight: 700, borderRight: '1px solid #d1d5db', verticalAlign: 'top' }}>
+                          {platNom}<br /><span style={{ fontWeight: 400, color: '#6b7280' }}>total : {platTotal}</span>
+                        </td>
+                      ) : null}
+                      <td style={{ padding: '4px 6px', textAlign: 'center', fontWeight: 700 }}>×{r.quantite}</td>
+                      <td style={{ padding: '4px 6px' }}>{r.clientNom}</td>
+                      <td style={{ padding: '4px 6px' }}>{r.clientTelephone}</td>
+                      <td style={{ padding: '4px 6px' }}>{r.clientEmail}</td>
+                      <td style={{ padding: '4px 6px', color: '#6b7280' }}>{r.message ?? ''}</td>
+                    </tr>
+                  ));
+                })}
+                <tr style={{ borderTop: '2px solid #111', background: '#f3f4f6', fontWeight: 700 }}>
+                  <td style={{ padding: '4px 6px' }}>TOTAL</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'center' }}>{total}</td>
+                  <td colSpan={4} />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
         {/* Groups by plat */}
-        <div className="space-y-4">
+        <div className="space-y-4 print:hidden">
           {Object.entries(byPlat).map(([platNom, platReservations]) => {
             const platTotal = platReservations.reduce((s, r) => s + r.quantite, 0);
             return (
@@ -166,7 +225,7 @@ export default function ReservationList({ reservations }: { reservations: Reserv
                         </span>
                         <span className="text-xs text-gray-400">{formatDate(r.dateReservation)}</span>
                         {r.emailEnvoye === true && (
-                          <span className="flex items-center gap-1 bg-green-50 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full border border-green-100">
+                          <span className="print:hidden flex items-center gap-1 bg-green-50 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full border border-green-100">
                             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
@@ -174,7 +233,7 @@ export default function ReservationList({ reservations }: { reservations: Reserv
                           </span>
                         )}
                         {r.emailEnvoye === false && (
-                          <span className="flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-medium px-2 py-0.5 rounded-full border border-amber-100"
+                          <span className="print:hidden flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-medium px-2 py-0.5 rounded-full border border-amber-100"
                             title={r.emailErreur ?? ''}>
                             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -209,7 +268,7 @@ export default function ReservationList({ reservations }: { reservations: Reserv
                         </div>
 
                         <button onClick={() => setCancelTarget(r)}
-                          className="sm:self-center flex items-center justify-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-100 px-4 py-2.5 rounded-xl transition-colors shrink-0">
+                          className="print:hidden sm:self-center flex items-center justify-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-100 px-4 py-2.5 rounded-xl transition-colors shrink-0">
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M6 18L18 6M6 6l12 12" />

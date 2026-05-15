@@ -106,17 +106,11 @@ export default async function AdminDashboard() {
                 </div>
                 <span className={`text-2xl font-black ${c.text}`}>{counts[i]}</span>
               </div>
-              <div className="px-5 py-3 flex gap-2">
+              <div className="px-5 py-3">
                 <Link href={s.href}
-                  className="flex-1 text-center py-2 border border-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors">
+                  className="block w-full text-center py-2 border border-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors">
                   Gérer
                 </Link>
-                {s.addLabel && (
-                  <Link href={`${s.href}?new=1`}
-                    className={`flex-1 text-center py-2 ${c.btn} text-white rounded-lg text-xs font-medium transition-colors`}>
-                    {s.addLabel}
-                  </Link>
-                )}
               </div>
             </div>
           );
@@ -140,8 +134,8 @@ export default async function AdminDashboard() {
             {
               title: 'Ajouter du contenu',
               steps: [
-                'Cliquez sur une section (Actualités, Plats…)',
-                'Cliquez sur le bouton "+ Ajouter"',
+                'Cliquez sur "Gérer" dans la section souhaitée',
+                'Cliquez sur le bouton "+ Ajouter" en haut de la liste',
                 'Remplissez le formulaire et validez',
               ],
             },

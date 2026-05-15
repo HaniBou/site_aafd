@@ -47,14 +47,14 @@ export default function VentePlatsPage() {
     <main className="min-h-screen">
       <PageHero
         title="Nos Plats Cuisinés"
-        description="Des plats préparés avec amour pour soutenir nos actions solidaires"
+        description="Nos bénévoles préparent régulièrement des plats faits maison que vous pouvez réserver. 
+            En achetant nos plats, vous soutenez directement les actions de l&apos;AAFD"
         imageSrc="/images/hero_plats.webp"
         imageAlt="Nos plats cuisinés"
-        gradientFrom="from-orange-900/90"
-        gradientTo="to-orange-800/70"
+        accentColor="bg-orange-400"
       />
 
-      {/* Introduction */}
+      {/* Introduction
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-gray-900">
@@ -68,7 +68,7 @@ export default function VentePlatsPage() {
             💙 Tous les bénéfices sont reversés à l&apos;association
           </p>
         </div>
-      </section>
+      </section> */}
 
       {/* Plats disponibles */}
       <section className="py-16 bg-slate-50">

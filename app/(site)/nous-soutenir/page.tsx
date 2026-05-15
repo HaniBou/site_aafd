@@ -16,13 +16,12 @@ export default function NousSoutenirPage() {
         description="Votre soutien est essentiel pour continuer à accompagner les familles en difficulté et développer nos actions sur le Val de Saône."
         imageSrc="/images/donate.webp"
         imageAlt="Nous soutenir"
-        gradientFrom="from-green-900/90"
-        gradientTo="to-green-800/70"
+        accentColor="bg-green-400"
       />
 
       {/* Pourquoi nous soutenir : Style Épuré */}
 <section className="py-20 bg-white">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Votre impact concret</h2>
       <div className="w-12 h-1 bg-blue-900 mx-auto"></div>
@@ -53,7 +52,7 @@ export default function NousSoutenirPage() {
 
       {/* Comment nous soutenir */}
       <section className="bg-gray-50 py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-gray-900">
               Comment nous soutenir ?
@@ -170,7 +169,7 @@ export default function NousSoutenirPage() {
 
       {/* Devenir partenaire */}
       <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div>
               <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl">
@@ -216,7 +215,7 @@ export default function NousSoutenirPage() {
 
      {/* Section Impact : L'AAFD en chiffres (Style harmonisé) */}
 <section className="bg-blue-900 py-16 md:py-24 text-white">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
       <h2 className="text-white">
         L&apos;impact de votre soutien

@@ -32,10 +32,15 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
+  const { nom, prenom, ville, texte, note, date, image } = body;
   const docRef = await adminDb.collection('temoignages').add({
-    ...body,
-    date: body.date || new Date().toISOString(),
-    image: body.image || 'none',
+    nom: String(nom ?? ''),
+    prenom: String(prenom ?? ''),
+    ville: String(ville ?? ''),
+    texte: String(texte ?? ''),
+    note: Number(note ?? 5),
+    date: date ? String(date) : new Date().toISOString(),
+    image: image ? String(image) : 'none',
   });
 
   revalidatePath('/temoignages');

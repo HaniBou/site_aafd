@@ -4,7 +4,7 @@ import Image from 'next/image'
 export function Footer() {
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-screen-2xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-4">
           {/* À propos avec logo */}
           <div className="md:col-span-2">
@@ -32,15 +32,9 @@ export function Footer() {
             {/* grid-cols-2 sur mobile, block (1 colonne) sur tablette et plus */}
             <ul className="grid grid-cols-2 md:block gap-y-2.5 gap-x-4 text-sm">
               <li>
-                <Link href="/nous-connaitre" className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+                <Link href="/notre-association" className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-2">
                   <span className="text-blue-400">→</span>
-                  Nous connaître
-                </Link>
-              </li>
-              <li>
-                <Link href="/notre-action" className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-2">
-                  <span className="text-blue-400">→</span>
-                  Notre action
+                  Notre association
                 </Link>
               </li>
               <li>
@@ -121,15 +115,16 @@ export function Footer() {
 
         <div className="mt-10 border-t border-gray-800 pt-8">
   <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-    {/* text-center centre le texte sur mobile, md:text-left le remet à gauche sur PC */}
     <p className="text-center md:text-left">
       &copy; {new Date().getFullYear()} AAFD Val de Saône. Tous droits réservés.
     </p>
-    
-    {/* text-center centre le texte sur mobile, md:text-right le pousse à droite sur PC */}
-    <p className="text-xs text-center md:text-right">
-      Association loi 1901 à but non lucratif
-    </p>
+    <div className="flex items-center gap-4 text-xs text-center md:text-right">
+      <span>Association loi 1901 à but non lucratif</span>
+      <span className="text-gray-700">|</span>
+      <Link href="/mentions-legales" className="hover:text-blue-400 transition-colors">
+        Mentions légales
+      </Link>
+    </div>
   </div>
 </div>
       </div>

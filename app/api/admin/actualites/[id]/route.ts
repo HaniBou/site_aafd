@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/session';
+import { deleteCloudinaryImage } from '@/lib/cloudinary';
 
 export const runtime = 'nodejs';
 
@@ -41,7 +42,16 @@ export async function PUT(
     }
   }
 
+  const existing = await adminDb.collection('actualites').doc(id).get();
+  const oldImage = existing.data()?.image as string | undefined;
+
   await adminDb.collection('actualites').doc(id).update(body);
+
+  const newImage = (body as { image?: string }).image;
+  if (newImage !== undefined && newImage !== oldImage) {
+    await deleteCloudinaryImage(oldImage);
+  }
+
   revalidatePath('/actualites');
   return NextResponse.json({ success: true });
 }
@@ -57,7 +67,12 @@ export async function DELETE(
   }
 
   const { id } = await params;
+  const existing = await adminDb.collection('actualites').doc(id).get();
+  const imageUrl = existing.data()?.image as string | undefined;
+
   await adminDb.collection('actualites').doc(id).delete();
+  await deleteCloudinaryImage(imageUrl);
+
   revalidatePath('/actualites');
   return NextResponse.json({ success: true });
 }

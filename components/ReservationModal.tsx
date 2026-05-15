@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, FormEvent } from "react";
-import createReservation from "@/lib/createReservation";
-import updatePlatQuantite from "@/lib/updatePlatQuantite";
+import { runTransaction, doc, collection } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 type Plat = {
   id: string;
@@ -32,6 +32,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
   const [emailError, setEmailError] = useState<string>("");
   const [emailWarning, setEmailWarning] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
 
   // Fonction de validation d'email
   const validateEmail = (email: string): boolean => {
@@ -52,10 +53,11 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    // Validation finale de l'email avant envoi
     if (!validateEmail(formData.email)) {
       setEmailError("Veuillez entrer une adresse email valide");
       setIsSubmitting(false);
@@ -63,72 +65,62 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
     }
 
     try {
-      // 1. Envoyer l'email d'abord via l'API Resend
-      let emailSent = false;
-      let emailErrorMessage = "";
-      
+      // 1. Transaction atomique : vérif quantité + décrémentation + création réservation
+      //    Si deux personnes réservent en même temps, une seule passera.
+      await runTransaction(db, async (transaction) => {
+        const platRef = doc(db, "plats", plat!.id);
+        const platDoc = await transaction.get(platRef);
+
+        if (!platDoc.exists()) throw new Error("Ce plat n'existe plus.");
+
+        const currentQty = (platDoc.data().quantite as number) ?? 0;
+        if (currentQty < formData.quantite) throw new Error("Il ne reste plus assez de portions disponibles.");
+
+        const reservationRef = doc(collection(db, "reservations"));
+
+        transaction.update(platRef, { quantite: currentQty - formData.quantite });
+        transaction.set(reservationRef, {
+          platId: plat!.id,
+          platNom: plat!.nom,
+          clientNom: formData.nom,
+          clientEmail: formData.email,
+          clientTelephone: formData.telephone,
+          quantite: formData.quantite,
+          message: formData.message || "",
+          emailEnvoye: false,
+          emailErreur: null,
+          dateReservation: new Date(),
+        });
+      });
+
+      // 2. Réservation enregistrée en base → envoyer l'email de confirmation
       try {
         const emailResponse = await fetch('/api/send-reservation', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             platNom: plat?.nom,
             clientNom: formData.nom,
             clientEmail: formData.email,
             clientTelephone: formData.telephone,
             quantite: formData.quantite,
-            message: formData.message || "Aucun message"
+            message: formData.message || "",
           }),
         });
-
-        const emailData = await emailResponse.json();
-
-        if (emailResponse.ok && emailData.success) {
-          emailSent = true;
-        } else {
-          emailErrorMessage = emailData.error || `Erreur d'envoi`;
-        }
-      } catch (error: any) {
-        console.error("Erreur lors de l'envoi de l'email:", error);
-        emailErrorMessage = error?.message || "Erreur de connexion";
+        setSubmitStatus(emailResponse.ok ? "success" : "warning");
+      } catch {
+        // Email raté mais réservation bien sauvegardée
+        setSubmitStatus("warning");
       }
 
-      // 2. Si l'email n'a pas été envoyé, on bloque la réservation
-      if (!emailSent) {
-        setSubmitStatus("error");
-        setEmailWarning(emailErrorMessage);
-        setIsSubmitting(false);
-        return;
-      }
+      setTimeout(() => window.location.reload(), 4000);
 
-      // 3. Email OK → on valide la réservation dans Firestore
-      await updatePlatQuantite(plat!.id, formData.quantite);
-
-      // 4. Enregistrer la réservation dans Firestore
-      await createReservation({
-        platId: plat!.id,
-        platNom: plat!.nom,
-        clientNom: formData.nom,
-        clientEmail: formData.email,
-        clientTelephone: formData.telephone,
-        quantite: formData.quantite,
-        message: formData.message || "",
-        emailEnvoye: true,
-        emailErreur: null,
-      });
-
-      setSubmitStatus("success");
-      
-      // Fermer le modal et rafraîchir la page après 4 secondes
-      setTimeout(() => {
-        window.location.reload(); // Pour mettre à jour les quantités affichées
-      }, 4000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de la réservation:", error);
+      setEmailWarning(error?.message || "Une erreur est survenue.");
       setSubmitStatus("error");
     } finally {
+      submittingRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -268,15 +260,12 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <div>
-                <p className="font-semibold text-yellow-900">Réservation enregistrée ⚠️</p>
+                <p className="font-semibold text-yellow-900">Réservation enregistrée ✅</p>
                 <p className="text-sm text-yellow-800 mt-1">
-                  Votre réservation est bien prise en compte, mais l'email de confirmation n'a pas pu être envoyé.
-                </p>
-                <p className="text-xs text-yellow-700 mt-2">
-                  Raison : {emailWarning}
+                  Votre réservation est bien prise en compte. L'email de confirmation n'a pas pu être envoyé, mais l'association a bien reçu votre demande.
                 </p>
                 <p className="text-sm text-yellow-800 mt-2 font-medium">
-                  💡 L'association vous contactera par téléphone pour confirmer.
+                  Nous vous contacterons par téléphone pour confirmer.
                 </p>
               </div>
             </div>
@@ -288,8 +277,8 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <p className="font-semibold text-red-900">Erreur d'envoi ❌</p>
-                <p className="text-sm text-red-700 mt-1">Veuillez réessayer ou nous contacter directement.</p>
+                <p className="font-semibold text-red-900">Réservation impossible ❌</p>
+                <p className="text-sm text-red-700 mt-1">{emailWarning || "Veuillez réessayer ou nous contacter directement."}</p>
               </div>
             </div>
           )}

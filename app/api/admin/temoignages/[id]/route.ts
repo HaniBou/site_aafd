@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/session';
+import { deleteCloudinaryImage } from '@/lib/cloudinary';
 
 export const runtime = 'nodejs';
 
@@ -25,7 +26,24 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  await adminDb.collection('temoignages').doc(id).update(body);
+  const { nom, prenom, ville, texte, note, date, image } = body;
+  const update: Record<string, unknown> = {};
+  if (nom !== undefined) update.nom = String(nom);
+  if (prenom !== undefined) update.prenom = String(prenom);
+  if (ville !== undefined) update.ville = String(ville);
+  if (texte !== undefined) update.texte = String(texte);
+  if (note !== undefined) update.note = Number(note);
+  if (date !== undefined) update.date = String(date);
+  if (image !== undefined) update.image = image ? String(image) : 'none';
+
+  const existing = await adminDb.collection('temoignages').doc(id).get();
+  const oldImage = existing.data()?.image as string | undefined;
+
+  await adminDb.collection('temoignages').doc(id).update(update);
+
+  if (image !== undefined && image !== oldImage) {
+    await deleteCloudinaryImage(oldImage);
+  }
   revalidatePath('/temoignages');
   return NextResponse.json({ success: true });
 }
@@ -41,7 +59,12 @@ export async function DELETE(
   }
 
   const { id } = await params;
+  const existing = await adminDb.collection('temoignages').doc(id).get();
+  const imageUrl = existing.data()?.image as string | undefined;
+
   await adminDb.collection('temoignages').doc(id).delete();
+  await deleteCloudinaryImage(imageUrl);
+
   revalidatePath('/temoignages');
   return NextResponse.json({ success: true });
 }

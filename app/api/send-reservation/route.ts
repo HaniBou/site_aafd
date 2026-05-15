@@ -1,9 +1,18 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { rateLimit } from '@/lib/rateLimit';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? '127.0.0.1';
+  if (!rateLimit(ip, 5, 10 * 60 * 1000)) {
+    return NextResponse.json(
+      { error: 'Trop de tentatives. Réessayez dans quelques minutes.' },
+      { status: 429 }
+    );
+  }
+
   try {
     const { platNom, clientNom, clientEmail, clientTelephone, quantite, message } = await request.json();
 

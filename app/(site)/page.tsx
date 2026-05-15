@@ -51,7 +51,7 @@ export default function HomePage() {
   //  Evenements futurs uniquement
   const evenementsAgenda = actualites
     .filter(actu => {
-      const isEventCategory = actu.category === "Vente de plats" || actu.category === "Événement à venir";
+      const isEventCategory = actu.category === "Vente" || actu.category === "Événement";
       const eventDate = new Date(actu.date);
       const today = new Date();
       today.setHours(0, 0, 0, 0); // On compare uniquement le jour
@@ -73,7 +73,7 @@ export default function HomePage() {
       {/* Actualité à la une */}
       {featuredActu && (
         <section className="py-12 md:py-16 bg-slate-50">
-          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-8">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="inline-block px-4 py-2 bg-orange-500 text-white text-sm font-medium tracking-wide rounded-full">
@@ -137,7 +137,7 @@ export default function HomePage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
-                  {featuredActu.category === "Vente de plats" && (
+                  {featuredActu.category === "Vente" && (
                     <Link
                       href="/vente-plats"
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
@@ -154,10 +154,66 @@ export default function HomePage() {
           </div>
         </section>
       )}
+      
+{/* 3. AGENDA - Cette section ne s'affiche QUE s'il y a des événements */}
+{evenementsAgenda.length > 0 && (
+  <section className="py-20 bg-blue-900 text-white">
+    <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">
+      
+      {/* En-tête de section centré */}
+      <div className="text-center mb-12">
+        <h2>Prochains rendez-vous</h2>
+      </div>
+
+      {/* Grille d'événements */}
+      <div className="grid gap-8 md:grid-cols-2">
+        {evenementsAgenda.map((evt) => (
+          <Link 
+            key={evt.id} 
+            href={`/actualites/${evt.id}`} 
+            className="group bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 transition-all shadow-xl"
+          >
+            {/* Carré Date - Centré sur mobile, à gauche sur desktop */}
+            <div className="bg-orange-500 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
+              <span className="text-3xl font-black leading-none">
+                {new Date(evt.date).getDate()}
+              </span>
+              <span className="text-[11px] uppercase font-bold">
+                {new Date(evt.date).toLocaleDateString("fr-FR", { month: 'short' }).replace('.', '')}
+              </span>
+            </div>
+
+            {/* Contenu Texte - Centré sur mobile, à gauche sur desktop */}
+            <div className="flex-1 text-center sm:text-left">
+              <span className="text-orange-400 text-[11px] font-bold uppercase tracking-wider italic">
+                {evt.category}
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-white mt-1 leading-snug">
+                {evt.title}
+              </h3>
+            </div>
+
+            {/* Bouton - Masqué sur petit mobile pour gagner de la place, ou affiché en desktop */}
+            <div className="hidden sm:flex p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg shrink-0">
+              <svg 
+                className="w-6 h-6 text-white transform transition-transform" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
 
       {/* Ce qui nous anime */}
       <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-gray-900">
               Ce qui nous anime
@@ -234,183 +290,80 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Qui aidons-nous */}
-      <section className="bg-slate-50 py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 md:grid-cols-2 items-center">
-            <div>
-              <h2 className="text-gray-900">
-                Qui aidons-nous ?
-              </h2>
-              <div className="prose prose-xl text-gray-600 text-justify">
-                <p className="text-gray-600">
-                  Nous accompagnons des <strong>familles réfugiées</strong> originaires d&apos;Albanie, du Kosovo, 
-                  de Bosnie, d&apos;Arménie, d&apos;Algérie, de Guinée, de République Démocratique du Congo et d&apos;autres pays.
-                </p>
-                <p className="text-gray-600">
-                  Nous soutenons également des <strong>jeunes isolés</strong> localisés sur le Val de Saône 
-                  dans les difficultés matérielles ou administratives qu&apos;ils rencontrent.
-                </p>
-                <p className="text-gray-600">
-                  Les jeunes et les familles sont <strong>associés et participent</strong> activement à nos événements.
-                </p>
-              </div>
-              <Link
-                href="/notre-action"
-                className="group mt-6 inline-flex items-center gap-2 text-lg text-blue-700 font-semibold hover:underline"
-              >
-                Découvrir notre action en détail
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-            <div className="relative h-[400px] rounded overflow-hidden shadow-xl bg-gray-200">
-              <Image 
-                src="/images/v4.webp" 
-                alt="Qui aidons-nous"
-                fill
-                className="object-cover"
-                
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-{/* 3. AGENDA - Cette section ne s'affiche QUE s'il y a des événements */}
-{evenementsAgenda.length > 0 && (
-  <section className="py-20 bg-blue-900 text-white">
-    <div className="mx-auto max-w-7xl px-6 lg:px-8">
-      
-      {/* En-tête de section centré */}
-      <div className="text-center mb-12">
-        <h2>Prochains rendez-vous</h2>
-      </div>
-
-      {/* Grille d'événements */}
-      <div className="grid gap-8 md:grid-cols-2">
-        {evenementsAgenda.map((evt) => (
-          <Link 
-            key={evt.id} 
-            href={`/actualites/${evt.id}`} 
-            className="group bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 transition-all shadow-xl"
-          >
-            {/* Carré Date - Centré sur mobile, à gauche sur desktop */}
-            <div className="bg-orange-500 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
-              <span className="text-3xl font-black leading-none">
-                {new Date(evt.date).getDate()}
-              </span>
-              <span className="text-[11px] uppercase font-bold">
-                {new Date(evt.date).toLocaleDateString("fr-FR", { month: 'short' }).replace('.', '')}
-              </span>
-            </div>
-
-            {/* Contenu Texte - Centré sur mobile, à gauche sur desktop */}
-            <div className="flex-1 text-center sm:text-left">
-              <span className="text-orange-400 text-[11px] font-bold uppercase tracking-wider italic">
-                {evt.category}
-              </span>
-              <h3 className="text-lg sm:text-xl font-bold text-white mt-1 leading-snug">
-                {evt.title}
-              </h3>
-            </div>
-
-            {/* Bouton - Masqué sur petit mobile pour gagner de la place, ou affiché en desktop */}
-            <div className="hidden sm:flex p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg shrink-0">
-              <svg 
-                className="w-6 h-6 text-white transform transition-transform" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
-      {/* Nos événements */}
-      <section className="py-20 bg-whitepy-16 md:py-24">
+       {/* Chiffres clés */}
+      <section className="bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-gray-900">
-              Nos événements
+            <h2>
+              L&apos;AAFD en chiffres
             </h2>
-            <p className="text-body-large text-gray-600">
-              Tout au long de l&apos;année, nous organisons des événements conviviaux
-            </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Vente de plats */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative aspect-[4/3] w-full">
-                <Image 
-                  src="/images/plats.webp" 
-                  alt="Vente de plats"
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">17</div>
+              <div className="text-lg text-blue-100">années d&apos;expérience</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">150</div>
+              <div className="text-lg text-blue-100">repas vendus par mois</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">10+</div>
+              <div className="text-lg text-blue-100">nationalités accompagnées</div>
+            </div>
+            <div className="text-center">
+              <div className="mb-2 text-5xl font-bold text-orange-400">100%</div>
+              <div className="text-lg text-blue-100">bénévoles</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Qui sommes-nous + Chiffres */}
+      <section>
+        {/* Texte + image — fond clair */}
+        <div className="bg-slate-50 py-16 md:py-24">
+          <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-12 md:grid-cols-2 items-center">
+              <div>
+                <h2 className="text-gray-900 mb-6">Qui sommes-nous ?</h2>
+                <div className="prose prose-xl text-gray-600 text-justify space-y-4">
+                  <p>
+                    Nous accompagnons des <strong>familles réfugiées</strong> originaires d&apos;Albanie, du Kosovo,
+                    de Bosnie, d&apos;Arménie, d&apos;Algérie, de Guinée, de République Démocratique du Congo et d&apos;autres pays.
+                  </p>
+                  <p>
+                    Nous soutenons également des <strong>jeunes isolés</strong> localisés sur le Val de Saône
+                    dans les difficultés matérielles ou administratives qu&apos;ils rencontrent.
+                  </p>
+                  <p>
+                    Les jeunes et les familles sont <strong>associés et participent</strong> activement à nos événements.
+                  </p>
+                </div>
+                <Link
+                  href="/notre-association"
+                  className="group mt-6 inline-flex items-center gap-2 text-lg text-blue-700 font-semibold hover:underline"
+                >
+                  En savoir plus sur notre association
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/v4.webp"
+                  alt="L'AAFD en action"
                   fill
                   className="object-cover"
-                  
                 />
-              </div>
-              <div className="p-6 bg-white text-center">
-                <h3 className="text-gray-900">
-                  Ventes de plats traditionnels
-                </h3>
-                <p className="text-gray-600">
-                  Les familles cuisinent des plats de leurs pays. 140 à 150 menus vendus chaque mois !
-                </p>
-              </div>
-            </div>
-
-            {/* Événements festifs */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative aspect-[4/3] w-full">
-                <Image 
-                  src="/images/petanque.webp" 
-                  alt="Événements festifs"
-                  fill
-                  className="object-cover"
-                  
-                />
-              </div>
-              <div className="p-6 bg-white text-center">
-                <h3 className="text-gray-900">
-                  Événements festifs
-                </h3>
-                <p className="text-gray-600">
-                  Tout au long de l&apos;année, nous organisons des moments conviviaux pour créer du lien et sensibiliser.
-                </p>
-              </div>
-            </div>
-
-            {/* Nettoyage */}
-            <div className="group rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-blue-500 hover:shadow-xl transition-all">
-              <div className="relative aspect-[4/3] w-full ">
-                <Image 
-                  src="/images/nettoyons.webp" 
-                  alt="Nettoyage Val de Saône"
-                  fill
-                  className="object-cover object-bottom"
-                  
-                />
-              </div>
-              <div className="p-6 bg-white text-center">
-                <h3 className="text-gray-900">
-                  Nettoyons notre Val de Saône
-                </h3>
-                <p className="text-gray-600">
-                  Action environnementale avec les familles pour rendre notre environnement plus agréable.
-                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+      
 
       {/* CTA Section */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">

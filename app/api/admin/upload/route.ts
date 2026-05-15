@@ -25,6 +25,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Aucun fichier' }, { status: 400 });
   }
 
+  if (!file.type.startsWith('image/')) {
+    return NextResponse.json({ error: 'Seules les images sont acceptées' }, { status: 400 });
+  }
+
+  const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+  if (file.size > MAX_SIZE) {
+    return NextResponse.json({ error: 'Fichier trop volumineux (max 5 Mo)' }, { status: 400 });
+  }
+
   const uploadForm = new FormData();
   uploadForm.append('file', file);
   uploadForm.append(

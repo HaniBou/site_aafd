@@ -87,7 +87,7 @@ export default function TemoignagesPage() {
       </section>
 
       <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-gray-900">Témoignages des familles accompagnées</h2>
             <p className="text-body-large text-gray-600">Des parcours de résilience et d'espoir</p>
@@ -148,7 +148,7 @@ export default function TemoignagesPage() {
       </section>
 
       <section className="bg-gray-50 py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">Témoignages des bénévoles</h2>
             <p className="text-xl text-gray-600">L'engagement qui enrichit</p>
@@ -184,7 +184,7 @@ export default function TemoignagesPage() {
       </section>
 
       <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">Moments partagés</h2>
             <p className="text-xl text-gray-600">Quelques instants de nos événements et actions</p>

@@ -32,8 +32,15 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
+  const { nom, description, typeMenu, cuisiniers, quantite, prix, image } = body;
   const docRef = await adminDb.collection('plats').add({
-    ...body,
+    nom: String(nom ?? ''),
+    description: String(description ?? ''),
+    typeMenu: String(typeMenu ?? ''),
+    cuisiniers: String(cuisiniers ?? ''),
+    quantite: Number(quantite ?? 0),
+    prix: Number(prix ?? 0),
+    image: image ? String(image) : null,
     dateAjout: new Date().toISOString(),
   });
 
