@@ -3,8 +3,10 @@ import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Contact - AAFD Val de Saône',
-  description: 'Contactez l\'AAFD pour toute question, demande d\'aide ou proposition de bénévolat',
+  title: 'Contact',
+  description: "Contactez l'AAFD Val de Saône pour toute question, demande d'aide ou proposition de bénévolat. Téléphone, email et formulaire disponibles.",
+  alternates: { canonical: '/contact' },
+  openGraph: { title: 'Contact | AAFD Val de Saône', description: "Contactez l'AAFD pour toute question ou proposition de bénévolat.", url: '/contact' },
 }
 
 export default function ContactPage() {

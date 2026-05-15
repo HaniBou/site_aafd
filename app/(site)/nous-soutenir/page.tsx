@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Nous soutenir - AAFD Val de Saône',
-  description: 'Soutenez l\'AAFD : faites un don, devenez partenaire ou participez à nos événements',
+  title: 'Nous soutenir',
+  description: "Soutenez l'AAFD Val de Saône : faites un don (66% déductible des impôts), devenez partenaire ou participez à nos événements caritatifs.",
+  alternates: { canonical: '/nous-soutenir' },
+  openGraph: { title: 'Nous soutenir | AAFD Val de Saône', description: "Faites un don (66% déductible), devenez partenaire ou participez à nos événements.", url: '/nous-soutenir' },
 }
 
 export default function NousSoutenirPage() {

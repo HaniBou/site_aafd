@@ -2,8 +2,10 @@ import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Mentions légales - AAFD Val de Saône',
-  description: 'Mentions légales du site de l\'AAFD Val de Saône, Association d\'Aide aux Familles en Difficulté',
+  title: 'Mentions légales',
+  description: "Mentions légales du site de l'AAFD Val de Saône, Association d'Aide aux Familles en Difficulté.",
+  alternates: { canonical: '/mentions-legales' },
+  robots: { index: false, follow: false },
 }
 
 export default function MentionsLegalesPage() {

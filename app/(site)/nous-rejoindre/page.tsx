@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Nous rejoindre - AAFD Val de Saône',
-  description: 'Rejoignez l\'équipe de bénévoles de l\'AAFD et participez à nos actions de solidarité',
+  title: 'Devenir bénévole',
+  description: "Rejoignez l'équipe de bénévoles de l'AAFD Val de Saône et participez à nos actions de solidarité auprès des familles réfugiées.",
+  alternates: { canonical: '/nous-rejoindre' },
+  openGraph: { title: 'Devenir bénévole | AAFD Val de Saône', description: "Rejoignez notre équipe de bénévoles et participez à nos actions de solidarité.", url: '/nous-rejoindre' },
 }
 
 export default function NousRejoindre() {

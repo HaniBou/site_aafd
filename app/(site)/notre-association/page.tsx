@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Notre association - AAFD Val de Saône',
-  description: 'Découvrez l\'histoire, la mission et les actions concrètes de l\'AAFD Val de Saône, association d\'aide aux familles en difficulté',
+  title: 'Notre association',
+  description: "Découvrez l'histoire, la mission et les actions de l'AAFD Val de Saône : 17 ans d'accompagnement des familles réfugiées, 100% bénévoles.",
+  alternates: { canonical: '/notre-association' },
+  openGraph: { title: 'Notre association | AAFD Val de Saône', description: "17 ans d'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
 }
 
 export default function NotreAssociationPage() {
