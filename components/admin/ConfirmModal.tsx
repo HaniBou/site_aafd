@@ -25,8 +25,8 @@ export default function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-7 text-center">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-overlay-in" onClick={onCancel} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-7 text-center animate-modal-in">
         <div
           className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${
             danger ? 'bg-red-100' : 'bg-yellow-100'

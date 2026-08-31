@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Actualite } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 type FormState = {
   title: string;
@@ -41,6 +42,7 @@ type UploadPhase = 'compressing' | 'uploading' | null;
 
 export default function ActuFormClient({ actualite }: { actualite?: Actualite }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const isEditing = !!actualite;
 
@@ -58,10 +60,30 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
+  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
+  // déjà envoyée sur Cloudinary.
+  const validate = (): string | null => {
+    if (!form.title.trim()) return 'Le titre est obligatoire.';
+    if (!form.category) return 'La catégorie est obligatoire.';
+    if (!form.date) return 'La date est obligatoire.';
+    if (!form.content.trim()) return 'Le contenu est obligatoire.';
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const invalid = validate();
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
+
     setBusy(true);
     setError(null);
+
+    let uploadedUrl: string | null = null;
+
     try {
       let imageUrl = form.existingImage || 'none';
 
@@ -70,6 +92,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           setUploadPhase(phase);
           setUploadProgress(percent);
         });
+        uploadedUrl = imageUrl;
         setUploadPhase(null);
       }
 
@@ -96,9 +119,24 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
         throw new Error(data.error ?? 'Erreur serveur');
       }
 
+      notify(
+        isEditing
+          ? 'Actualité modifiée avec succès'
+          : 'Actualité ajoutée avec succès',
+        'success',
+      );
       router.push('/admin/actualites');
       router.refresh();
     } catch (err) {
+      // L'image vient d'être envoyée mais l'enregistrement a échoué :
+      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
+      if (uploadedUrl) {
+        await fetch('/api/admin/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: uploadedUrl }),
+        }).catch(() => {});
+      }
       setUploadPhase(null);
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');
       setBusy(false);
@@ -112,16 +150,22 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
     <div className="min-h-screen bg-gray-50">
       {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
+            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/actualites"
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            aria-label="Retour aux actualités"
+            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Retour aux actualités
+            <span className="hidden sm:inline">Retour</span>
           </Link>
-          <h1 className="text-sm font-bold text-gray-900">
-            {isEditing ? `Modifier "${actualite!.title}"` : 'Nouvelle actualité'}
+
+          <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
+
+          <h1 className="text-sm font-bold text-gray-900 truncate min-w-0 mb-0 leading-none">
+            {isEditing ? `Modifier « ${actualite!.title} »` : 'Nouvelle actualité'}
           </h1>
         </div>
       </div>
@@ -185,7 +229,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
                   : imageSrc ? "Changer l'image" : 'Ajouter une image *'}
               </span>
               {!isUploading && (
-                <span className="text-xs text-gray-400">JPG, PNG, WebP — max 10 Mo</span>
+                <span className="text-xs text-gray-500">JPG, PNG, WebP — max 10 Mo</span>
               )}
             </button>
 
@@ -222,43 +266,43 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
 
         {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Informations</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Titre *</label>
-            <input type="text" value={form.title}
+            <label htmlFor="titre" className="block text-sm font-semibold text-gray-700 mb-1.5">Titre *</label>
+            <input id="titre" type="text" value={form.title}
               onChange={e => setForm({ ...form, title: e.target.value })}
               placeholder="Ex : Distribution alimentaire du 15 juin"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
               required />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Catégorie *</label>
-              <select value={form.category}
+              <label htmlFor="categorie" className="block text-sm font-semibold text-gray-700 mb-1.5">Catégorie *</label>
+              <select id="categorie" value={form.category}
                 onChange={e => setForm({ ...form, category: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
                 required>
                 <option value="">Choisir…</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
-              <input type="date" value={form.date}
+              <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
+              <input id="date" type="date" value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
                 required />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Contenu *</label>
-            <textarea value={form.content}
+            <label htmlFor="contenu" className="block text-sm font-semibold text-gray-700 mb-1.5">Contenu *</label>
+            <textarea id="contenu" value={form.content}
               onChange={e => setForm({ ...form, content: e.target.value })}
               rows={6} placeholder="Décrivez l'actualité en détail…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
               required />
           </div>
         </div>
@@ -275,7 +319,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold text-gray-800">Mettre à la une</p>
-              <p className="text-xs text-gray-500 mt-0.5">S'affiche en premier et mis en avant sur le site</p>
+              <p className="text-xs text-gray-500 mt-0.5">S&apos;affiche en premier et mis en avant sur le site</p>
             </div>
             {form.aLaUne && (
               <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2.5 py-1 rounded-full shrink-0">

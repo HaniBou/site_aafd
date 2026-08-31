@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
+import { CONTACT_EMAIL, CONTACT_PHONE, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -29,7 +30,7 @@ export default function ContactPage() {
     Restons en contact
   </h2>
   <p className="text-gray-600 mb-10 text-lg leading-relaxed">
-    L'association AAFD s'engage à répondre dans les meilleurs délais. Chaque message est important pour nous.
+    L&apos;association AAFD s&apos;engage à répondre dans les meilleurs délais. Chaque message est important pour nous.
   </p>
 
   {/* Liste des contacts épurée */}
@@ -42,9 +43,9 @@ export default function ContactPage() {
         </svg>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-0.5">Appelez-nous</p>
-        <a href="tel:+33612345678" className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
-          06 12 34 56 78
+        <p className="text-xs uppercase tracking-wider font-bold text-gray-600 mb-0.5">Appelez-nous</p>
+        <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
+          {CONTACT_PHONE}
         </a>
       </div>
     </div>
@@ -57,9 +58,9 @@ export default function ContactPage() {
         </svg>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-0.5">Écrivez-nous</p>
-        <a href="mailto:aafd@gmx.fr" className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
-          aafd@gmx.fr
+        <p className="text-xs uppercase tracking-wider font-bold text-gray-600 mb-0.5">Écrivez-nous</p>
+        <a href={`mailto:${CONTACT_EMAIL}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
+          {CONTACT_EMAIL}
         </a>
       </div>
     </div>
@@ -72,9 +73,9 @@ export default function ContactPage() {
         </svg>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-0.5">Instagram</p>
-        <a href="https://www.instagram.com/aafd_asso/" target="_blank" rel="noopener noreferrer" className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
-          @aafd_asso
+        <p className="text-xs uppercase tracking-wider font-bold text-gray-600 mb-0.5">Instagram</p>
+        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
+          {INSTAGRAM_HANDLE}
         </a>
       </div>
     </div>

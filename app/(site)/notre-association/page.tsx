@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
+import { HELLOASSO_URL } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Notre association',
@@ -133,20 +134,20 @@ export default function NotreAssociationPage() {
                 </div>
                 <Link
                   href="/vente-plats"
-                  className="mt-6 inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition-colors font-semibold text-sm shadow"
+                  className="mt-6 inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-full hover:bg-orange-700 transition-colors font-semibold text-sm shadow"
                 >
                   Commander nos plats
                 </Link>
               </div>
               <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl">
-                <img src="/images/plats.webp" alt="Ventes de plats" className="object-cover w-full h-full" />
+                <Image src="/images/plats.webp" alt="Ventes de plats" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
               </div>
             </div>
 
             {/* Événements festifs */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl order-2 md:order-1">
-                <img src="/images/evenement.webp" alt="Événements festifs" className="object-cover w-full h-full" />
+                <Image src="/images/evenement.webp" alt="Événements festifs" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
               </div>
               <div className="order-1 md:order-2">
                 <span className="text-blue-700 font-bold tracking-widest uppercase text-xs mb-3 block">Tout au long de l&apos;année</span>
@@ -189,7 +190,7 @@ export default function NotreAssociationPage() {
                 </div>
               </div>
               <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl">
-                <img src="/images/nettoyons_1.webp" alt="Nettoyage Val de Saône" className="object-cover object-bottom w-full h-full" />
+                <Image src="/images/nettoyons_1.webp" alt="Nettoyage Val de Saône" fill className="object-cover object-bottom" sizes="(max-width: 768px) 100vw, 50vw" />
               </div>
             </div>
           </div>
@@ -278,12 +279,17 @@ export default function NotreAssociationPage() {
             Rejoignez notre équipe de bénévoles ou soutenez nos actions par un don
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors shadow-lg">
+            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors shadow-lg">
               Devenir bénévole
             </Link>
-            <Link href="/nous-soutenir" className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors">
-              Nous soutenir
-            </Link>
+            <a
+              href={HELLOASSO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
+            >
+              Faire un don
+            </a>
           </div>
         </div>
       </section>

@@ -121,7 +121,7 @@ export default function NousRejoindre() {
       <h2 className="text-gray-900">
         Nos différentes missions
       </h2>
-      <p className="mt-4 text-gray-600">S'engager selon vos compétences et vos envies</p>
+      <p className="mt-4 text-gray-600">S&apos;engager selon vos compétences et vos envies</p>
     </div>
 
     <div className="relative border-l-2 border-blue-100 ml-4 md:ml-0 md:left-1/2">
@@ -173,7 +173,7 @@ export default function NousRejoindre() {
           </div>
           <a 
             href="/contact"
-            className="inline-block rounded-full bg-orange-500 px-10 py-4 text-lg font-bold text-white hover:bg-orange-600 hover:scale-105 transition-all shadow-lg"
+            className="inline-block rounded-full bg-orange-600 px-10 py-4 text-lg font-bold text-white hover:bg-orange-700 hover:scale-105 transition-all shadow-lg"
           >
             Nous rejoindre
           </a>
@@ -217,7 +217,7 @@ export default function NousRejoindre() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors"
+              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors"
             >
               Devenir bénévole
             </a>

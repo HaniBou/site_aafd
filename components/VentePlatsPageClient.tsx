@@ -1,33 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import getPlats from "@/lib/getPlats";
+import { useState } from "react";
 import ReservationModal from "@/components/ReservationModal";
 import { PageHero } from "@/components/PageHero";
 import PlatCard from "@/components/PlatCard";
+import type { Plat } from "@/types";
+import { Reveal } from "@/components/Reveal";
 
-type Plat = {
-  id: string;
-  nom: string;
-  description: string;
-  quantite: number;
-  prix: number;
-  image?: string;
-  dateAjout: string;
+type Props = {
+  plats: Plat[];
+  loadError?: boolean;
 };
 
-export default function VentePlatsPageClient() {
-  const [plats, setPlats] = useState<Plat[]>([]);
+export default function VentePlatsPageClient({ plats, loadError = false }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getPlats();
-      setPlats(data);
-    }
-    fetchData();
-  }, []);
 
   const openModal = (plat: Plat) => {
     setSelectedPlat(plat);
@@ -62,21 +49,31 @@ export default function VentePlatsPageClient() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-8 justify-center">
-            {plats.map((plat, index) => (
-              <PlatCard
-                key={plat.id}
-                plat={plat}
-                onReserve={openModal}
-                iconFallback={platIcons[index % platIcons.length]}
-              />
-            ))}
-          </div>
-
-          {plats.length === 0 && (
+          {loadError ? (
             <div className="text-center py-16">
-              <p className="text-xl text-gray-500 mb-4">Aucun plat disponible pour le moment</p>
-              <p className="text-lg text-gray-400">Revenez bientôt pour découvrir nos nouvelles spécialités !</p>
+              <p className="text-xl text-gray-700 mb-4">Les plats n&apos;ont pas pu être chargés</p>
+              <p className="text-lg text-gray-600">Merci de réessayer dans quelques instants ou de nous contacter.</p>
+            </div>
+          ) : plats.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-gray-600 mb-4">Aucun plat disponible pour le moment</p>
+              <p className="text-lg text-gray-600">Revenez bientôt pour découvrir nos nouvelles spécialités !</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-8 justify-center">
+              {plats.map((plat, index) => (
+                <Reveal
+                  key={plat.id}
+                  delay={(index % 3) * 100}
+                  className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
+                >
+                  <PlatCard
+                    plat={plat}
+                    onReserve={openModal}
+                    iconFallback={platIcons[index % platIcons.length]}
+                  />
+                </Reveal>
+              ))}
             </div>
           )}
 
@@ -98,35 +95,21 @@ export default function VentePlatsPageClient() {
           </h2>
 
           <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
-                <span className="text-4xl font-bold text-white">1</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Choisissez votre plat</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Parcourez nos plats disponibles et cliquez sur &quot;Réserver ce plat&quot;
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
-                <span className="text-4xl font-bold text-white">2</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Réservez en ligne</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Remplissez le formulaire avec vos coordonnées
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
-                <span className="text-4xl font-bold text-white">3</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Venez retirer</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Récupérez votre plat à la date convenue et réglez sur place
-              </p>
-            </div>
+            {[
+              { titre: 'Choisissez votre plat', texte: 'Parcourez nos plats disponibles et cliquez sur « Réserver ce plat »' },
+              { titre: 'Réservez en ligne', texte: 'Remplissez le formulaire avec vos coordonnées' },
+              { titre: 'Venez retirer', texte: 'Récupérez votre plat à la date convenue et réglez sur place' },
+            ].map((etape, i) => (
+              <Reveal key={etape.titre} delay={i * 130}>
+                <div className="text-center">
+                  <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
+                    <span className="text-4xl font-bold text-white">{i + 1}</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{etape.titre}</h3>
+                  <p className="text-gray-700 leading-relaxed">{etape.texte}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
 
           <div className="mt-12 max-w-3xl mx-auto bg-white rounded-2xl p-8 shadow-lg">

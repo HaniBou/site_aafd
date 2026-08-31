@@ -1,12 +1,18 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
+import { CONTACT_EMAIL } from '@/lib/siteConfig'
 
+// Page en préparation : masquée du site (aucun lien, absente du sitemap,
+// interdite aux robots) mais toujours accessible par son URL directe pour
+// pouvoir la finir. Pour la remettre en ligne : retirer le `robots` ci-dessous,
+// la réintégrer dans app/sitemap.ts, app/robots.ts, Navigation, MobileMenu et
+// Footer, et repointer les boutons « Faire un don » vers /nous-soutenir.
 export const metadata: Metadata = {
   title: 'Nous soutenir',
   description: "Soutenez l'AAFD Val de Saône : faites un don (66% déductible des impôts), devenez partenaire ou participez à nos événements caritatifs.",
   alternates: { canonical: '/nous-soutenir' },
+  robots: { index: false, follow: false },
   openGraph: { title: 'Nous soutenir | AAFD Val de Saône', description: "Faites un don (66% déductible), devenez partenaire ou participez à nos événements.", url: '/nous-soutenir' },
 }
 
@@ -33,7 +39,7 @@ export default function NousSoutenirPage() {
       <div className="text-center md:text-left">
         <h3 className="text-xl font-bold text-blue-900 mb-4 tracking-tight">Aide au logement</h3>
         <p className="text-gray-600 leading-relaxed font-light">
-          Financement de cautions et loyers pour permettre aux familles d'accéder à un foyer décent.
+          Financement de cautions et loyers pour permettre aux familles d&apos;accéder à un foyer décent.
         </p>
       </div>
       <div className="text-center md:text-left">
@@ -45,7 +51,7 @@ export default function NousSoutenirPage() {
       <div className="text-center md:text-left">
         <h3 className="text-xl font-bold text-green-700 mb-4 tracking-tight">Besoins quotidiens</h3>
         <p className="text-gray-600 leading-relaxed font-light">
-          Soutien pour les transports, les assurances et l'équipement de première nécessité.
+          Soutien pour les transports, les assurances et l&apos;équipement de première nécessité.
         </p>
       </div>
     </div>
@@ -115,7 +121,8 @@ export default function NousSoutenirPage() {
               <div className="bg-blue-50 p-6 rounded-lg">
                 <p className="text-sm text-blue-900 font-semibold mb-2">Contact pour les dons</p>
                 <p className="text-blue-800">
-                  <strong>Email :</strong> aafd@gmx.fr
+                  <strong>Email :</strong>{' '}
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="hover:underline">{CONTACT_EMAIL}</a>
                 </p>
               </div>
             </div>

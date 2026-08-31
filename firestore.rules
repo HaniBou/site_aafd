@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Toutes les écritures et toutes les lectures de données personnelles passent
+// par le SDK admin côté serveur, qui ignore ces règles.
+// Le navigateur n'a donc besoin d'aucun accès direct à Firestore.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

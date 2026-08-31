@@ -5,11 +5,23 @@ import { jwtVerify } from 'jose';
 const COOKIE_NAME = 'admin_session';
 
 function getSecret() {
-  return new TextEncoder().encode(process.env.ADMIN_SESSION_SECRET!);
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  // Sans ce contrôle, la clé HMAC vaudrait la chaîne "undefined"
+  // et n'importe qui pourrait forger un cookie admin valide.
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      'ADMIN_SESSION_SECRET est absent ou trop court (32 caractères minimum).',
+    );
+  }
+  return new TextEncoder().encode(secret);
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Vérifié avant toute chose : une configuration incomplète doit échouer
+  // bruyamment, jamais laisser passer.
+  const secret = getSecret();
 
   if (pathname === '/admin/login') {
     return NextResponse.next();
@@ -22,7 +34,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    await jwtVerify(token, getSecret());
+    await jwtVerify(token, secret);
     return NextResponse.next();
   } catch {
     const response = NextResponse.redirect(new URL('/admin/login', request.url));

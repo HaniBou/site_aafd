@@ -1,5 +1,6 @@
 import { adminDb } from './admin';
-import type { Plat, Actualite, Temoignage, Reservation } from '@/types';
+import { buildSlug } from '@/lib/slug';
+import type { Plat, Actualite, Temoignage, Reservation, Moment } from '@/types';
 
 // Firestore Timestamps are class instances — Next.js cannot pass them from
 // Server Components to Client Components. Convert every Timestamp to an ISO string.
@@ -39,6 +40,40 @@ export async function getActualiteByIdAdmin(id: string): Promise<Actualite | nul
   return { id: doc.id, ...serializeDoc(doc.data()!) } as Actualite;
 }
 
+export async function getActualiteBySlugAdmin(slug: string): Promise<Actualite | null> {
+  const snap = await adminDb
+    .collection('actualites')
+    .where('slug', '==', slug)
+    .limit(1)
+    .get();
+
+  if (snap.empty) return null;
+  const doc = snap.docs[0];
+  return { id: doc.id, ...serializeDoc(doc.data()) } as Actualite;
+}
+
+// Deux articles ne peuvent pas partager la même URL : on suffixe -2, -3…
+// `excludeId` permet de garder son slug à un article qu'on modifie.
+export async function buildUniqueActualiteSlug(
+  title: string,
+  excludeId?: string,
+): Promise<string> {
+  const base = buildSlug(title);
+
+  for (let suffix = 1; suffix < 50; suffix++) {
+    const candidate = suffix === 1 ? base : `${base}-${suffix}`;
+    const snap = await adminDb
+      .collection('actualites')
+      .where('slug', '==', candidate)
+      .get();
+
+    const taken = snap.docs.some(doc => doc.id !== excludeId);
+    if (!taken) return candidate;
+  }
+
+  return `${base}-${Date.now()}`;
+}
+
 export async function getActualitesAdmin(): Promise<Actualite[]> {
   const snap = await adminDb.collection('actualites').get();
   const items = snap.docs.map(
@@ -71,4 +106,18 @@ export async function getReservationsAdmin(): Promise<Reservation[]> {
     (a, b) =>
       new Date(b.dateReservation).getTime() - new Date(a.dateReservation).getTime(),
   );
+}
+
+export async function getMomentByIdAdmin(id: string): Promise<Moment | null> {
+  const doc = await adminDb.collection('moments').doc(id).get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...serializeDoc(doc.data()!) } as Moment;
+}
+
+export async function getMomentsAdmin(): Promise<Moment[]> {
+  const snap = await adminDb.collection('moments').get();
+  const items = snap.docs.map(
+    doc => ({ id: doc.id, ...serializeDoc(doc.data()) } as Moment),
+  );
+  return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }

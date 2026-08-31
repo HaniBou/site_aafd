@@ -1,284 +1,151 @@
-# Site AAFD - Pages Institutionnelles
+# Site AAFD Val de Saône
 
-Site Next.js avec Sanity CMS pour les pages institutionnelles d'une association.
+Site vitrine et back-office de l'**Association d'Aide aux Familles en Difficulté** (Val de Saône) :
+présentation de l'association, actualités, témoignages, vente de plats cuisinés avec réservation
+en ligne, et une administration protégée pour gérer tout le contenu.
 
-## 🏗️ Architecture
+## Stack
 
-**Pages statiques** codées en Next.js + **contenu éditable** via Sanity Studio.
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router), React 19, TypeScript strict |
+| CSS | Tailwind CSS v4 (`app/globals.css`) |
+| Base de données | Firestore (SDK admin côté serveur uniquement) |
+| Auth admin | Firebase Auth (email/mot de passe) → JWT HS256 en cookie httpOnly |
+| Images | Compression navigateur (WebP) → route serveur → Cloudinary |
+| Emails | Resend |
+| Hébergement | Vercel |
 
-### Principe
-
-- Les pages (`/nous-connaitre`, `/notre-action`, etc.) sont **codées en dur**
-- Seul le **contenu** (textes, images, stats) est **éditable via Sanity**
-- Design inspiré de sites associatifs modernes (type Habitat & Humanisme)
-
-## 🚀 Installation
+## Installation
 
 ```bash
+git clone <url-du-dépôt>
+cd site_aafd
 npm install
-npm run dev
+cp .env.example .env.local   # puis remplir les valeurs
+npm run dev                  # http://localhost:3000
 ```
 
-- Site : http://localhost:3000
-- Studio : http://localhost:3000/studio
+## Variables d'environnement
 
-## 📄 Pages disponibles
+Toutes les variables sont décrites dans [`.env.example`](.env.example). Résumé :
 
-- `/` - Page d'accueil avec liens vers les 4 pages
-- `/nous-connaitre` - Présentation de l'association
-- `/notre-action` - Actions menées
-- `/nous-soutenir` - Comment soutenir
-- `/nous-rejoindre` - Comment rejoindre
+| Variable | Rôle |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | URL publique du site (canonical, sitemap, liens des emails) |
+| `NEXT_PUBLIC_FIREBASE_*` | Configuration Firebase côté client (clés publiques, utilisées pour le login admin) |
+| `FIREBASE_PROJECT_ID` / `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` | Compte de service Firebase — **secret** |
+| `ADMIN_SESSION_SECRET` | Clé de signature du cookie de session admin, 32 caractères minimum — **secret** |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` / `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` | Upload d'images (preset unsigned) |
+| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Suppression des images — **secret** |
+| `RESEND_API_KEY` | Envoi des emails — **secret** |
 
-## 🎨 Structure d'une page
+Générer le secret de session :
 
-Chaque page peut contenir :
-
-### 1. Section Hero (1 par page)
-Bannière en haut de page avec :
-- Titre principal
-- Sous-titre
-- Image de fond
-- Bouton CTA optionnel
-
-### 2. Sections de contenu (plusieurs possibles)
-Blocs texte + image :
-- Titre de section
-- Contenu riche (paragraphes, listes, liens)
-- Image optionnelle (gauche ou droite)
-- Alternance fond blanc/gris
-
-### 3. Chiffres clés (1 par page)
-Section avec statistiques :
-- Jusqu'à 6 chiffres
-- Affichage moderne sur fond bleu
-
-## 🗂️ Schemas Sanity
-
-### `heroSection`
-```typescript
-{
-  page: 'nous-connaitre' | 'notre-action' | 'nous-soutenir' | 'nous-rejoindre'
-  title: string
-  subtitle: text
-  backgroundImage: image
-  ctaText: string (optionnel)
-  ctaLink: string (optionnel)
-}
+```bash
+openssl rand -base64 32
 ```
 
-### `contentSection`
-```typescript
-{
-  page: string
-  sectionId: string (unique, ex: "mission", "histoire")
-  title: string
-  content: blockContent
-  image: image (optionnel)
-  imagePosition: 'left' | 'right'
-}
+L'application **refuse de démarrer** si les variables Firebase Admin ou `ADMIN_SESSION_SECRET`
+sont absentes : c'est volontaire, une configuration incomplète rendrait les sessions admin forgeables.
+
+## Configuration des services
+
+### Firebase
+
+1. Console Firebase → **Authentication** → activer **Email/Password**.
+2. **Authentication → Users → Add user** : créer le compte administrateur.
+3. **Paramètres du projet → Comptes de service → Générer une clé privée** : renseigner
+   `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`.
+4. Déployer les règles Firestore versionnées dans ce dépôt :
+
+   ```bash
+   npx firebase-tools deploy --only firestore:rules
+   ```
+
+   Ces règles ferment **tout** accès direct depuis le navigateur (`allow read, write: if false`).
+   C'est normal : le site lit et écrit exclusivement via le SDK admin côté serveur, qui n'est
+   pas soumis aux règles. Voir [`firestore.rules`](firestore.rules).
+
+Détails dans [`FIREBASE_AUTH_SETUP.md`](FIREBASE_AUTH_SETUP.md).
+
+### Cloudinary
+
+Créer un **upload preset unsigned** et renseigner `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`.
+Détails dans [`docs/CLOUDINARY_SETUP.md`](docs/CLOUDINARY_SETUP.md).
+
+### Resend
+
+**Un domaine vérifié est obligatoire.** Avec le domaine de test `resend.dev`, Resend n'accepte
+d'envoyer que vers l'adresse propriétaire du compte : toute réservation d'un visiteur tiers
+échouerait. Vérifier le domaine dans Resend, puis ajuster `CONTACT_EMAIL` et `MAIL_FROM` dans
+[`lib/siteConfig.ts`](lib/siteConfig.ts).
+
+## Administration
+
+- Accès : `/admin` (redirection automatique vers `/admin/login`).
+- Gestion des plats, actualités, témoignages et réservations (avec vue impression et export).
+- Interface pensée pour mobile.
+
+La protection est **serveur** : `proxy.ts` (middleware) garde `/admin/:path*`, et chaque route
+API admin revérifie la session indépendamment.
+
+## Scripts
+
+```bash
+npm run dev     # serveur de développement
+npm run build   # build de production
+npm run start   # serveur de production
+npm run lint    # ESLint
+npx tsc --noEmit  # vérification des types
+
+# Recalcule les slugs des actualités (aperçu, puis application)
+node --env-file=.env.local scripts/backfill-slugs.mjs
+node --env-file=.env.local scripts/backfill-slugs.mjs --write
 ```
 
-### `stats`
-```typescript
-{
-  page: string
-  title: string
-  stats: [{
-    number: string
-    label: string
-    icon: string (optionnel)
-  }]
-}
-```
+## URLs des actualités
 
-## 📝 Éditer le contenu
+Les articles sont servis sur `/actualites/<slug>`, le slug étant dérivé du titre et rendu unique
+(`-2`, `-3`… en cas de doublon). Il est recalculé à chaque modification du titre. Les anciennes
+URLs `/actualites/<id-firestore>` sont redirigées en permanence (308) vers le slug.
 
-### Via Sanity Studio
+## Déploiement (Vercel)
 
-1. Accédez à `/studio`
-2. Créez vos sections :
-   - **Section Hero** : Bannière de page
-   - **Section de contenu** : Blocs texte/image
-   - **Chiffres clés** : Statistiques
-3. **Publiez** (important !)
-4. Le site se met à jour automatiquement
+1. Importer le dépôt dans Vercel (framework détecté automatiquement).
+2. Déclarer toutes les variables de `.env.example` dans **Settings → Environment Variables**.
+3. Renseigner `NEXT_PUBLIC_SITE_URL` avec le domaine final.
+4. Déployer les règles Firestore (voir plus haut) — elles ne sont pas déployées par Vercel.
 
-### Exemple : Page "Nous connaître"
+Les pages de liste publiques sont régénérées toutes les 60 secondes (`export const revalidate = 60`) :
+une modification faite dans l'admin apparaît en ligne au bout d'une minute au plus. Le détail d'une
+actualité est rendu à la demande, sans cache, pour que `notFound()` renvoie bien un vrai 404.
 
-```
-Hero:
-  Page: nous-connaitre
-  Titre: "Habitat & Humanisme, bâtisseur de liens"
-  Sous-titre: "En 2025, l'association célèbre 40 années..."
-  
-Section 1:
-  Page: nous-connaitre
-  ID: histoire
-  Titre: "Notre histoire"
-  Contenu: [texte]
-  Image: [photo]
-  Position: gauche
-
-Section 2:
-  Page: nous-connaitre
-  ID: mission  
-  Titre: "Notre mission"
-  Contenu: [texte]
-  Image: [photo]
-  Position: droite
-
-Stats:
-  Page: nous-connaitre
-  Stats:
-    - 40 | années d'engagement
-    - 1000+ | personnes accompagnées
-    - 85% | de satisfaction
-```
-
-## 🎨 Design et styles
-
-### Couleurs
-
-- **Bleu principal** : `#1e40af` (blue-700)
-- **Bleu foncé** : `#1e3a8a` (blue-900)  
-- **Orange accent** : `#f97316` (orange-500)
-
-Modifiables dans `app/globals.css`.
-
-### Composants
-
-- `HeroSection` : Bannière avec image de fond
-- `ContentSection` : Texte + image côte à côte
-- `Stats` : Affichage de statistiques
-- `PortableTextContent` : Rendu du contenu riche
-
-### Responsive
-
-- Mobile-first avec Tailwind CSS
-- Breakpoints : sm (640px), md (768px), lg (1024px)
-- Grilles adaptatives
-
-## 🔧 Structure du code
+## Structure
 
 ```
 app/
-├── page.tsx                    # Page d'accueil
-├── nous-connaitre/page.tsx     # Page statique 1
-├── notre-action/page.tsx       # Page statique 2
-├── nous-soutenir/page.tsx      # Page statique 3
-├── nous-rejoindre/page.tsx     # Page statique 4
-└── studio/                     # Sanity Studio
-
-components/
-├── HeroSection.tsx             # Composant Hero
-├── ContentSection.tsx          # Composant Section
-├── Stats.tsx                   # Composant Stats
-└── PortableTextContent.tsx     # Rendu Portable Text
-
-sanity/
-├── schemaTypes/
-│   ├── heroSectionType.ts      # Schema Hero
-│   ├── contentSectionType.ts   # Schema Section
-│   └── statsType.ts            # Schema Stats
-└── lib/
-    ├── client.ts               # Client Sanity
-    └── queries.ts              # Queries GROQ
+  (site)/           pages publiques
+    actualites/[slug]/  détail d'un article (URL parlante)
+  admin/            back-office
+  api/
+    reservations/   création de réservation (transaction serveur)
+    send-contact/   email du formulaire de contact
+    send-reservation/ emails de confirmation
+    admin/          CRUD protégé + upload
+components/         composants UI
+lib/
+  firebase/         admin.ts (serveur), client.ts (auth login), fetchers.ts (lectures)
+  siteConfig.ts     coordonnées, domaine, expéditeurs email
+  slug.ts           génération des URLs d'articles
+scripts/            scripts de maintenance ponctuels
+firestore.rules     règles Firestore versionnées
+proxy.ts            middleware de garde des routes /admin
 ```
 
-## 🔄 Workflow de développement
+## À compléter avant mise en ligne
 
-### Ajouter une nouvelle section à une page
-
-1. **Créer dans le Studio** :
-   - Type : "Section de contenu"
-   - Page : choisir la page
-   - Identifiant unique
-   - Contenu + image
-   - Publier
-
-2. **La section apparaît automatiquement** sur la page
-
-### Modifier le design d'une page
-
-Les pages sont dans `app/[nom-page]/page.tsx`.
-
-Exemple pour ajouter une section personnalisée :
-
-```tsx
-// app/nous-connaitre/page.tsx
-export default async function Page() {
-  const sections = await client.fetch(...)
-  
-  return (
-    <main>
-      <HeroSection {...hero} />
-      {sections.map(section => ...)}
-      
-      {/* Votre section custom */}
-      <section className="py-24">
-        <h2>Section personnalisée</h2>
-      </section>
-      
-      <Stats {...stats} />
-    </main>
-  )
-}
-```
-
-## 📊 Performance
-
-- **SSG** : Pages pré-générées au build
-- **ISR** : Revalidation toutes les heures (3600s)
-- **Images optimisées** : Next.js Image + Sanity CDN
-- **Tailwind CSS** : CSS minimal
-
-## 🚀 Déploiement
-
-### Vercel (recommandé)
-
-```bash
-npm i -g vercel
-vercel
-```
-
-Les variables d'environnement seront détectées automatiquement.
-
-### Autre hébergement
-
-```bash
-npm run build
-npm start
-```
-
-## 📚 Documentation
-
-- `GUIDE_CONTENU.md` : Guide pour les bénévoles
-- Ce README : Documentation technique
-
-## 🆘 Support
-
-### Le contenu ne s'affiche pas
-1. Vérifiez que c'est publié (pas en brouillon)
-2. Actualisez le cache : Ctrl+F5
-3. Vérifiez la page sélectionnée dans Sanity
-
-### Erreur de build
-```bash
-rm -rf .next
-npm run build
-```
-
-### Images qui ne chargent pas
-- Vérifiez le format (JPG/PNG)
-- Réduisez la taille (< 2 Mo)
-
-## 🔐 Sécurité
-
-- Accès lecture publique au contenu
-- Authentification Sanity pour l'édition
-- Pas de token exposé côté client
-
-## 📄 Licence
-
-Développé pour l'Association AAFD - 2025
+- Numéro de téléphone (`CONTACT_PHONE` dans `lib/siteConfig.ts`)
+- Mentions légales : adresse, numéro RNA/SIRET, nom de la présidente
+- Photos des tuiles « Photo à venir » sur la page Témoignages
+- Compte Instagram à confirmer (`INSTAGRAM_URL` dans `lib/siteConfig.ts`)

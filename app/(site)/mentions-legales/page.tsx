@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
+import { CONTACT_EMAIL, CONTACT_PHONE } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
@@ -39,11 +40,11 @@ export default function MentionsLegalesPage() {
                 </li>
                 <li>
                   <strong>Téléphone :</strong>{' '}
-                  <a href="tel:+33612345678" className="text-blue-900 hover:underline">06 12 34 56 78</a>
+                  <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="text-blue-900 hover:underline">{CONTACT_PHONE}</a>
                 </li>
                 <li>
                   <strong>Email :</strong>{' '}
-                  <a href="mailto:aafd@gmx.fr" className="text-blue-900 hover:underline">aafd@gmx.fr</a>
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>
                 </li>
               </ul>
             </div>
@@ -120,7 +121,7 @@ export default function MentionsLegalesPage() {
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Vos droits</h3>
               <p>
                 Pour exercer vos droits (accès, rectification, suppression, opposition), contactez-nous à{' '}
-                <a href="mailto:aafd@gmx.fr" className="text-blue-900 hover:underline">aafd@gmx.fr</a>.
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>.
                 En cas de difficulté, vous pouvez adresser une réclamation à la{' '}
                 <strong>CNIL</strong> (Commission Nationale de l&apos;Informatique et des Libertés).
               </p>
@@ -151,7 +152,7 @@ export default function MentionsLegalesPage() {
               </p>
             </div>
 
-            <p className="text-sm text-gray-400 border-t pt-6">
+            <p className="text-sm text-gray-600 border-t pt-6">
               Dernière mise à jour : mai 2026
             </p>
 

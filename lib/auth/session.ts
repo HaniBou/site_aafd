@@ -4,7 +4,16 @@ export const COOKIE_NAME = 'admin_session';
 export const SESSION_DURATION_SECONDS = 7 * 24 * 60 * 60;
 
 function getSecret() {
-  return new TextEncoder().encode(process.env.ADMIN_SESSION_SECRET!);
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  // Sans ce contrôle, la clé HMAC vaudrait la chaîne "undefined"
+  // et n'importe qui pourrait forger un cookie admin valide.
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      'ADMIN_SESSION_SECRET est absent ou trop court (32 caractères minimum). ' +
+        'Générez-le avec : openssl rand -base64 32',
+    );
+  }
+  return new TextEncoder().encode(secret);
 }
 
 export async function createSessionToken(uid: string): Promise<string> {

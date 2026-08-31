@@ -31,14 +31,40 @@ export async function DELETE(
     return NextResponse.json({ error: 'Réservation introuvable' }, { status: 404 });
   }
 
-  const data = reservationDoc.data()!;
+  try {
+    return await cancelReservation(id, reservationDoc.data()!);
+  } catch (error) {
+    console.error('[reservations] annulation', error);
+    return NextResponse.json(
+      { error: "L'annulation a échoué. Merci de réessayer." },
+      { status: 500 },
+    );
+  }
+}
+
+async function cancelReservation(id: string, data: FirebaseFirestore.DocumentData) {
+  const platId = data.platId as string | undefined;
+  const quantite = Number(data.quantite);
+
+  // Le plat a pu être supprimé depuis. `batch.update` sur un document absent
+  // fait échouer tout le lot : la réservation devenait alors impossible à
+  // annuler. On ne restitue le stock que si le plat existe encore.
+  let platExiste = false;
+  if (platId) {
+    platExiste = (await adminDb.collection('plats').doc(platId).get()).exists;
+  }
+
   const batch = adminDb.batch();
   batch.delete(adminDb.collection('reservations').doc(id));
-  batch.update(adminDb.collection('plats').doc(data.platId as string), {
-    quantite: FieldValue.increment(data.quantite as number),
-  });
+
+  if (platExiste && Number.isFinite(quantite) && quantite > 0) {
+    batch.update(adminDb.collection('plats').doc(platId!), {
+      quantite: FieldValue.increment(quantite),
+    });
+  }
+
   await batch.commit();
 
   revalidatePath('/vente-plats');
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, stockRestitue: platExiste });
 }

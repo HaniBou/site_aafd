@@ -26,7 +26,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { nom, description, typeMenu, cuisiniers, quantite, prix, image } = body;
+  const { nom, description, typeMenu, cuisiniers, quantite, prix, image, cloture } = body;
   const update: Record<string, unknown> = {};
   if (nom !== undefined) update.nom = String(nom);
   if (description !== undefined) update.description = String(description);
@@ -35,6 +35,7 @@ export async function PUT(
   if (quantite !== undefined) update.quantite = Number(quantite);
   if (prix !== undefined) update.prix = Number(prix);
   if (image !== undefined) update.image = image ? String(image) : null;
+  if (cloture !== undefined) update.cloture = Boolean(cloture);
 
   const existing = await adminDb.collection('plats').doc(id).get();
   const oldImage = existing.data()?.image as string | undefined;

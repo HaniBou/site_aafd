@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Temoignage } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 type FormState = {
   nom: string;
@@ -40,6 +41,7 @@ type UploadPhase = 'compressing' | 'uploading' | null;
 
 export default function TemoignageFormClient({ temoignage }: { temoignage?: Temoignage }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const isEditing = !!temoignage;
 
@@ -57,10 +59,30 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
+  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
+  // déjà envoyée sur Cloudinary.
+  const validate = (): string | null => {
+    if (!form.nom.trim()) return 'Le nom est obligatoire.';
+    if (!form.type) return 'Le type de témoignage est obligatoire.';
+    if (!form.date) return 'La date est obligatoire.';
+    if (!form.contenu.trim()) return 'Le témoignage est obligatoire.';
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const invalid = validate();
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
+
     setBusy(true);
     setError(null);
+
+    let uploadedUrl: string | null = null;
+
     try {
       let imageUrl = form.existingImage || 'none';
 
@@ -69,6 +91,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           setUploadPhase(phase);
           setUploadProgress(percent);
         });
+        uploadedUrl = imageUrl;
         setUploadPhase(null);
       }
 
@@ -95,9 +118,24 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
         throw new Error(data.error ?? 'Erreur serveur');
       }
 
+      notify(
+        isEditing
+          ? 'Témoignage modifié avec succès'
+          : 'Témoignage ajouté avec succès',
+        'success',
+      );
       router.push('/admin/temoignages');
       router.refresh();
     } catch (err) {
+      // L'image vient d'être envoyée mais l'enregistrement a échoué :
+      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
+      if (uploadedUrl) {
+        await fetch('/api/admin/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: uploadedUrl }),
+        }).catch(() => {});
+      }
       setUploadPhase(null);
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');
       setBusy(false);
@@ -111,16 +149,22 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
     <div className="min-h-screen bg-gray-50">
       {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
+            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/temoignages"
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            aria-label="Retour aux témoignages"
+            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Retour aux témoignages
+            <span className="hidden sm:inline">Retour</span>
           </Link>
-          <h1 className="text-sm font-bold text-gray-900">
-            {isEditing ? `Modifier "${temoignage!.nom}"` : 'Nouveau témoignage'}
+
+          <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
+
+          <h1 className="text-sm font-bold text-gray-900 truncate min-w-0 mb-0 leading-none">
+            {isEditing ? `Modifier « ${temoignage!.nom} »` : 'Nouveau témoignage'}
           </h1>
         </div>
       </div>
@@ -143,7 +187,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
 
         {/* Type selector */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Type de témoignage *</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Type de témoignage *</p>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: 'Famille accompagnee', label: 'Famille accompagnée', icon: '🏠' },
@@ -203,7 +247,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : (
-                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -214,7 +258,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
                   : imageSrc ? 'Changer la photo' : 'Ajouter une photo (optionnel)'}
               </span>
               {!isUploading && (
-                <span className="text-xs text-gray-400">JPG, PNG, WebP — max 10 Mo</span>
+                <span className="text-xs text-gray-500">JPG, PNG, WebP — max 10 Mo</span>
               )}
             </button>
 
@@ -250,40 +294,40 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
 
         {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Informations</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nom *</label>
-              <input type="text" value={form.nom}
+              <label htmlFor="nom" className="block text-sm font-semibold text-gray-700 mb-1.5">Nom *</label>
+              <input id="nom" type="text" value={form.nom}
                 onChange={e => setForm({ ...form, nom: e.target.value })}
                 placeholder="Ex : Marie D."
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
                 required />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
-              <input type="date" value={form.date}
+              <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
+              <input id="date" type="date" value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
                 required />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Rôle / Fonction</label>
-            <input type="text" value={form.role}
+            <label htmlFor="role-fonction" className="block text-sm font-semibold text-gray-700 mb-1.5">Rôle / Fonction</label>
+            <input id="role-fonction" type="text" value={form.role}
               onChange={e => setForm({ ...form, role: e.target.value })}
               placeholder="Ex : Bénévole depuis 3 ans, Mère de famille…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors" />
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors" />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Témoignage *</label>
-            <textarea value={form.contenu}
+            <label htmlFor="temoignage" className="block text-sm font-semibold text-gray-700 mb-1.5">Témoignage *</label>
+            <textarea id="temoignage" value={form.contenu}
               onChange={e => setForm({ ...form, contenu: e.target.value })}
               rows={6} placeholder="Le texte du témoignage tel qu'il apparaîtra sur le site…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
               required />
           </div>
         </div>

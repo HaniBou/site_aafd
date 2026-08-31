@@ -2,7 +2,8 @@
 
 @font-face {
   font-family: 'DINSchriftRegular';
-  src: url('/fonts/DINSchriftRegular.otf') format('opentype');
+  src: url('/fonts/DINSchriftRegular.woff2') format('woff2'),
+       url('/fonts/DINSchriftRegular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -20,7 +21,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: DINSchriftRegular, Arial, Helvetica, sans-serif;
-  --font-mono: var(--font-geist-mono);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
@@ -150,5 +151,114 @@ select:disabled,
 
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Animations des héros — CSS pur, pour ne pas dépendre de l'hydratation React.
+   Le titre (élément LCP) n'est jamais animé. */
+@keyframes heroLine {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-line {
+  transform-origin: left;
+  animation: heroLine 0.7s ease-out both;
+}
+
+.animate-hero-fade {
+  animation: heroFade 0.7s ease-out 0.25s both;
+}
+
+.animate-hero-fade-late {
+  animation: heroFade 0.6s ease-out 0.45s both;
+}
+
+@keyframes scrollHint {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-scroll-hint {
+  animation: scrollHint 2s ease-in-out infinite;
+}
+
+/* Apparition au scroll (composant Reveal).
+   Tout est sous `no-preference` : si l'utilisateur a demandé moins
+   d'animations, le contenu est simplement là, sans état masqué. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Entrée des modales */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-modal-in {
+  animation: modalIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-overlay-in {
+  animation: overlayIn 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-line,
+  .animate-hero-fade,
+  .animate-hero-fade-late,
+  .animate-scroll-hint,
+  .animate-fadeIn,
+  .animate-modal-in,
+  .animate-overlay-in {
+    animation: none;
+  }
 }
 

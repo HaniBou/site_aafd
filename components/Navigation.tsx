@@ -41,7 +41,7 @@ export function Navigation() {
         ? isOrange
           ? 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
           : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
-        : 'text-white/90 hover:text-white hover:bg-white/15'
+        : 'text-white hover:bg-white/15 drop-shadow-md'
     }`
   }
 
@@ -63,7 +63,7 @@ export function Navigation() {
               />
             </div>
             <span className={`text-xl font-bold transition-colors duration-500 ${
-              isScrolled ? 'text-blue-700' : 'text-white'
+              isScrolled ? 'text-blue-700' : 'text-white drop-shadow-md'
             }`}>
               AAFD Val de Saône
             </span>

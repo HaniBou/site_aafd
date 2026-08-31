@@ -4,31 +4,29 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 export function FloatingDonButton() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
   const isHomePage = pathname === '/'
   const isAdminPage = pathname?.startsWith('/admin')
 
+  // Sur la page d'accueil, apparaît après scroll ; ailleurs, toujours visible.
+  const isVisible = !isHomePage || isScrolled
+
   useEffect(() => {
-    // Sur la page d'accueil, apparaît après scroll
-    // Sur les autres pages, toujours visible
-    if (!isHomePage) {
-      setIsVisible(true)
-      return
-    }
+    if (!isHomePage) return
 
     let ticking = false
-    
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsVisible(window.scrollY > 300)
+          setIsScrolled(window.scrollY > 300)
           ticking = false
         })
         ticking = true
       }
     }
-    
+
     handleScroll() // Check initial position
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -45,8 +43,12 @@ export function FloatingDonButton() {
       href="https://www.helloasso.com/associations/association-d-aide-aux-familles-en-difficulte-en-val-de-saone"
       target="_blank"
       rel="noopener noreferrer"
-      style={{ willChange: isVisible ? 'auto' : 'transform, opacity' }}
-      className={`fixed bottom-14 right-6 md:bottom-24 md:right-8 z-[50] group transition-all duration-500 ease-out ${
+      aria-label="Faire un don à l'AAFD (nouvel onglet)"
+      style={{
+        willChange: isVisible ? 'auto' : 'transform, opacity',
+        bottom: 'calc(3.5rem + env(safe-area-inset-bottom))',
+      }}
+      className={`fixed right-6 md:right-8 z-[50] group transition-all duration-500 ease-out ${
         isVisible 
           ? 'opacity-100 scale-100 translate-y-0' 
           : 'opacity-0 scale-90 translate-y-4 pointer-events-none'

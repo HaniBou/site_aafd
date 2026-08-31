@@ -10,6 +10,7 @@ const SECTION_LABELS: Record<string, string> = {
   '/admin/actualites': 'Actualités',
   '/admin/plats': 'Vente de plats',
   '/admin/temoignages': 'Témoignages',
+  '/admin/moments': 'Moments partagés',
   '/admin/reservations': 'Réservations',
 };
 
@@ -29,7 +30,7 @@ export default function AdminNav() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-40 print:hidden">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
 
         {/* Left: breadcrumb */}
@@ -38,7 +39,7 @@ export default function AdminNav() {
             <>
               <Link
                 href="/admin"
-                className="flex items-center gap-1 text-gray-400 hover:text-indigo-600 transition-colors text-sm shrink-0"
+                className="flex items-center gap-1 text-gray-500 hover:text-indigo-600 transition-colors text-sm shrink-0"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

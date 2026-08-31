@@ -6,9 +6,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Actualite } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 export default function ActuList({ actualites }: { actualites: Actualite[] }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const [, startTransition] = useTransition();
 
   const [deleteTarget, setDeleteTarget] = useState<Actualite | null>(null);
@@ -22,6 +24,7 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
     try {
       const res = await fetch(`/api/admin/actualites/${deleteTarget.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Erreur lors de la suppression');
+      notify('Actualité supprimée avec succès', 'success');
       setDeleteTarget(null);
       refresh();
     } catch (err) {
@@ -86,7 +89,7 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
               </svg>
             </div>
             <p className="text-gray-500 font-medium mb-1">Aucune actualité pour le moment</p>
-            <p className="text-sm text-gray-400 mb-5">Publiez votre première actualité.</p>
+            <p className="text-sm text-gray-500 mb-5">Publiez votre première actualité.</p>
             <Link href="/admin/actualites/nouveau"
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
               Ajouter une actualité
@@ -116,14 +119,14 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
                 <div className="flex-1 min-w-0 p-4">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     {actu.aLaUne && (
-                      <span className="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+                      <span className="bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
                         À LA UNE
                       </span>
                     )}
                     <span className="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full border border-blue-100">
                       {actu.category}
                     </span>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-500">
                       {new Date(actu.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
                   </div>

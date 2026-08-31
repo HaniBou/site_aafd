@@ -1,24 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
-import getTemoignages from "@/lib/getTemoignages";
+import type { Temoignage, Moment } from "@/types";
+import { HELLOASSO_URL } from "@/lib/siteConfig";
+import { Reveal } from "@/components/Reveal";
 
-type Temoignage = {
-  id: string;
-  nom: string;
-  role?: string;
-  type: "Famille accompagnee" | "Benevole";
-  contenu: string;
-  image?: string;
-  date: string;
+type Props = {
+  temoignages: Temoignage[];
+  moments: Moment[];
+  loadError?: boolean;
 };
 
-export default function TemoignagesPageClient() {
-  const [temoignages, setTemoignages] = useState<Temoignage[]>([]);
-
+export default function TemoignagesPageClient({ temoignages, moments, loadError = false }: Props) {
   const familyFallbacks = [
     { container: "bg-gradient-to-br from-blue-100 to-blue-200 text-blue-300", quote: "text-blue-900" },
     { container: "bg-gradient-to-br from-orange-100 to-orange-200 text-orange-300", quote: "text-orange-600" },
@@ -34,26 +30,13 @@ export default function TemoignagesPageClient() {
     "bg-gradient-to-br from-green-100 to-green-200 text-green-300",
   ];
 
-  useEffect(() => {
-    async function fetchTemoignages() {
-      try {
-        const data = await getTemoignages();
-        const sorted = data.sort(
-          (a: Temoignage, b: Temoignage) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setTemoignages(sorted);
-      } catch (error) {
-        console.error("Erreur lors du chargement des témoignages:", error);
-      }
-    }
-    fetchTemoignages();
-  }, []);
-
   const { familles, benevoles } = useMemo(() => {
+    const sorted = [...temoignages].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
     return {
-      familles: temoignages.filter((item) => item.type === "Famille accompagnee"),
-      benevoles: temoignages.filter((item) => item.type === "Benevole"),
+      familles: sorted.filter((item) => item.type === "Famille accompagnee"),
+      benevoles: sorted.filter((item) => item.type === "Benevole"),
     };
   }, [temoignages]);
 
@@ -83,15 +66,20 @@ export default function TemoignagesPageClient() {
             <p className="text-body-large text-gray-600">Des parcours de résilience et d&apos;espoir</p>
           </div>
 
-          {familles.length === 0 ? (
-            <p className="text-center text-gray-500">Aucun témoignage famille pour le moment.</p>
+          {loadError ? (
+            <p className="text-center text-gray-700">
+              Les témoignages n&apos;ont pas pu être chargés. Merci de réessayer dans quelques instants.
+            </p>
+          ) : familles.length === 0 ? (
+            <p className="text-center text-gray-600">Aucun témoignage famille pour le moment.</p>
           ) : (
             <div className="space-y-16">
               {familles.map((item, index) => {
                 const isReversed = index % 2 === 1;
                 const style = familyFallbacks[index % familyFallbacks.length];
                 return (
-                  <article key={item.id} className="grid gap-8 md:grid-cols-2 items-center">
+                  <Reveal key={item.id}>
+                  <article className="grid gap-8 md:grid-cols-2 items-center">
                     <div className={`relative h-[400px] rounded-2xl overflow-hidden shadow-xl ${style.container} ${isReversed ? "order-1 md:order-2" : ""}`}>
                       {item.image && item.image !== "none" ? (
                         <Image src={item.image} alt={item.nom} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
@@ -116,6 +104,7 @@ export default function TemoignagesPageClient() {
                       </div>
                     </div>
                   </article>
+                  </Reveal>
                 );
               })}
             </div>
@@ -130,12 +119,17 @@ export default function TemoignagesPageClient() {
             <p className="text-xl text-gray-600">L&apos;engagement qui enrichit</p>
           </div>
 
-          {benevoles.length === 0 ? (
-            <p className="text-center text-gray-500">Aucun témoignage bénévole pour le moment.</p>
+          {loadError ? (
+            <p className="text-center text-gray-700">
+              Les témoignages n&apos;ont pas pu être chargés. Merci de réessayer dans quelques instants.
+            </p>
+          ) : benevoles.length === 0 ? (
+            <p className="text-center text-gray-600">Aucun témoignage bénévole pour le moment.</p>
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {benevoles.map((item, index) => (
-                <article key={item.id} className="bg-white rounded-2xl overflow-hidden shadow-lg">
+                <Reveal key={item.id} delay={(index % 3) * 100} className="h-full">
+                <article className="h-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   <div className={`relative h-96 ${benevoleFallbacks[index % benevoleFallbacks.length]}`}>
                     {item.image && item.image !== "none" ? (
                       <Image src={item.image} alt={item.nom} fill className="object-cover" sizes="(max-width: 1024px) 50vw, 33vw" />
@@ -153,53 +147,63 @@ export default function TemoignagesPageClient() {
                     {item.role && <p className="text-sm text-gray-600">{item.role}</p>}
                   </div>
                 </article>
+                </Reveal>
               ))}
             </div>
           )}
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">Moments partagés</h2>
-            <p className="text-xl text-gray-600">Quelques instants de nos événements et actions</p>
-          </div>
+      {/* Moments partagés — alimenté depuis l'admin.
+          La section disparaît tant qu'aucune photo n'a été ajoutée. */}
+      {moments.length > 0 && (
+        <section className="py-16 md:py-24">
+          <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">Moments partagés</h2>
+              <p className="text-xl text-gray-600">Quelques instants de nos événements et actions</p>
+            </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              { gradient: "from-blue-200 to-blue-300 text-blue-400", label: "Vente de plats" },
-              { gradient: "from-orange-200 to-orange-300 text-orange-400", label: "Tournoi de pétanque" },
-              { gradient: "from-green-200 to-green-300 text-green-400", label: "Nettoyage Val de Saône" },
-              { gradient: "from-purple-200 to-purple-300 text-purple-400", label: "Cours de français" },
-              { gradient: "from-red-200 to-red-300 text-red-400", label: "Réunion bénévoles" },
-              { gradient: "from-yellow-200 to-yellow-300 text-yellow-500", label: "Fête de fin d'année" },
-            ].map((item) => (
-              <div key={item.label} className={`relative h-80 rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br ${item.gradient}`}>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <svg className="h-20 w-20 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <p className="text-lg font-semibold">{item.label}</p>
-                  <p className="text-sm mt-1">Photo à venir</p>
-                </div>
-              </div>
-            ))}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {moments.map((moment, index) => (
+                <Reveal key={moment.id} delay={(index % 3) * 100} className="h-full">
+                  <figure className="group relative h-80 rounded-2xl overflow-hidden shadow-lg bg-gray-200">
+                    <Image
+                      src={moment.image}
+                      alt={moment.titre}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-5">
+                      <figcaption className="text-lg font-semibold text-white drop-shadow">
+                        {moment.titre}
+                      </figcaption>
+                    </div>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>Vous aussi, écrivez votre histoire avec l&apos;AAFD</h2>
           <p className="mb-8 text-xl text-blue-100">Rejoignez notre communauté et devenez acteur du changement</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-500 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-600 transition-colors">
+            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors">
               Devenir bénévole
             </Link>
-            <Link href="/nous-soutenir" className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors">
-              Soutenir nos actions
-            </Link>
+            <a
+              href={HELLOASSO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
+            >
+              Faire un don
+            </a>
           </div>
         </div>
       </section>

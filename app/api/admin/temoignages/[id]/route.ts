@@ -26,13 +26,12 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { nom, prenom, ville, texte, note, date, image } = body;
+  const { nom, role, type, contenu, date, image } = body;
   const update: Record<string, unknown> = {};
-  if (nom !== undefined) update.nom = String(nom);
-  if (prenom !== undefined) update.prenom = String(prenom);
-  if (ville !== undefined) update.ville = String(ville);
-  if (texte !== undefined) update.texte = String(texte);
-  if (note !== undefined) update.note = Number(note);
+  if (nom !== undefined) update.nom = String(nom).trim();
+  if (role !== undefined) update.role = String(role);
+  if (type !== undefined) update.type = type === 'Benevole' ? 'Benevole' : 'Famille accompagnee';
+  if (contenu !== undefined) update.contenu = String(contenu).trim();
   if (date !== undefined) update.date = String(date);
   if (image !== undefined) update.image = image ? String(image) : 'none';
 

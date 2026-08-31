@@ -1,18 +1,8 @@
-import Image from "next/image";
-import { useState, useEffect } from "react";
+"use client";
 
-type Plat = {
-  id: string;
-  nom: string;
-  typeMenu?: string;
-  cuisiniers?: string;
-  items?: string[];
-  description: string;
-  quantite: number;
-  prix: number;
-  image?: string;
-  dateAjout: string;
-};
+import Image from "next/image";
+import { useState } from "react";
+import type { Plat } from "@/types";
 
 interface PlatCardProps {
   plat: Plat;
@@ -22,9 +12,6 @@ interface PlatCardProps {
 
 export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: PlatCardProps) {
   const [showOverlay, setShowOverlay] = useState(false);
-
-  // Bloquer le scroll de la page quand la modal est ouverte
-  // Pas besoin d'effet pour overlay
 
   // Gestion overlay mobile : clic affiche/masque overlay
   const handleImageClick = (e: React.MouseEvent) => {
@@ -40,11 +27,11 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
 
   return (
     <div
-      className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm cursor-pointer"
+      className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full h-full flex flex-col"
     >
       {/* Image + overlay */}
       <div
-        className="relative aspect-[4/3] bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden"
+        className="group relative aspect-[4/3] bg-orange-500 overflow-hidden cursor-pointer"
         onClick={handleImageClick}
         onMouseEnter={() => setIsImageHovered(true)}
         onMouseLeave={() => setIsImageHovered(false)}
@@ -92,6 +79,21 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
             </ul>
           )}
         </div>
+        {/* Affordance : sans elle, personne ne découvre l'overlay */}
+        {(plat.description || (plat.items && plat.items.length > 0)) && (
+          <span
+            className={`absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm transition-opacity duration-300 ${
+              showOverlay || isImageHovered ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="md:hidden">Voir le détail</span>
+            <span className="hidden md:inline">Survolez pour le détail</span>
+          </span>
+        )}
+
         {/* Badge disponibilité */}
         <div className="absolute top-4 right-4">
           {plat.quantite > 0 ? (
@@ -106,18 +108,18 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
         </div>
       </div>
       {/* Contenu */}
-      <div className="p-2 text-center flex flex-col gap-1">
+      <div className="p-3 text-center flex flex-col gap-1">
         {/* Nom du plat */}
         <h3 className="text-gray-900 mb-1 font-bold text-base leading-tight">
           {plat.nom}
         </h3>
         {/* Type de menu en sous-titre si présent */}
         {plat.typeMenu && (
-          <div className="text-orange-600 text-[16px] mb-1 font-semibold">{plat.typeMenu}</div>
+          <p className="text-orange-600 text-sm mb-1 font-semibold">{plat.typeMenu}</p>
         )}
         {/* Cuisiniers */}
         {plat.cuisiniers && (
-          <p className="text-gray-700 text-md italic mb-1">
+          <p className="text-gray-700 text-sm italic mb-1">
             concocté par {plat.cuisiniers}
           </p>
         )}
@@ -140,8 +142,8 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
           }}
           className={`w-full font-semibold py-2 px-3 rounded-lg text-sm transition-all mt-1 ${
             plat.quantite > 0
-              ? 'bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-md hover:shadow-lg'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-orange-600 text-white hover:bg-orange-700 active:scale-95 shadow-md hover:shadow-lg'
+              : 'bg-gray-200 text-gray-600 cursor-not-allowed'
           }`}
           disabled={plat.quantite === 0}
         >

@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
 import ActualitesPageClient from '@/components/ActualitesPageClient'
+import { getActualitesAdmin } from '@/lib/firebase/fetchers'
+import type { Actualite } from '@/types'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Actualités',
@@ -14,6 +18,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ActualitesPage() {
-  return <ActualitesPageClient />
+export default async function ActualitesPage() {
+  let actualites: Actualite[] = []
+  let loadError = false
+
+  try {
+    actualites = await getActualitesAdmin()
+  } catch (error) {
+    console.error('[actualites] chargement des actualités', error)
+    loadError = true
+  }
+
+  return <ActualitesPageClient actualites={actualites} loadError={loadError} />
 }

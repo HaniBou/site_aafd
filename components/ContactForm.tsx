@@ -153,7 +153,7 @@ export default function ContactForm() {
             className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
           >
             <option value="">Sélectionnez un sujet</option>
-            <option value="demande_aide">Demande d'aide alimentaire</option>
+            <option value="demande_aide">Demande d&apos;aide alimentaire</option>
             <option value="benevolat">Proposition de bénévolat</option>
             <option value="don">Don / Partenariat</option>
             <option value="renseignement">Demande de renseignement</option>
@@ -203,7 +203,7 @@ export default function ContactForm() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-lg font-semibold text-red-900">Erreur d'envoi</h3>
+                  <h3 className="text-lg font-semibold text-red-900">Erreur d&apos;envoi</h3>
                   <p className="text-red-700 mt-1">{errorMessage}</p>
                 </>
               )}

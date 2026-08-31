@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Plat } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 type FormState = {
   nom: string;
@@ -35,6 +36,7 @@ type UploadPhase = 'compressing' | 'uploading' | null;
 
 export default function PlatFormClient({ plat }: { plat?: Plat }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const isEditing = !!plat;
 
@@ -52,10 +54,32 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
+  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
+  // déjà envoyée sur Cloudinary.
+  const validate = (): string | null => {
+    if (!form.nom.trim()) return 'Le nom du plat est obligatoire.';
+    if (!form.description.trim()) return 'La description est obligatoire.';
+    const prix = parseFloat(form.prix);
+    if (!Number.isFinite(prix) || prix < 0) return 'Le prix doit être un nombre positif.';
+    const quantite = parseInt(form.quantite, 10);
+    if (!Number.isInteger(quantite) || quantite < 0) return 'La quantité doit être un entier positif.';
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const invalid = validate();
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
+
     setBusy(true);
     setError(null);
+
+    let uploadedUrl: string | null = null;
+
     try {
       let imageUrl = form.existingImage || 'none';
 
@@ -64,6 +88,7 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
           setUploadPhase(phase);
           setUploadProgress(percent);
         });
+        uploadedUrl = imageUrl;
         setUploadPhase(null);
       }
 
@@ -91,9 +116,24 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
         throw new Error(data.error ?? 'Erreur serveur');
       }
 
+      notify(
+        isEditing
+          ? 'Plat modifiée avec succès'
+          : 'Plat ajoutée avec succès',
+        'success',
+      );
       router.push('/admin/plats');
       router.refresh();
     } catch (err) {
+      // L'image vient d'être envoyée mais le plat n'a pas été enregistré :
+      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
+      if (uploadedUrl) {
+        await fetch('/api/admin/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: uploadedUrl }),
+        }).catch(() => {});
+      }
       setUploadPhase(null);
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');
       setBusy(false);
@@ -107,16 +147,22 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
     <div className="min-h-screen bg-gray-50">
       {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
+            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/plats"
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            aria-label="Retour aux plats"
+            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Retour aux plats
+            <span className="hidden sm:inline">Retour</span>
           </Link>
-          <h1 className="text-sm font-bold text-gray-900">
-            {isEditing ? `Modifier "${plat!.nom}"` : 'Nouveau plat'}
+
+          <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
+
+          <h1 className="text-sm font-bold text-gray-900 truncate min-w-0 mb-0 leading-none">
+            {isEditing ? `Modifier « ${plat!.nom} »` : 'Nouveau plat'}
           </h1>
         </div>
       </div>
@@ -183,7 +229,7 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
                   : imageSrc ? 'Changer la photo' : 'Ajouter une photo *'}
               </span>
               {!isUploading && (
-                <span className="text-xs text-gray-400">JPG, PNG, WebP — max 10 Mo</span>
+                <span className="text-xs text-gray-500">JPG, PNG, WebP — max 10 Mo</span>
               )}
             </button>
 
@@ -230,51 +276,51 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
 
         {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Informations</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nom du plat *</label>
-            <input
+            <label htmlFor="nom-du-plat" className="block text-sm font-semibold text-gray-700 mb-1.5">Nom du plat *</label>
+            <input id="nom-du-plat"
               type="text"
               value={form.nom}
               onChange={e => setForm({ ...form, nom: e.target.value })}
               placeholder="Ex : Couscous royal, Tajine d'agneau…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Type de menu</label>
-              <input
+              <label htmlFor="type-de-menu" className="block text-sm font-semibold text-gray-700 mb-1.5">Type de menu</label>
+              <input id="type-de-menu"
                 type="text"
                 value={form.typeMenu}
                 onChange={e => setForm({ ...form, typeMenu: e.target.value })}
                 placeholder="Ex : Menu congolais…"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Cuisinier(s)</label>
-              <input
+              <label htmlFor="cuisinier-s" className="block text-sm font-semibold text-gray-700 mb-1.5">Cuisinier(s)</label>
+              <input id="cuisinier-s"
                 type="text"
                 value={form.cuisiniers}
                 onChange={e => setForm({ ...form, cuisiniers: e.target.value })}
                 placeholder="Ex : Marie, Jean…"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description *</label>
-            <textarea
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">Description *</label>
+            <textarea id="description"
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows={4}
               placeholder="Décrivez le plat : ingrédients, accompagnements, allergènes…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
               required
             />
           </div>
@@ -282,34 +328,34 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
 
         {/* Price & Quantity */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Prix & Stock</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Prix & Stock</p>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Prix (€) *</label>
+              <label htmlFor="prix" className="block text-sm font-semibold text-gray-700 mb-1.5">Prix (€) *</label>
               <div className="relative">
-                <input
+                <input id="prix"
                   type="number"
                   step="0.50"
                   min="0"
                   value={form.prix}
                   onChange={e => setForm({ ...form, prix: e.target.value })}
                   placeholder="12.50"
-                  className="w-full pl-4 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
+                  className="w-full pl-4 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
                   required
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">€</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">€</span>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Quantité disponible *</label>
-              <input
+              <label htmlFor="quantite-disponible" className="block text-sm font-semibold text-gray-700 mb-1.5">Quantité disponible *</label>
+              <input id="quantite-disponible"
                 type="number"
                 min="0"
                 value={form.quantite}
                 onChange={e => setForm({ ...form, quantite: e.target.value })}
                 placeholder="20"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
                 required
               />
             </div>

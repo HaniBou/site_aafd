@@ -4,10 +4,13 @@ export type Plat = {
   typeMenu?: string;
   cuisiniers?: string;
   description: string;
+  items?: string[];
   quantite: number;
   prix: number;
   image?: string;
   dateAjout?: string;
+  /** Vente terminée : le plat n'est plus proposé sur le site public. */
+  cloture?: boolean;
 };
 
 export type Actualite = {
@@ -16,7 +19,7 @@ export type Actualite = {
   date: string;
   content: string;
   category: string;
-  slug: string;
+  slug?: string;
   image?: string;
   aLaUne?: boolean;
   uploadedAt?: string;
@@ -44,4 +47,13 @@ export type Reservation = {
   dateReservation: string;
   emailEnvoye?: boolean;
   emailErreur?: string | null;
+};
+
+/** Photo de la galerie « Moments partagés » (page Témoignages). */
+export type Moment = {
+  id: string;
+  titre: string;
+  image: string;
+  date: string;
+  uploadedAt?: string;
 };

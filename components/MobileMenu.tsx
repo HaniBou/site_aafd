@@ -39,6 +39,15 @@ export function MobileMenu() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobileMenuOpen])
+
   return (
     <div className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
@@ -57,36 +66,43 @@ export function MobileMenu() {
               />
             </div>
             <span className={`text-lg font-bold transition-colors duration-500 ${
-              isScrolled || mobileMenuOpen ? 'text-blue-900' : 'text-white'
+              isScrolled || mobileMenuOpen ? 'text-blue-900' : 'text-white drop-shadow-md'
             }`}>
               AAFD Val de Saône
             </span>
           </Link>
 
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`p-2 rounded-full transition-colors ${
+            className={`p-2 rounded-full transition-colors min-w-11 min-h-11 flex items-center justify-center ${
               isScrolled || mobileMenuOpen
                 ? 'text-gray-700 hover:bg-blue-50'
                 : 'text-white hover:bg-white/20'
             }`}
-            aria-label="Toggle menu"
+            aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu-panel"
           >
             {mobileMenuOpen ? (
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
           </button>
         </div>
 
-        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+        <div
+          id="mobile-menu-panel"
+          inert={!mobileMenuOpen}
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+              mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
           <nav className="py-4 space-y-2 border-t border-gray-100">
             {[
               { href: '/notre-association', label: 'Notre association' },

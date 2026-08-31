@@ -4,7 +4,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { revalidatePath } from 'next/cache';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/session';
-import { getActualitesAdmin } from '@/lib/firebase/fetchers';
+import { getActualitesAdmin, buildUniqueActualiteSlug } from '@/lib/firebase/fetchers';
 
 export const runtime = 'nodejs';
 
@@ -13,16 +13,6 @@ async function checkSession() {
   const token = store.get(COOKIE_NAME)?.value;
   if (!token) throw new Error('Unauthorized');
   await verifySessionToken(token);
-}
-
-function buildSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
 }
 
 export async function GET() {
@@ -70,11 +60,12 @@ export async function POST(request: NextRequest) {
     category: category || 'Actualité',
     date: date || new Date().toISOString(),
     image: image || 'none',
-    slug: buildSlug(title),
+    slug: await buildUniqueActualiteSlug(title),
     aLaUne: Boolean(aLaUne),
     uploadedAt: FieldValue.serverTimestamp(),
   });
 
   revalidatePath('/actualites');
+  revalidatePath('/');
   return NextResponse.json({ id: docRef.id }, { status: 201 });
 }

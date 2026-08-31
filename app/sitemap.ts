@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next'
 import { getActualitesAdmin } from '@/lib/firebase/fetchers'
+import { SITE_URL as siteUrl } from '@/lib/siteConfig'
+import { actualiteHref } from '@/lib/slug'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://site-aafd.vercel.app'
+// Le sitemap serait figé au build : sans ce revalidate, un article publié
+// depuis l'admin n'y apparaîtrait qu'au prochain déploiement.
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
@@ -25,12 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${siteUrl}/nous-rejoindre`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/nous-soutenir`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
@@ -65,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const actualites = await getActualitesAdmin()
     actualitePages = actualites.map((actu) => ({
-      url: `${siteUrl}/actualites/${actu.id}`,
+      url: `${siteUrl}${actualiteHref(actu)}`,
       lastModified: actu.uploadedAt ? new Date(actu.uploadedAt) : new Date(actu.date),
       changeFrequency: 'weekly' as const,
       priority: 0.6,

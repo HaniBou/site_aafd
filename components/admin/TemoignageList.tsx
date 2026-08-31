@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Temoignage } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 const AVATAR_COLORS = [
   'from-blue-400 to-indigo-500',
@@ -17,6 +18,7 @@ const AVATAR_COLORS = [
 
 export default function TemoignageList({ temoignages }: { temoignages: Temoignage[] }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const [, startTransition] = useTransition();
 
   const [deleteTarget, setDeleteTarget] = useState<Temoignage | null>(null);
@@ -30,6 +32,7 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
     try {
       const res = await fetch(`/api/admin/temoignages/${deleteTarget.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Erreur lors de la suppression');
+      notify('Témoignage supprimé avec succès', 'success');
       setDeleteTarget(null);
       refresh();
     } catch (err) {
@@ -94,7 +97,7 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
               </svg>
             </div>
             <p className="text-gray-500 font-medium mb-1">Aucun témoignage pour le moment</p>
-            <p className="text-sm text-gray-400 mb-5">Ajoutez des témoignages de familles ou de bénévoles.</p>
+            <p className="text-sm text-gray-500 mb-5">Ajoutez des témoignages de familles ou de bénévoles.</p>
             <Link href="/admin/temoignages/nouveau"
               className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
               Ajouter un témoignage
@@ -138,7 +141,7 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
                   <p className="text-xs text-gray-500 italic line-clamp-3 leading-relaxed whitespace-pre-line">
                     &ldquo;{item.contenu}&rdquo;
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-1.5">
+                  <p className="text-[11px] text-gray-500 mt-1.5">
                     {new Date(item.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
                 </div>

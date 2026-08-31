@@ -4,6 +4,7 @@ import {
   getPlatsAdmin,
   getReservationsAdmin,
   getTemoignagesAdmin,
+  getMomentsAdmin,
 } from '@/lib/firebase/fetchers';
 
 export const dynamic = 'force-dynamic';
@@ -43,6 +44,17 @@ const SECTIONS = [
     ),
   },
   {
+    href: '/admin/moments',
+    label: 'Moments partagés',
+    desc: 'Photos de la galerie (page Témoignages)',
+    addLabel: '+ Ajouter une photo',
+    color: 'teal',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    ),
+  },
+  {
     href: '/admin/reservations',
     label: 'Réservations',
     desc: 'Commandes de plats reçues',
@@ -60,17 +72,26 @@ const COLOR: Record<string, { bg: string; text: string; badge: string; btn: stri
   orange:  { bg: 'bg-orange-50',  text: 'text-orange-600',  badge: 'bg-orange-500',  btn: 'bg-orange-600 hover:bg-orange-700' },
   emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', badge: 'bg-emerald-500', btn: 'bg-emerald-600 hover:bg-emerald-700' },
   purple:  { bg: 'bg-purple-50',  text: 'text-purple-600',  badge: 'bg-purple-500',  btn: 'bg-purple-600 hover:bg-purple-700' },
+  teal:    { bg: 'bg-teal-50',    text: 'text-teal-600',    badge: 'bg-teal-500',    btn: 'bg-teal-600 hover:bg-teal-700' },
 };
 
 export default async function AdminDashboard() {
-  const [plats, actualites, temoignages, reservations] = await Promise.all([
+  const [plats, actualites, temoignages, moments, reservations] = await Promise.all([
     getPlatsAdmin(),
     getActualitesAdmin(),
     getTemoignagesAdmin(),
+    getMomentsAdmin(),
     getReservationsAdmin(),
   ]);
 
-  const counts = [actualites.length, plats.length, temoignages.length, reservations.length];
+  // Même ordre que SECTIONS
+  const counts = [
+    actualites.length,
+    plats.length,
+    temoignages.length,
+    moments.length,
+    reservations.length,
+  ];
 
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
@@ -81,7 +102,7 @@ export default async function AdminDashboard() {
 
       {/* Welcome header */}
       <div className="mb-10">
-        <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{today}</p>
+        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{today}</p>
         <h1 className="text-3xl font-bold text-gray-900">Bonjour 👋</h1>
         <p className="text-gray-500 mt-1">Que souhaitez-vous faire aujourd&apos;hui ?</p>
       </div>

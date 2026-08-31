@@ -2,34 +2,50 @@
 
 import { useEffect, useState } from 'react';
 
+export type ToastTone = 'success' | 'error' | 'info';
+
 interface ToastProps {
   message: string;
   show: boolean;
+  /** Explicite. À défaut, le ton est déduit du texte du message. */
+  tone?: ToastTone;
   onClose?: () => void;
 }
 
-export default function Toast({ message, show, onClose }: ToastProps) {
-  const [visible, setVisible] = useState(false);
+export default function Toast({ message, show, tone, onClose }: ToastProps) {
+  const [visible, setVisible] = useState(show);
+  const [prevShow, setPrevShow] = useState(show);
+
+  // Ajustement pendant le rendu plutôt que dans un effet : évite un rendu
+  // en cascade à chaque apparition du toast.
+  if (prevShow !== show) {
+    setPrevShow(show);
+    if (show) setVisible(true);
+  }
 
   useEffect(() => {
-    if (show) {
-      setVisible(true);
-    } else {
-      const t = setTimeout(() => setVisible(false), 300);
-      return () => clearTimeout(t);
-    }
+    if (show) return;
+    const t = setTimeout(() => setVisible(false), 300);
+    return () => clearTimeout(t);
   }, [show]);
 
   if (!visible && !show) return null;
 
   const normalized = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  const isError = /(erreur|echec|fail|failed|impossible|probleme)/.test(normalized);
-  const isSuccess = !isError &&
-    /(succes|success|effectue|ajoute|modifie|supprime|publie|annule|mis a jour)/.test(normalized);
+  const isError = tone
+    ? tone === 'error'
+    : /(erreur|echec|fail|failed|impossible|probleme)/.test(normalized);
+  const isSuccess = tone
+    ? tone === 'success'
+    : !isError &&
+      /(succes|success|effectue|ajoute|modifie|supprime|publie|annule|mis a jour)/.test(normalized);
 
   return (
     <div
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-md transition-all duration-300 ${
+      role="status"
+      aria-live="polite"
+      style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
+      className={`fixed left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-md transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >

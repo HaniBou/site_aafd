@@ -1,17 +1,8 @@
 "use client";
 
 import { useState, useRef, FormEvent } from "react";
-import { runTransaction, doc, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-
-type Plat = {
-  id: string;
-  nom: string;
-  description: string;
-  quantite: number;
-  image?: string;
-  dateAjout: string;
-};
+import { useRouter } from "next/navigation";
+import type { Plat } from "@/types";
 
 type ReservationModalProps = {
   isOpen: boolean;
@@ -33,6 +24,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
   const [emailWarning, setEmailWarning] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   const submittingRef = useRef(false);
+  const router = useRouter();
 
   // Fonction de validation d'email
   const validateEmail = (email: string): boolean => {
@@ -53,71 +45,48 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Validation avant de poser le verrou, sinon un email refusé bloque
+    // définitivement le formulaire.
+    if (!validateEmail(formData.email)) {
+      setEmailError("Veuillez entrer une adresse email valide");
+      return;
+    }
+
     if (submittingRef.current) return;
     submittingRef.current = true;
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    if (!validateEmail(formData.email)) {
-      setEmailError("Veuillez entrer une adresse email valide");
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      // 1. Transaction atomique : vérif quantité + décrémentation + création réservation
-      //    Si deux personnes réservent en même temps, une seule passera.
-      await runTransaction(db, async (transaction) => {
-        const platRef = doc(db, "plats", plat!.id);
-        const platDoc = await transaction.get(platRef);
-
-        if (!platDoc.exists()) throw new Error("Ce plat n'existe plus.");
-
-        const currentQty = (platDoc.data().quantite as number) ?? 0;
-        if (currentQty < formData.quantite) throw new Error("Il ne reste plus assez de portions disponibles.");
-
-        const reservationRef = doc(collection(db, "reservations"));
-
-        transaction.update(platRef, { quantite: currentQty - formData.quantite });
-        transaction.set(reservationRef, {
+      // Tout se passe côté serveur : vérification du stock, décrément, écriture
+      // de la réservation puis envoi des emails. Le navigateur n'écrit jamais
+      // dans Firestore.
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           platId: plat!.id,
-          platNom: plat!.nom,
           clientNom: formData.nom,
           clientEmail: formData.email,
           clientTelephone: formData.telephone,
           quantite: formData.quantite,
           message: formData.message || "",
-          emailEnvoye: false,
-          emailErreur: null,
-          dateReservation: new Date(),
-        });
+        }),
       });
 
-      // 2. Réservation enregistrée en base → envoyer l'email de confirmation
-      try {
-        const emailResponse = await fetch('/api/send-reservation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            platNom: plat?.nom,
-            clientNom: formData.nom,
-            clientEmail: formData.email,
-            clientTelephone: formData.telephone,
-            quantite: formData.quantite,
-            message: formData.message || "",
-          }),
-        });
-        setSubmitStatus(emailResponse.ok ? "success" : "warning");
-      } catch {
-        // Email raté mais réservation bien sauvegardée
-        setSubmitStatus("warning");
+      const reservation = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(reservation.error || "La réservation n'a pas pu être enregistrée.");
       }
 
-      setTimeout(() => window.location.reload(), 4000);
+      setSubmitStatus(reservation.emailEnvoye ? "success" : "warning");
 
-    } catch (error: any) {
-      console.error("Erreur lors de la réservation:", error);
-      setEmailWarning(error?.message || "Une erreur est survenue.");
+      // Rafraîchit les stocks affichés sans recharger la page.
+      router.refresh();
+    } catch (error) {
+      setEmailWarning(error instanceof Error ? error.message : "Une erreur est survenue.");
       setSubmitStatus("error");
     } finally {
       submittingRef.current = false;
@@ -128,20 +97,28 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
   if (!isOpen || !plat) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-overlay-in"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reservation-modal-title"
+      onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-modal-in">
         {/* En-tête du modal */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-t-2xl">
+        <div className="bg-orange-600 text-white p-6 rounded-t-2xl">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-2xl font-bold mb-2">Réserver</h3>
-              <p className="text-orange-100">{plat.nom}</p>
+              <h3 id="reservation-modal-title" className="text-2xl font-bold mb-2">Réserver</h3>
+              <p className="text-orange-50">{plat.nom}</p>
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+              aria-label="Fermer"
+              className="text-white hover:bg-white/20 rounded-full p-2 transition-colors min-w-11 min-h-11 flex items-center justify-center"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -226,6 +203,23 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
             </select>
           </div>
 
+          {/* Récapitulatif du prix */}
+          {typeof plat.prix === "number" && (
+            <div className="rounded-lg bg-orange-50 border border-orange-200 p-4">
+              <div className="flex items-center justify-between text-sm text-gray-700">
+                <span>
+                  {formData.quantite} × {plat.prix.toFixed(2)} €
+                </span>
+                <span className="text-lg font-bold text-orange-700">
+                  {(plat.prix * formData.quantite).toFixed(2)} €
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-gray-600">
+                À régler sur place au moment du retrait.
+              </p>
+            </div>
+          )}
+
           {/* Message optionnel */}
           <div>
             <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -262,7 +256,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
               <div>
                 <p className="font-semibold text-yellow-900">Réservation enregistrée ✅</p>
                 <p className="text-sm text-yellow-800 mt-1">
-                  Votre réservation est bien prise en compte. L'email de confirmation n'a pas pu être envoyé, mais l'association a bien reçu votre demande.
+                  Votre réservation est bien prise en compte. L&apos;email de confirmation n&apos;a pas pu être envoyé, mais l&apos;association a bien reçu votre demande.
                 </p>
                 <p className="text-sm text-yellow-800 mt-2 font-medium">
                   Nous vous contacterons par téléphone pour confirmer.
@@ -284,7 +278,17 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
           )}
 
           {/* Boutons */}
-          {submitStatus !== "success" && submitStatus !== "warning" && (
+          {submitStatus === "success" || submitStatus === "warning" ? (
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-md"
+              >
+                Fermer
+              </button>
+            </div>
+          ) : (
             <div className="flex gap-3 pt-4">
               <button
                 type="button"
@@ -296,7 +300,7 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
               <button
                 type="submit"
                 disabled={isSubmitting || !!emailError}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Envoi..." : "Confirmer"}
               </button>

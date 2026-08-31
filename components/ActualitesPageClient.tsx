@@ -2,22 +2,18 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import getActualites from "@/lib/getActualites";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { getCategoryStyles } from '@/lib/categoryStyles';
+import type { Actualite } from "@/types";
+import { INSTAGRAM_URL } from "@/lib/siteConfig";
+import { Reveal } from "@/components/Reveal";
+import { actualiteHref } from "@/lib/slug";
 
-interface Actualite {
-  id: string;
-  title: string;
-  date: string;
-  uploadedAt: string;
-  category: string;
-  image: string;
-  content: string;
-  slug: string;
-  aLaUne: boolean;
-}
+type Props = {
+  actualites: Actualite[];
+  loadError?: boolean;
+};
 
 const CATEGORIES = ["Tout", "Actualité", "Vente", "Événement", "Annonce"];
 
@@ -27,21 +23,19 @@ const formatDate = (dateStr: string) =>
 const truncate = (text: string, max: number) =>
   text.length > max ? text.substring(0, max) + "…" : text;
 
-export default function ActualitesPageClient() {
-  const [actuALaUne, setActuALaUne] = useState<Actualite | null>(null);
-  const [autresActus, setAutresActus] = useState<Actualite[]>([]);
+export default function ActualitesPageClient({ actualites, loadError = false }: Props) {
   const [activeCategory, setActiveCategory] = useState("Tout");
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getActualites();
-      const sorted = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      const featured = sorted.find(a => a.aLaUne) ?? sorted[0];
-      setActuALaUne(featured ?? null);
-      setAutresActus(sorted.filter(a => a.id !== featured?.id));
-    }
-    fetchData();
-  }, []);
+  const { actuALaUne, autresActus } = useMemo(() => {
+    const sorted = [...actualites].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    const featured = sorted.find(a => a.aLaUne) ?? sorted[0] ?? null;
+    return {
+      actuALaUne: featured,
+      autresActus: sorted.filter(a => a.id !== featured?.id),
+    };
+  }, [actualites]);
 
   const filtered = activeCategory === "Tout"
     ? autresActus
@@ -61,14 +55,14 @@ export default function ActualitesPageClient() {
         <section className="py-16 md:py-20 bg-white">
           <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-10">
-              <span className="px-4 py-1.5 bg-orange-500 text-white text-xs font-bold tracking-widest uppercase rounded-full">
+              <span className="px-4 py-1.5 bg-orange-600 text-white text-xs font-bold tracking-widest uppercase rounded-full">
                 À la une
               </span>
               <div className="h-px flex-1 bg-gray-100" />
             </div>
 
             <div className="group grid md:grid-cols-5 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <Link href={`/actualites/${actuALaUne.id}`} className="relative md:col-span-3 h-[260px] md:h-[460px] block bg-gray-200 overflow-hidden">
+              <Link href={actualiteHref(actuALaUne)} className="relative md:col-span-3 h-[260px] md:h-[460px] block bg-gray-200 overflow-hidden">
                 {actuALaUne.image && actuALaUne.image !== 'none' ? (
                   <Image
                     src={actuALaUne.image}
@@ -86,8 +80,8 @@ export default function ActualitesPageClient() {
                 <span className={`self-start mb-3 px-3 py-1 text-xs font-bold tracking-wider uppercase rounded-full ${getCategoryStyles(actuALaUne.category)}`}>
                   {actuALaUne.category}
                 </span>
-                <p className="text-xs text-gray-400 mb-3 uppercase tracking-wide">{formatDate(actuALaUne.date)}</p>
-                <Link href={`/actualites/${actuALaUne.id}`}>
+                <p className="text-xs text-gray-600 mb-3 uppercase tracking-wide">{formatDate(actuALaUne.date)}</p>
+                <Link href={actualiteHref(actuALaUne)}>
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-4 hover:text-blue-900 transition-colors">
                     {actuALaUne.title}
                   </h2>
@@ -97,7 +91,7 @@ export default function ActualitesPageClient() {
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
                   <Link
-                    href={`/actualites/${actuALaUne.id}`}
+                    href={actualiteHref(actuALaUne)}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:underline"
                   >
                     Lire la suite
@@ -108,7 +102,7 @@ export default function ActualitesPageClient() {
                   {actuALaUne.category === "Vente de plats" && (
                     <Link
                       href="/vente-plats"
-                      className="ml-auto inline-flex items-center gap-2 bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition-colors font-semibold text-sm shadow"
+                      className="ml-auto inline-flex items-center gap-2 bg-orange-600 text-white px-5 py-2 rounded-full hover:bg-orange-700 transition-colors font-semibold text-sm shadow"
                     >
                       Commander
                     </Link>
@@ -139,12 +133,17 @@ export default function ActualitesPageClient() {
             ))}
           </div>
 
-          {filtered.length === 0 ? (
-            <p className="text-center text-gray-400 py-24">Aucune actualité dans cette catégorie.</p>
+          {loadError ? (
+            <p className="text-center text-gray-700 py-24">
+              Les actualités n&apos;ont pas pu être chargées. Merci de réessayer dans quelques instants.
+            </p>
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-gray-600 py-24">Aucune actualité dans cette catégorie.</p>
           ) : (
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map(actu => (
-                <article key={actu.id} className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+              {filtered.map((actu, i) => (
+                <Reveal key={actu.id} delay={(i % 3) * 100} className="h-full">
+                <article className="group relative h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                   <div className="relative h-52 bg-gray-200 overflow-hidden">
                     {actu.image && actu.image !== 'none' ? (
                       <Image
@@ -163,7 +162,7 @@ export default function ActualitesPageClient() {
                   </div>
 
                   <div className="flex flex-col flex-1 p-6">
-                    <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">{formatDate(actu.date)}</p>
+                    <p className="text-xs text-gray-600 uppercase tracking-wide mb-2">{formatDate(actu.date)}</p>
                     <h3 className="text-lg font-bold text-gray-900 leading-snug mb-3 group-hover:text-blue-900 transition-colors">
                       {actu.title}
                     </h3>
@@ -172,7 +171,7 @@ export default function ActualitesPageClient() {
                     </p>
                     <div className="mt-5 flex items-center justify-between">
                       <Link
-                        href={`/actualites/${actu.id}`}
+                        href={actualiteHref(actu)}
                         className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline"
                       >
                         Lire la suite
@@ -183,7 +182,7 @@ export default function ActualitesPageClient() {
                       {actu.category === "Vente" && (
                         <Link
                           href="/vente-plats"
-                          className="relative z-10 inline-flex items-center gap-1.5 bg-orange-500 text-white px-4 py-1.5 rounded-full hover:bg-orange-600 transition-colors font-semibold text-xs shadow"
+                          className="relative z-10 inline-flex items-center gap-1.5 bg-orange-600 text-white px-4 py-1.5 rounded-full hover:bg-orange-700 transition-colors font-semibold text-xs shadow"
                         >
                           Commander
                         </Link>
@@ -191,6 +190,7 @@ export default function ActualitesPageClient() {
                     </div>
                   </div>
                 </article>
+                </Reveal>
               ))}
             </div>
           )}
@@ -206,7 +206,7 @@ export default function ActualitesPageClient() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://www.instagram.com/aafd_asso/"
+              href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 px-8 py-4 text-lg font-semibold text-white hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"

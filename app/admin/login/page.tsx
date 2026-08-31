@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase/client';
 
@@ -57,7 +58,7 @@ export default function AdminLogin() {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 w-full max-w-md">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-1">Administration</h1>
-          <p className="text-sm text-gray-500">Connectez-vous pour accéder au tableau de bord</p>
+          <p className="text-sm text-gray-600">Connectez-vous pour accéder au tableau de bord</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -70,7 +71,7 @@ export default function AdminLogin() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
               placeholder="admin@exemple.com"
               required
               disabled={loading}
@@ -87,7 +88,7 @@ export default function AdminLogin() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
               placeholder="••••••••"
               required
               disabled={loading}
@@ -117,9 +118,9 @@ export default function AdminLogin() {
         </form>
 
         <div className="mt-6">
-          <a href="/" className="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
+          <Link href="/" className="text-sm text-gray-600 hover:text-indigo-700 transition-colors">
             ← Retour au site
-          </a>
+          </Link>
         </div>
       </div>
     </main>

@@ -6,9 +6,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Plat } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import { useAdminToast } from '@/components/admin/AdminToast';
 
 export default function PlatList({ plats }: { plats: Plat[] }) {
   const router = useRouter();
+  const notify = useAdminToast();
   const [, startTransition] = useTransition();
 
   const [confirmId, setConfirmId] = useState<string | null>(null);
@@ -16,11 +18,33 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
 
   const refresh = () => startTransition(() => router.refresh());
 
+  const setCloture = async (plat: Plat, cloture: boolean) => {
+    setDeleteError(null);
+    try {
+      const res = await fetch(`/api/admin/plats/${plat.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cloture }),
+      });
+      if (!res.ok) throw new Error(cloture ? 'La clôture a échoué' : 'La réouverture a échoué');
+      notify(
+        cloture
+          ? `Vente de « ${plat.nom} » clôturée — retirée du site`
+          : `Vente de « ${plat.nom} » rouverte — de nouveau en ligne`,
+        'success',
+      );
+      refresh();
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    }
+  };
+
   const handleDelete = async (id: string) => {
     setDeleteError(null);
     try {
       const res = await fetch(`/api/admin/plats/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Impossible de supprimer le plat');
+      notify('Plat supprimé avec succès', 'success');
       refresh();
     } catch (err) {
       setDeleteError(err instanceof Error ? err.message : 'Une erreur est survenue');
@@ -103,7 +127,9 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
         <div className="space-y-3">
           {plats.map(plat => (
             <div key={plat.id}
-              className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+              className={`bg-white rounded-2xl border shadow-sm overflow-hidden hover:shadow-md transition-shadow ${
+                plat.cloture ? 'border-gray-300 bg-gray-50' : 'border-gray-200'
+              }`}>
               <div className="flex gap-0">
                 {plat.image && plat.image !== 'none' && (
                   <div className="relative w-28 sm:w-36 shrink-0">
@@ -114,6 +140,11 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h3 className="font-bold text-gray-900 text-sm truncate">{plat.nom}</h3>
+                      {plat.cloture && (
+                        <span className="inline-block text-[11px] font-bold text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full mt-0.5 mr-1">
+                          VENTE CLÔTURÉE
+                        </span>
+                      )}
                       {plat.typeMenu && (
                         <span className="inline-block text-[11px] font-medium text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full mt-0.5">
                           {plat.typeMenu}
@@ -122,16 +153,16 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <Link href={`/admin/plats/${plat.id}/modifier`}
-                        className="w-8 h-8 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center transition-colors"
-                        title="Modifier">
+                        className="w-11 h-11 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center transition-colors"
+                        title="Modifier" aria-label="Modifier ce plat">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </Link>
                       <button onClick={() => setConfirmId(plat.id)}
-                        className="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center transition-colors"
-                        title="Supprimer">
+                        className="w-11 h-11 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg flex items-center justify-center transition-colors"
+                        title="Supprimer" aria-label="Supprimer ce plat">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -178,6 +209,18 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
                   className="flex-1 py-2.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
                   Modifier
                 </Link>
+                <div className="w-px bg-gray-100" />
+                <button onClick={() => setCloture(plat, !plat.cloture)}
+                  title={plat.cloture
+                    ? 'Remettre ce plat en vente sur le site'
+                    : 'Retirer ce plat du site — les réservations sont conservées'}
+                  className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${
+                    plat.cloture
+                      ? 'text-emerald-700 hover:bg-emerald-50'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}>
+                  {plat.cloture ? 'Rouvrir' : 'Clôturer'}
+                </button>
                 <div className="w-px bg-gray-100" />
                 <button onClick={() => setConfirmId(plat.id)}
                   className="flex-1 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
