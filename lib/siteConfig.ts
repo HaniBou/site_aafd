@@ -3,8 +3,11 @@
 
 export const CONTACT_EMAIL = "contact@entraide-aafd-valdesaone.fr";
 
-// TODO avant mise en ligne : remplacer par le vrai numéro de l'association.
-export const CONTACT_PHONE = "06 12 34 56 78";
+export const CONTACT_PHONE = "06 88 27 38 88";
+
+// Même numéro au format international, pour les données structurées : Google
+// rapproche mieux une fiche d'établissement d'un numéro en +33 que d'un 06.
+export const CONTACT_PHONE_E164 = "+33688273888";
 
 export const INSTAGRAM_HANDLE = "@aafd_asso";
 export const INSTAGRAM_URL = "https://www.instagram.com/aafd_asso/";
@@ -33,14 +36,13 @@ export function yearsOfAction(): number {
   return new Date().getFullYear() - ASSOCIATION_FOUNDING_YEAR;
 }
 
-// Adresse du siège. Renseignée, elle alimente les données structurées lues par
-// Google : c'est ce qui permet à l'association de remonter sur les recherches
-// locales (« aide familles réfugiées Val de Saône »).
-// TODO avant mise en ligne : compléter avec l'adresse réelle de l'association.
+// Adresse du siège. Elle alimente les données structurées lues par Google :
+// c'est ce qui permet à l'association de remonter sur les recherches locales
+// (« aide familles réfugiées Val de Saône »).
 export const ASSOCIATION_ADDRESS = {
-  streetAddress: "",
-  postalCode: "",
-  addressLocality: "",
+  streetAddress: "28 rue Ampère",
+  postalCode: "69270",
+  addressLocality: "Fontaines-sur-Saône",
   addressRegion: "Auvergne-Rhône-Alpes",
   addressCountry: "FR",
 } as const;

@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import {
   SITE_URL,
   CONTACT_EMAIL,
-  CONTACT_PHONE,
+  CONTACT_PHONE_E164,
   INSTAGRAM_URL,
   ASSOCIATION_NAME,
   ASSOCIATION_FULL_NAME,
@@ -13,12 +13,6 @@ import {
   ASSOCIATION_ADDRESS,
   HELLOASSO_URL,
 } from "@/lib/siteConfig";
-
-// L'adresse n'est publiée que si elle est renseignée : une PostalAddress aux
-// champs vides fait échouer la validation des données structurées.
-const hasAddress =
-  ASSOCIATION_ADDRESS.streetAddress !== "" &&
-  ASSOCIATION_ADDRESS.addressLocality !== "";
 
 // Décrit l'association pour Google : nom, logo, contacts, comptes officiels.
 // Uniquement sur les pages publiques, jamais dans l'admin.
@@ -38,7 +32,7 @@ const organizationSchema = {
     height: 512,
   },
   email: CONTACT_EMAIL,
-  telephone: CONTACT_PHONE,
+  telephone: CONTACT_PHONE_E164,
   foundingDate: String(ASSOCIATION_FOUNDING_YEAR),
   // Pas de `nonprofitStatus` : l'énumération schema.org ne couvre que les
   // statuts néerlandais, britanniques et américains, rien pour la loi 1901.
@@ -51,12 +45,10 @@ const organizationSchema = {
     "@type": "ContactPoint",
     contactType: "customer support",
     email: CONTACT_EMAIL,
-    telephone: CONTACT_PHONE,
+    telephone: CONTACT_PHONE_E164,
     availableLanguage: ["French"],
   },
-  ...(hasAddress
-    ? { address: { "@type": "PostalAddress", ...ASSOCIATION_ADDRESS } }
-    : {}),
+  address: { "@type": "PostalAddress", ...ASSOCIATION_ADDRESS },
   sameAs: [INSTAGRAM_URL, HELLOASSO_URL],
 };
 

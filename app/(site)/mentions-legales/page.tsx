@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
-import { CONTACT_EMAIL, CONTACT_PHONE } from '@/lib/siteConfig'
+import { CONTACT_EMAIL, CONTACT_PHONE, ASSOCIATION_ADDRESS } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
@@ -32,7 +32,8 @@ export default function MentionsLegalesPage() {
                 <li><strong>Forme juridique :</strong> Association loi 1901 à but non lucratif</li>
                 <li>
                   <strong>Siège social :</strong>{' '}
-                  <span className="text-orange-600 font-semibold">[Adresse du siège social à compléter]</span>
+                  {ASSOCIATION_ADDRESS.streetAddress}, {ASSOCIATION_ADDRESS.postalCode}{' '}
+                  {ASSOCIATION_ADDRESS.addressLocality}
                 </li>
                 <li>
                   <strong>Numéro RNA / SIRET :</strong>{' '}

@@ -190,10 +190,6 @@ proxy.ts            middleware de garde des routes /admin
 
 ## À compléter avant mise en ligne
 
-- Numéro de téléphone (`CONTACT_PHONE` dans `lib/siteConfig.ts`) — c'est aujourd'hui un numéro
-  fictif, et il est publié dans les données structurées lues par Google
-- Adresse du siège (`ASSOCIATION_ADDRESS` dans `lib/siteConfig.ts`) — c'est le principal levier
-  pour remonter sur les recherches locales ; le schéma l'omet tant qu'elle est vide
-- Mentions légales : adresse, numéro RNA/SIRET, nom de la présidente
+- Mentions légales : numéro RNA/SIRET et nom de la présidente (le siège est renseigné)
 - Photos des tuiles « Photo à venir » sur la page Témoignages
 - Compte Instagram à confirmer (`INSTAGRAM_URL` dans `lib/siteConfig.ts`)
