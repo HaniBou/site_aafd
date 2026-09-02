@@ -1,7 +1,13 @@
 import type { Metadata } from 'next'
 import HomeContent from '@/components/HomeContent'
-import { getActualitesAdmin, getPlatsAdmin } from '@/lib/firebase/fetchers'
-import type { Actualite, Plat } from '@/types'
+import {
+  getActualitesAdmin,
+  getMomentsAdmin,
+  getVenteEnCours,
+  getPlatsByVenteAdmin,
+} from '@/lib/firebase/fetchers'
+import { venteEstOuverte } from '@/lib/vente'
+import type { Actualite, Moment, Plat, Vente } from '@/types'
 
 export const revalidate = 60
 
@@ -23,17 +29,34 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   let actualites: Actualite[] = []
   let platsDuMoment: Plat[] = []
+  let venteEnCours: Vente | null = null
+  let moments: Moment[] = []
 
   try {
-    const [actus, plats] = await Promise.all([getActualitesAdmin(), getPlatsAdmin()])
+    const [actus, vente, momentsGalerie] = await Promise.all([
+      getActualitesAdmin(),
+      getVenteEnCours(),
+      getMomentsAdmin(),
+    ])
     actualites = actus
-    // On ne met en avant que ce qui est réellement commandable.
-    platsDuMoment = plats
-      .filter(plat => !plat.cloture && plat.quantite > 0)
-      .slice(0, 3)
+    moments = momentsGalerie
+
+    if (venteEstOuverte(vente)) {
+      venteEnCours = vente
+      platsDuMoment = (await getPlatsByVenteAdmin(vente!.id))
+        .filter(plat => plat.quantite > 0)
+        .slice(0, 3)
+    }
   } catch (error) {
     console.error('[accueil] chargement des données', error)
   }
 
-  return <HomeContent actualites={actualites} platsDuMoment={platsDuMoment} />
+  return (
+    <HomeContent
+      actualites={actualites}
+      platsDuMoment={platsDuMoment}
+      venteEnCours={venteEnCours}
+      moments={moments}
+    />
+  )
 }

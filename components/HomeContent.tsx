@@ -2,19 +2,46 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MainHero } from '@/components/MainHero'
 import { getCategoryStyles } from '@/lib/categoryStyles'
-import type { Actualite, Plat } from '@/types'
+import type { Actualite, Moment, Plat, Vente } from '@/types'
 import { actualiteHref } from '@/lib/slug'
-import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
+import { formatDateJour } from '@/lib/vente'
+import {
+  ASSOCIATION_FOUNDING_YEAR,
+  HELLOASSO_URL,
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+} from '@/lib/siteConfig'
 import { Reveal } from '@/components/Reveal'
 import { CountUp } from '@/components/CountUp'
+
+const PHOTOS_INSTAGRAM_PAR_DEFAUT = [
+  { src: '/images/ensemble.webp', alt: 'Bénévoles et familles réunis' },
+  { src: '/images/petanque.webp', alt: 'Tournoi de pétanque' },
+  { src: '/images/sortie_enfants.webp', alt: 'Sortie avec les enfants' },
+  { src: '/images/nettoyons_1.webp', alt: 'Opération de nettoyage' },
+  { src: '/images/evenement.webp', alt: 'Événement festif de l’association' },
+  { src: '/images/distribution.webp', alt: 'Distribution d’aide matérielle' },
+];
 
 export default function HomeContent({
   actualites,
   platsDuMoment,
+  venteEnCours = null,
+  moments = [],
 }: {
   actualites: Actualite[];
   platsDuMoment: Plat[];
+  venteEnCours?: Vente | null;
+  moments?: Moment[];
 }) {
+  const photosInstagram = [
+    ...moments
+      .filter(moment => moment.image && moment.image !== 'none')
+      .slice(0, 6)
+      .map(moment => ({ src: moment.image, alt: moment.titre })),
+    ...PHOTOS_INSTAGRAM_PAR_DEFAUT,
+  ].slice(0, 6);
+
   const featuredActu =
     actualites.find(actu => actu.aLaUne === true) ??
     [...actualites].sort(
@@ -293,11 +320,22 @@ export default function HomeContent({
         <section className="py-16 md:py-24 bg-white">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-gray-900">Nos plats du moment</h2>
+              <span className="inline-block rounded-full bg-green-100 px-4 py-1.5 text-sm font-bold text-green-800 mb-3">
+                Réservations ouvertes
+              </span>
+              <h2 className="text-gray-900">{venteEnCours?.titre ?? 'Nos plats du moment'}</h2>
               <p className="text-body-large text-gray-600 max-w-2xl mx-auto">
                 Cuisinés par nos bénévoles. Chaque plat acheté finance directement
                 l&apos;accompagnement des familles.
               </p>
+              {venteEnCours?.dateLimiteCommande && (
+                <p className="text-gray-700 font-semibold mt-2">
+                  À réserver avant le {formatDateJour(venteEnCours.dateLimiteCommande)}
+                  {venteEnCours.dateRetrait && (
+                    <> — retrait le {formatDateJour(venteEnCours.dateRetrait)}</>
+                  )}
+                </p>
+              )}
             </div>
 
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
@@ -352,6 +390,80 @@ export default function HomeContent({
           </div>
         </section>
       )}
+
+      {/* Instagram */}
+      <section className="py-20 md:py-24 bg-white overflow-hidden">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 shadow-lg">
+                <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                </svg>
+              </span>
+
+              <h2 className="text-gray-900">L&apos;AAFD est sur Instagram</h2>
+              <p className="mb-4 text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 bg-clip-text text-transparent">
+                {INSTAGRAM_HANDLE}
+              </p>
+              <p className="text-body-large text-gray-600">
+                Les coulisses des ventes de plats, les sorties avec les familles, les appels à
+                bénévoles : on y raconte le quotidien de l&apos;association, en photos.
+                Abonnez-vous et faites-nous connaître autour de vous.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Voir le compte Instagram ${INSTAGRAM_HANDLE} de l'AAFD`}
+              className="mt-12 grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6 rounded-2xl"
+            >
+              {photosInstagram.map((photo, index) => (
+                <div
+                  key={`${photo.src}-${index}`}
+                  className="group/tile relative aspect-square overflow-hidden rounded-xl bg-gray-100"
+                >
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 33vw, (max-width: 1024px) 33vw, 16vw"
+                    className="object-cover transition-transform duration-500 group-hover/tile:scale-110"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover/tile:bg-black/40 group-hover/tile:opacity-100">
+                    <svg className="h-7 w-7 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                  </div>
+                </div>
+              ))}
+            </a>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <div className="mt-10 text-center">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-2xl hover:brightness-110"
+              >
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                </svg>
+                Suivre {INSTAGRAM_HANDLE}
+                <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">

@@ -55,5 +55,6 @@ export async function POST(request: NextRequest) {
   });
 
   revalidatePath('/temoignages');
+  revalidatePath('/');
   return NextResponse.json({ id: docRef.id }, { status: 201 });
 }

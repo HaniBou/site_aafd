@@ -1,9 +1,5 @@
-import { getPlatsAdmin } from '@/lib/firebase/fetchers';
-import PlatList from '@/components/admin/PlatList';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-export default async function AdminPlatsPage() {
-  const plats = await getPlatsAdmin();
-  return <PlatList plats={plats} />;
+export default function AdminPlatsPage() {
+  redirect('/admin/ventes');
 }

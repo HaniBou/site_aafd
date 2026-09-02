@@ -1,7 +1,12 @@
 import type { Metadata } from 'next'
 import VentePlatsPageClient from '@/components/VentePlatsPageClient'
-import { getPlatsAdmin } from '@/lib/firebase/fetchers'
-import type { Plat } from '@/types'
+import {
+  getVenteEnCours,
+  getPlatsByVenteAdmin,
+  getProchaineVenteAnnoncee,
+} from '@/lib/firebase/fetchers'
+import { venteEstOuverte } from '@/lib/vente'
+import type { Plat, Vente } from '@/types'
 
 export const revalidate = 60
 
@@ -19,17 +24,30 @@ export const metadata: Metadata = {
 }
 
 export default async function VentePlatsPage() {
+  let vente: Vente | null = null
   let plats: Plat[] = []
+  let prochaineVente: Vente | null = null
   let loadError = false
 
   try {
-    // Les ventes clôturées restent en base pour l'admin, mais ne sont plus
-    // proposées au public.
-    plats = (await getPlatsAdmin()).filter(plat => !plat.cloture)
+    vente = await getVenteEnCours()
+    if (vente) {
+      plats = await getPlatsByVenteAdmin(vente.id)
+    } else {
+      prochaineVente = await getProchaineVenteAnnoncee()
+    }
   } catch (error) {
-    console.error('[vente-plats] chargement des plats', error)
+    console.error('[vente-plats] chargement de la vente', error)
     loadError = true
   }
 
-  return <VentePlatsPageClient plats={plats} loadError={loadError} />
+  return (
+    <VentePlatsPageClient
+      vente={vente}
+      plats={plats}
+      prochaineVente={prochaineVente}
+      commandesOuvertes={venteEstOuverte(vente)}
+      loadError={loadError}
+    />
+  )
 }

@@ -1,14 +1,24 @@
-import { getReservationsAdmin, getPlatsAdmin } from '@/lib/firebase/fetchers';
+import {
+  getReservationsAdmin,
+  getPlatsAdmin,
+  getVentesAdmin,
+} from '@/lib/firebase/fetchers';
 import ReservationList from '@/components/admin/ReservationList';
+import { etatVente, type VenteAvecEtat } from '@/lib/vente';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminReservationsPage() {
-  // Les plats servent à savoir quelles ventes sont clôturées et à retrouver
-  // le nom à jour d'un plat renommé depuis la réservation.
-  const [reservations, plats] = await Promise.all([
+  const [reservations, plats, ventes] = await Promise.all([
     getReservationsAdmin(),
     getPlatsAdmin(),
+    getVentesAdmin(),
   ]);
-  return <ReservationList reservations={reservations} plats={plats} />;
+
+  const ventesAvecEtat: VenteAvecEtat[] = ventes.map(vente => ({
+    ...vente,
+    etat: etatVente(vente),
+  }));
+
+  return <ReservationList reservations={reservations} plats={plats} ventes={ventesAvecEtat} />;
 }

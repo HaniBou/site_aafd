@@ -5,14 +5,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/client';
 
-const SECTION_LABELS: Record<string, string> = {
-  '/admin': 'Tableau de bord',
-  '/admin/actualites': 'Actualités',
-  '/admin/plats': 'Vente de plats',
-  '/admin/temoignages': 'Témoignages',
-  '/admin/moments': 'Moments partagés',
-  '/admin/reservations': 'Réservations',
-};
+const SECTION_LABELS: [string, string][] = [
+  ['/admin/actualites', 'Actualités'],
+  ['/admin/ventes', 'Ventes de plats'],
+  ['/admin/plats', 'Ventes de plats'],
+  ['/admin/temoignages', 'Témoignages'],
+  ['/admin/moments', 'Moments partagés'],
+  ['/admin/reservations', 'Réservations'],
+];
 
 export default function AdminNav() {
   const pathname = usePathname();
@@ -21,7 +21,8 @@ export default function AdminNav() {
   if (pathname === '/admin/login') return null;
 
   const isHome = pathname === '/admin';
-  const sectionLabel = SECTION_LABELS[pathname] ?? 'Administration';
+  const sectionLabel =
+    SECTION_LABELS.find(([prefixe]) => pathname.startsWith(prefixe))?.[1] ?? 'Administration';
 
   const handleLogout = async () => {
     await fetch('/api/admin/logout', { method: 'POST' });

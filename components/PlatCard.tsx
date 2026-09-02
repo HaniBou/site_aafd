@@ -7,10 +7,16 @@ import type { Plat } from "@/types";
 interface PlatCardProps {
   plat: Plat;
   onReserve: (plat: Plat) => void;
+  reservationOuverte?: boolean;
   iconFallback?: string;
 }
 
-export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: PlatCardProps) {
+export default function PlatCard({
+  plat,
+  onReserve,
+  reservationOuverte = true,
+  iconFallback = "🍽️",
+}: PlatCardProps) {
   const [showOverlay, setShowOverlay] = useState(false);
 
   // Gestion overlay mobile : clic affiche/masque overlay
@@ -96,7 +102,11 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
 
         {/* Badge disponibilité */}
         <div className="absolute top-4 right-4">
-          {plat.quantite > 0 ? (
+          {!reservationOuverte ? (
+            <span className="bg-gray-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+              Réservations closes
+            </span>
+          ) : plat.quantite > 0 ? (
             <span className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
               ✓ Disponible
             </span>
@@ -128,7 +138,7 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
           <div className="text-lg font-bold text-orange-600">
             {plat.prix}€
           </div>
-          {plat.quantite > 0 && (
+          {reservationOuverte && plat.quantite > 0 && (
             <div className="text-xs text-gray-500">
               <span className="font-semibold text-gray-700">{plat.quantite}</span> restant{plat.quantite > 1 ? 's' : ''}
             </div>
@@ -141,13 +151,17 @@ export default function PlatCard({ plat, onReserve, iconFallback = "🍽️" }: 
             onReserve(plat);
           }}
           className={`w-full font-semibold py-2 px-3 rounded-lg text-sm transition-all mt-1 ${
-            plat.quantite > 0
+            reservationOuverte && plat.quantite > 0
               ? 'bg-orange-600 text-white hover:bg-orange-700 active:scale-95 shadow-md hover:shadow-lg'
               : 'bg-gray-200 text-gray-600 cursor-not-allowed'
           }`}
-          disabled={plat.quantite === 0}
+          disabled={!reservationOuverte || plat.quantite === 0}
         >
-          {plat.quantite > 0 ? 'Réserver ce plat' : 'Non disponible'}
+          {!reservationOuverte
+            ? 'Réservations closes'
+            : plat.quantite > 0
+            ? 'Réserver ce plat'
+            : 'Non disponible'}
         </button>
       </div>
     </div>

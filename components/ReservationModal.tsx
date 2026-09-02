@@ -2,15 +2,17 @@
 
 import { useState, useRef, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import type { Plat } from "@/types";
+import type { Plat, Vente } from "@/types";
+import { formatDateHeure } from "@/lib/vente";
 
 type ReservationModalProps = {
   isOpen: boolean;
   plat: Plat | null;
+  vente?: Vente | null;
   onClose: () => void;
 };
 
-export default function ReservationModal({ isOpen, plat, onClose }: ReservationModalProps) {
+export default function ReservationModal({ isOpen, plat, vente, onClose }: ReservationModalProps) {
   const [formData, setFormData] = useState({
     nom: "",
     email: "",
@@ -217,6 +219,14 @@ export default function ReservationModal({ isOpen, plat, onClose }: ReservationM
               <p className="mt-1 text-xs text-gray-600">
                 À régler sur place au moment du retrait.
               </p>
+            </div>
+          )}
+
+          {vente?.dateRetrait && (
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Retrait</p>
+              <p className="text-sm font-semibold text-gray-900">{formatDateHeure(vente.dateRetrait)}</p>
+              {vente.lieuRetrait && <p className="text-sm text-gray-600 mt-0.5">{vente.lieuRetrait}</p>}
             </div>
           )}
 

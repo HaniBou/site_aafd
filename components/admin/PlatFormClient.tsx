@@ -34,11 +34,25 @@ function platToForm(p: Plat): FormState {
 
 type UploadPhase = 'compressing' | 'uploading' | null;
 
-export default function PlatFormClient({ plat }: { plat?: Plat }) {
+const CHAMP =
+  'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 text-base bg-white outline-none transition-colors';
+
+const LABEL = 'block text-base font-bold text-gray-900 mb-1';
+
+const AIDE = 'text-sm text-gray-600 mb-2';
+
+type Props = {
+  plat?: Plat;
+  venteId: string;
+  venteTitre?: string;
+};
+
+export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
   const router = useRouter();
   const notify = useAdminToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const isEditing = !!plat;
+  const retour = `/admin/ventes/${venteId}`;
 
   const [form, setForm] = useState<FormState>(plat ? platToForm(plat) : EMPTY);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -93,6 +107,7 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
       }
 
       const body = {
+        venteId,
         nom: form.nom,
         typeMenu: form.typeMenu,
         cuisiniers: form.cuisiniers,
@@ -117,12 +132,10 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
       }
 
       notify(
-        isEditing
-          ? 'Plat modifiée avec succès'
-          : 'Plat ajoutée avec succès',
+        isEditing ? 'Plat modifié avec succès' : 'Plat ajouté avec succès',
         'success',
       );
-      router.push('/admin/plats');
+      router.push(retour);
       router.refresh();
     } catch (err) {
       // L'image vient d'être envoyée mais le plat n'a pas été enregistré :
@@ -150,8 +163,8 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
         {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
             et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <Link href="/admin/plats"
-            aria-label="Retour aux plats"
+          <Link href={retour}
+            aria-label="Retour à la vente"
             className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -163,6 +176,9 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
 
           <h1 className="text-sm font-bold text-gray-900 truncate min-w-0 mb-0 leading-none">
             {isEditing ? `Modifier « ${plat!.nom} »` : 'Nouveau plat'}
+            {venteTitre && (
+              <span className="font-medium text-gray-500"> — {venteTitre}</span>
+            )}
           </h1>
         </div>
       </div>
@@ -275,120 +291,141 @@ export default function PlatFormClient({ plat }: { plat?: Plat }) {
         </div>
 
         {/* Fields */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
+          <p className="text-base font-bold text-gray-900 pb-1 border-b border-gray-100">Le plat</p>
 
           <div>
-            <label htmlFor="nom-du-plat" className="block text-sm font-semibold text-gray-700 mb-1.5">Nom du plat *</label>
+            <label htmlFor="nom-du-plat" className={LABEL}>
+              Nom du plat <span className="text-orange-600">*</span>
+            </label>
+            <p className={AIDE}>Le nom affiché en gros sur la carte du plat.</p>
             <input id="nom-du-plat"
               type="text"
               value={form.nom}
               onChange={e => setForm({ ...form, nom: e.target.value })}
-              placeholder="Ex : Couscous royal, Tajine d'agneau…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
+              placeholder="Couscous royal"
+              className={CHAMP}
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="type-de-menu" className="block text-sm font-semibold text-gray-700 mb-1.5">Type de menu</label>
-              <input id="type-de-menu"
-                type="text"
-                value={form.typeMenu}
-                onChange={e => setForm({ ...form, typeMenu: e.target.value })}
-                placeholder="Ex : Menu congolais…"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
-              />
-            </div>
-            <div>
-              <label htmlFor="cuisinier-s" className="block text-sm font-semibold text-gray-700 mb-1.5">Cuisinier(s)</label>
-              <input id="cuisinier-s"
-                type="text"
-                value={form.cuisiniers}
-                onChange={e => setForm({ ...form, cuisiniers: e.target.value })}
-                placeholder="Ex : Marie, Jean…"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
-              />
-            </div>
+          <div>
+            <label htmlFor="type-de-menu" className={LABEL}>Type de menu</label>
+            <p className={AIDE}>Facultatif. Affiché en petit sous le nom du plat.</p>
+            <input id="type-de-menu"
+              type="text"
+              value={form.typeMenu}
+              onChange={e => setForm({ ...form, typeMenu: e.target.value })}
+              placeholder="Menu congolais"
+              className={CHAMP}
+            />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">Description *</label>
+            <label htmlFor="cuisinier-s" className={LABEL}>Qui l&apos;a cuisiné</label>
+            <p className={AIDE}>Facultatif. Le site affichera « concocté par… ».</p>
+            <input id="cuisinier-s"
+              type="text"
+              value={form.cuisiniers}
+              onChange={e => setForm({ ...form, cuisiniers: e.target.value })}
+              placeholder="Marie et Jean"
+              className={CHAMP}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="description" className={LABEL}>
+              Description <span className="text-orange-600">*</span>
+            </label>
+            <p className={AIDE}>
+              Les ingrédients, les accompagnements, et surtout les allergènes. Ce texte apparaît
+              quand le visiteur passe sur la photo.
+            </p>
             <textarea id="description"
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows={4}
-              placeholder="Décrivez le plat : ingrédients, accompagnements, allergènes…"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
+              placeholder="Semoule, légumes, poulet et merguez. Contient du gluten."
+              className={`${CHAMP} resize-none`}
               required
             />
           </div>
         </div>
 
         {/* Price & Quantity */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Prix & Stock</p>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
+          <p className="text-base font-bold text-gray-900 pb-1 border-b border-gray-100">Prix et nombre de parts</p>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="prix" className="block text-sm font-semibold text-gray-700 mb-1.5">Prix (€) *</label>
-              <div className="relative">
-                <input id="prix"
-                  type="number"
-                  step="0.50"
-                  min="0"
-                  value={form.prix}
-                  onChange={e => setForm({ ...form, prix: e.target.value })}
-                  placeholder="12.50"
-                  className="w-full pl-4 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
-                  required
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">€</span>
-              </div>
-            </div>
-            <div>
-              <label htmlFor="quantite-disponible" className="block text-sm font-semibold text-gray-700 mb-1.5">Quantité disponible *</label>
-              <input id="quantite-disponible"
+          <div>
+            <label htmlFor="prix" className={LABEL}>
+              Prix d&apos;une part <span className="text-orange-600">*</span>
+            </label>
+            <p className={AIDE}>En euros. Utilisez un point pour les centimes : 12.50</p>
+            <div className="relative max-w-[12rem]">
+              <input id="prix"
                 type="number"
+                step="0.50"
                 min="0"
-                value={form.quantite}
-                onChange={e => setForm({ ...form, quantite: e.target.value })}
-                placeholder="20"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors [appearance:textfield]"
+                inputMode="decimal"
+                value={form.prix}
+                onChange={e => setForm({ ...form, prix: e.target.value })}
+                placeholder="12.50"
+                className={`${CHAMP} pr-9 [appearance:textfield]`}
                 required
               />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-base font-semibold">€</span>
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="quantite-disponible" className={LABEL}>
+              Nombre de parts à vendre <span className="text-orange-600">*</span>
+            </label>
+            <p className={AIDE}>
+              Combien de parts vous pouvez préparer. Le site les décompte tout seul à chaque
+              réservation, et affiche « Épuisé » quand il n&apos;en reste plus.
+            </p>
+            <input id="quantite-disponible"
+              type="number"
+              min="0"
+              inputMode="numeric"
+              value={form.quantite}
+              onChange={e => setForm({ ...form, quantite: e.target.value })}
+              placeholder="20"
+              className={`${CHAMP} max-w-[12rem] [appearance:textfield]`}
+              required
+            />
           </div>
         </div>
 
         {/* Submit */}
-        <div className="flex gap-3 pb-8">
-          <Link
-            href="/admin/plats"
-            className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center"
-          >
-            Annuler
-          </Link>
+        <div className="pb-8">
           <button
             type="submit"
             disabled={busy || isUploading}
-            className="flex-[2] bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white py-3.5 rounded-xl text-sm font-bold transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-md"
+            className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white py-4 rounded-xl text-base font-bold transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-sm"
           >
             {busy && !isUploading && (
-              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             )}
             {isUploading
-              ? 'Upload en cours…'
+              ? 'Envoi de la photo en cours…'
               : busy
               ? 'Enregistrement…'
               : isEditing
               ? 'Enregistrer les modifications'
-              : 'Ajouter le plat'}
+              : 'Ajouter ce plat à la vente'}
           </button>
+
+          <Link
+            href={retour}
+            className="mt-3 block w-full py-3.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors text-base font-semibold text-center"
+          >
+            Annuler et revenir en arrière
+          </Link>
         </div>
       </form>
     </div>

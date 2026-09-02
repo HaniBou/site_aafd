@@ -52,6 +52,7 @@ export async function PUT(
   }
 
   revalidatePath('/temoignages');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }
 
@@ -73,5 +74,6 @@ export async function DELETE(
   await deleteCloudinaryImage(imageUrl);
 
   revalidatePath('/temoignages');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }

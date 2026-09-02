@@ -32,8 +32,17 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { nom, description, typeMenu, cuisiniers, quantite, prix, image } = body;
+  const { venteId, nom, description, typeMenu, cuisiniers, quantite, prix, image } = body;
+
+  if (!venteId || typeof venteId !== 'string') {
+    return NextResponse.json({ error: 'Un plat doit être rattaché à une vente.' }, { status: 400 });
+  }
+  if (!(await adminDb.collection('ventes').doc(venteId).get()).exists) {
+    return NextResponse.json({ error: 'Vente introuvable.' }, { status: 404 });
+  }
+
   const docRef = await adminDb.collection('plats').add({
+    venteId,
     nom: String(nom ?? ''),
     description: String(description ?? ''),
     typeMenu: String(typeMenu ?? ''),
@@ -45,5 +54,6 @@ export async function POST(request: NextRequest) {
   });
 
   revalidatePath('/vente-plats');
+  revalidatePath('/');
   return NextResponse.json({ id: docRef.id }, { status: 201 });
 }

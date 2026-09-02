@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {
   getActualitesAdmin,
-  getPlatsAdmin,
+  getVentesAdmin,
   getReservationsAdmin,
   getTemoignagesAdmin,
   getMomentsAdmin,
@@ -22,10 +22,10 @@ const SECTIONS = [
     ),
   },
   {
-    href: '/admin/plats',
-    label: 'Vente de plats',
-    desc: 'Plats à vendre, prix, quantités',
-    addLabel: '+ Ajouter un plat',
+    href: '/admin/ventes',
+    label: 'Ventes de plats',
+    desc: 'Une vente = ses plats, ses dates, son retrait',
+    addLabel: '+ Créer une vente',
     color: 'orange',
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
@@ -76,8 +76,8 @@ const COLOR: Record<string, { bg: string; text: string; badge: string; btn: stri
 };
 
 export default async function AdminDashboard() {
-  const [plats, actualites, temoignages, moments, reservations] = await Promise.all([
-    getPlatsAdmin(),
+  const [ventes, actualites, temoignages, moments, reservations] = await Promise.all([
+    getVentesAdmin(),
     getActualitesAdmin(),
     getTemoignagesAdmin(),
     getMomentsAdmin(),
@@ -87,7 +87,7 @@ export default async function AdminDashboard() {
   // Même ordre que SECTIONS
   const counts = [
     actualites.length,
-    plats.length,
+    ventes.length,
     temoignages.length,
     moments.length,
     reservations.length,
@@ -180,8 +180,17 @@ export default async function AdminDashboard() {
               title: 'Réservations de plats',
               steps: [
                 'Les commandes arrivent automatiquement',
-                'Téléchargez le CSV pour imprimer la liste',
+                'Bouton "Tableau Excel" pour télécharger la liste',
                 '"Annuler" remet la quantité en stock',
+              ],
+            },
+            {
+              title: 'Organiser une vente',
+              steps: [
+                'Créez la vente : titre, date limite, date et lieu de retrait',
+                'Ajoutez-lui ses plats (ou dupliquez la vente précédente)',
+                'Cliquez "Mettre en ligne" : la page Nos plats s\'active',
+                'Après la distribution, cliquez "Clôturer"',
               ],
             },
           ].map(block => (

@@ -45,13 +45,13 @@ export default function ConfirmModal({
           )}
         </div>
 
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-        <p className="text-sm text-gray-500 mb-7 leading-relaxed">{message}</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+        <p className="text-base text-gray-700 mb-7 leading-relaxed">{message}</p>
 
         <div className="flex flex-col gap-3">
           <button
             onClick={onConfirm}
-            className={`w-full py-3 rounded-xl text-white text-sm font-semibold transition-colors ${
+            className={`w-full py-4 rounded-xl text-white text-base font-bold transition-colors ${
               danger
                 ? 'bg-red-600 hover:bg-red-700 active:bg-red-800'
                 : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800'
@@ -61,7 +61,7 @@ export default function ConfirmModal({
           </button>
           <button
             onClick={onCancel}
-            className="w-full py-3 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="w-full py-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors text-base font-semibold"
           >
             {cancelLabel}
           </button>

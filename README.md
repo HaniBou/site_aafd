@@ -96,7 +96,10 @@ d'envoyer que vers l'adresse propriétaire du compte : toute réservation d'un v
 ## Administration
 
 - Accès : `/admin`, ou le lien « Espace bénévoles » en bas de chaque page publique.
-- Gestion des plats, actualités, témoignages, moments et réservations (avec vue impression et export).
+- Gestion des ventes de plats, actualités, témoignages, moments et réservations (avec vue impression et export).
+- Une **vente** regroupe ses plats, sa date limite de commande, sa date et son lieu de retrait.
+  Elle reste invisible du public tant qu'elle n'est pas mise en ligne ; hors vente ouverte, la page
+  `/vente-plats` annonce la prochaine. Une seule vente peut être en ligne à la fois.
 - Interface dimensionnée pour des bénévoles peu à l'aise avec l'informatique : corps de texte
   large, cibles tactiles d'au moins 44 px, boutons libellés plutôt qu'icônes seules.
 

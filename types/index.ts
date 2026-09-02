@@ -1,5 +1,19 @@
+export type StatutVente = 'brouillon' | 'ouverte' | 'fermee';
+
+export type Vente = {
+  id: string;
+  titre: string;
+  statut: StatutVente;
+  dateLimiteCommande?: string;
+  dateRetrait?: string;
+  lieuRetrait?: string;
+  message?: string;
+  createdAt?: string;
+};
+
 export type Plat = {
   id: string;
+  venteId?: string;
   nom: string;
   typeMenu?: string;
   cuisiniers?: string;
@@ -9,8 +23,6 @@ export type Plat = {
   prix: number;
   image?: string;
   dateAjout?: string;
-  /** Vente terminée : le plat n'est plus proposé sur le site public. */
-  cloture?: boolean;
 };
 
 export type Actualite = {
@@ -39,6 +51,8 @@ export type Reservation = {
   id: string;
   platNom: string;
   platId: string;
+  venteId?: string;
+  venteTitre?: string;
   clientNom: string;
   clientEmail: string;
   clientTelephone: string;

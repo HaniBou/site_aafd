@@ -3,6 +3,8 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '@/lib/firebase/admin';
 import { rateLimit } from '@/lib/rateLimit';
 import { sendReservationEmails } from '@/lib/emails/reservation';
+import { venteEstOuverte } from '@/lib/vente';
+import type { Vente } from '@/types';
 
 export const runtime = 'nodejs';
 
@@ -50,11 +52,13 @@ export async function POST(request: NextRequest) {
 
   const PLAT_INTROUVABLE = "Ce plat n'existe plus.";
   const STOCK_INSUFFISANT = 'Il ne reste plus assez de portions disponibles.';
+  const VENTE_FERMEE = 'Les commandes de cette vente sont closes.';
 
   const platRef = adminDb.collection('plats').doc(platId);
   const reservationRef = adminDb.collection('reservations').doc();
 
   let platNom = '';
+  let venteRetenue: Vente | null = null;
 
   try {
     // Transaction atomique : vérification du stock + décrément + création
@@ -67,6 +71,16 @@ export async function POST(request: NextRequest) {
       const data = platDoc.data()!;
       platNom = (data.nom as string) ?? '';
       const currentQty = (data.quantite as number) ?? 0;
+      const venteId = (data.venteId as string) ?? '';
+
+      if (!venteId) throw new Error(VENTE_FERMEE);
+
+      const venteDoc = await transaction.get(adminDb.collection('ventes').doc(venteId));
+      if (!venteDoc.exists) throw new Error(VENTE_FERMEE);
+
+      const vente = { id: venteDoc.id, ...venteDoc.data() } as Vente;
+      if (!venteEstOuverte(vente)) throw new Error(VENTE_FERMEE);
+      venteRetenue = vente;
 
       if (currentQty < quantite) {
         throw new Error(STOCK_INSUFFISANT);
@@ -76,6 +90,8 @@ export async function POST(request: NextRequest) {
       transaction.set(reservationRef, {
         platId,
         platNom,
+        venteId,
+        venteTitre: vente.titre ?? '',
         clientNom,
         clientEmail,
         clientTelephone,
@@ -88,7 +104,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     const reason = error instanceof Error ? error.message : '';
-    if (reason === PLAT_INTROUVABLE || reason === STOCK_INSUFFISANT) {
+    if (reason === PLAT_INTROUVABLE || reason === STOCK_INSUFFISANT || reason === VENTE_FERMEE) {
       return NextResponse.json({ error: reason }, { status: 409 });
     }
     console.error('[reservations] transaction', error);
@@ -100,6 +116,8 @@ export async function POST(request: NextRequest) {
 
   // La réservation est enregistrée : l'échec des emails ne doit plus la remettre
   // en cause, on se contente de le tracer sur le document.
+  const vente = venteRetenue as Vente | null;
+
   const emails = await sendReservationEmails({
     platNom,
     clientNom,
@@ -107,6 +125,9 @@ export async function POST(request: NextRequest) {
     clientTelephone,
     quantite,
     message,
+    venteTitre: vente?.titre,
+    dateRetrait: vente?.dateRetrait,
+    lieuRetrait: vente?.lieuRetrait,
   });
 
   await reservationRef

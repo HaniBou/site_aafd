@@ -1,6 +1,7 @@
 import { adminDb } from './admin';
 import { buildSlug } from '@/lib/slug';
-import type { Plat, Actualite, Temoignage, Reservation, Moment } from '@/types';
+import { retraitAVenir } from '@/lib/vente';
+import type { Plat, Actualite, Temoignage, Reservation, Moment, Vente } from '@/types';
 
 // Firestore Timestamps are class instances — Next.js cannot pass them from
 // Server Components to Client Components. Convert every Timestamp to an ISO string.
@@ -18,6 +19,49 @@ function serializeDoc(data: Record<string, unknown>): Record<string, unknown> {
     }
   }
   return out;
+}
+
+export async function getVenteByIdAdmin(id: string): Promise<Vente | null> {
+  const doc = await adminDb.collection('ventes').doc(id).get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...serializeDoc(doc.data()!) } as Vente;
+}
+
+export async function getVentesAdmin(): Promise<Vente[]> {
+  const snap = await adminDb.collection('ventes').get();
+  const items = snap.docs.map(
+    doc => ({ id: doc.id, ...serializeDoc(doc.data()) } as Vente),
+  );
+  return items.sort((a, b) =>
+    (b.dateRetrait ?? b.createdAt ?? '').localeCompare(a.dateRetrait ?? a.createdAt ?? ''),
+  );
+}
+
+export async function getVenteEnCours(): Promise<Vente | null> {
+  const snap = await adminDb.collection('ventes').where('statut', '==', 'ouverte').get();
+  if (snap.empty) return null;
+  const items = snap.docs
+    .map(doc => ({ id: doc.id, ...serializeDoc(doc.data()) } as Vente))
+    .sort((a, b) => (a.dateRetrait ?? '').localeCompare(b.dateRetrait ?? ''));
+  return items[0];
+}
+
+export async function getProchaineVenteAnnoncee(): Promise<Vente | null> {
+  const snap = await adminDb.collection('ventes').where('statut', '==', 'brouillon').get();
+  if (snap.empty) return null;
+  const items = snap.docs
+    .map(doc => ({ id: doc.id, ...serializeDoc(doc.data()) } as Vente))
+    .filter(vente => retraitAVenir(vente))
+    .sort((a, b) => (a.dateRetrait ?? '').localeCompare(b.dateRetrait ?? ''));
+  return items[0] ?? null;
+}
+
+export async function getPlatsByVenteAdmin(venteId: string): Promise<Plat[]> {
+  const snap = await adminDb.collection('plats').where('venteId', '==', venteId).get();
+  const items = snap.docs.map(
+    doc => ({ id: doc.id, ...serializeDoc(doc.data()) } as Plat),
+  );
+  return items.sort((a, b) => (a.dateAjout ?? '').localeCompare(b.dateAjout ?? ''));
 }
 
 export async function getPlatByIdAdmin(id: string): Promise<Plat | null> {

@@ -66,5 +66,6 @@ async function cancelReservation(id: string, data: FirebaseFirestore.DocumentDat
   await batch.commit();
 
   revalidatePath('/vente-plats');
+  revalidatePath('/');
   return NextResponse.json({ success: true, stockRestitue: platExiste });
 }

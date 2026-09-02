@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/session';
-import { deleteCloudinaryImage } from '@/lib/cloudinary';
+import { deletePlatImageIfUnused } from '@/lib/platImages';
 
 export const runtime = 'nodejs';
 
@@ -26,7 +26,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { nom, description, typeMenu, cuisiniers, quantite, prix, image, cloture } = body;
+  const { nom, description, typeMenu, cuisiniers, quantite, prix, image } = body;
   const update: Record<string, unknown> = {};
   if (nom !== undefined) update.nom = String(nom);
   if (description !== undefined) update.description = String(description);
@@ -35,7 +35,6 @@ export async function PUT(
   if (quantite !== undefined) update.quantite = Number(quantite);
   if (prix !== undefined) update.prix = Number(prix);
   if (image !== undefined) update.image = image ? String(image) : null;
-  if (cloture !== undefined) update.cloture = Boolean(cloture);
 
   const existing = await adminDb.collection('plats').doc(id).get();
   const oldImage = existing.data()?.image as string | undefined;
@@ -43,9 +42,10 @@ export async function PUT(
   await adminDb.collection('plats').doc(id).update(update);
 
   if (image !== undefined && image !== oldImage) {
-    await deleteCloudinaryImage(oldImage);
+    await deletePlatImageIfUnused(oldImage, id);
   }
   revalidatePath('/vente-plats');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }
 
@@ -64,8 +64,9 @@ export async function DELETE(
   const imageUrl = existing.data()?.image as string | undefined;
 
   await adminDb.collection('plats').doc(id).delete();
-  await deleteCloudinaryImage(imageUrl);
+  await deletePlatImageIfUnused(imageUrl, id);
 
   revalidatePath('/vente-plats');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }
