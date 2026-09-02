@@ -51,12 +51,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
-    {
-      url: `${siteUrl}/mentions-legales`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
+    // Ni /mentions-legales ni /nous-soutenir : elles sont en `noindex`.
+    // Soumettre au sitemap une page qu'on demande par ailleurs de ne pas indexer
+    // fait remonter un avertissement dans Search Console.
   ]
 
   let actualitePages: MetadataRoute.Sitemap = []
