@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 
 export function MainHero() {
   return (
@@ -40,7 +41,7 @@ export function MainHero() {
             <p className="text-white text-base md:text-lg leading-relaxed drop-shadow-lg">
               Accompagner, soutenir et créer du lien avec les{' '}
               <span className="text-white font-semibold">familles réfugiées</span>{' '}
-              depuis 19 ans.
+              depuis {ASSOCIATION_FOUNDING_YEAR}.
             </p>
           </div>
 
@@ -53,7 +54,7 @@ export function MainHero() {
               Devenir bénévole
             </Link>
             <a
-              href="https://www.helloasso.com/associations/association-d-aide-aux-familles-en-difficulte-en-val-de-saone"
+              href={HELLOASSO_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-bold rounded-full bg-pink-600 text-white hover:bg-pink-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105"

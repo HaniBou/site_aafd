@@ -126,12 +126,12 @@ export default function NousRejoindre() {
 
     <div className="relative border-l-2 border-blue-100 ml-4 md:ml-0 md:left-1/2">
       {[
+        { title: "Scolarité des enfants", desc: "Suivi scolaire des enfants et lien avec les établissements du territoire." },
+        { title: "Aide aux tâches administratives", desc: "Accompagnement de nos familles dans leurs démarches et leurs rendez-vous officiels." },
+        { title: "Logements", desc: "Recherche de logements et aide au financement des cautions et des loyers." },
         { title: "Organisation d'événements", desc: "Ventes de plats, tournois de pétanque et actions environnementales." },
-        { title: "Accompagnement administratif", desc: "Aide aux démarches, traduction de documents et rendez-vous officiels." },
-        { title: "Cours de français", desc: "Enseignement du FLE pour faciliter l'intégration des familles." },
         { title: "Communication & réseaux sociaux", desc: "Rayonnement de l'association et création de contenus digitaux." },
-        { title: "Recherche de partenariats", desc: "Développement du réseau avec les entreprises et collectivités." },
-        { title: "Logistique & coordination", desc: "Gestion des stocks, transports et entraide entre bénévoles." }
+        { title: "Recherche de partenariats", desc: "Développement du réseau avec les entreprises et collectivités." }
       ].map((mission, idx) => (
         <div key={idx} className="mb-12 last:mb-0 relative group">
           {/* Le point sur la ligne */}

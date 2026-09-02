@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     default: "AAFD Val de Saône - Association d'Aide aux Familles en Difficulté",
     template: "%s | AAFD Val de Saône",
   },
-  description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 19 ans : soutien administratif, vente de plats cuisinés, événements festifs, cours de français et aide matérielle.",
+  description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 2007 : soutien administratif, scolarité des enfants, vente de plats cuisinés, événements festifs et aide matérielle.",
   keywords: ["association", "familles réfugiées", "Val de Saône", "bénévoles", "aide humanitaire", "AAFD", "solidarité", "réfugiés"],
   authors: [{ name: "AAFD Val de Saône" }],
   creator: "AAFD Val de Saône",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "AAFD Val de Saône",
     title: "AAFD Val de Saône - Association d'Aide aux Familles en Difficulté",
-    description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 19 ans : vente de plats, événements festifs et aide matérielle.",
+    description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 2007 : vente de plats, événements festifs et aide matérielle.",
     images: [
       {
         url: '/opengraph-image',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "AAFD Val de Saône - Association d'Aide aux Familles en Difficulté",
-    description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 19 ans.",
+    description: "L'AAFD accompagne les familles réfugiées sur le Val de Saône depuis 2007.",
     images: ['/opengraph-image'],
   },
   alternates: {

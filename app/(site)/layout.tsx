@@ -23,7 +23,7 @@ const organizationSchema = {
   name: `${ASSOCIATION_NAME} Val de Saône`,
   alternateName: ASSOCIATION_FULL_NAME,
   description:
-    "Association loi 1901 qui accompagne les familles réfugiées sur le Val de Saône : soutien administratif, vente de plats cuisinés, événements festifs, cours de français et aide matérielle.",
+    "Association loi 1901 qui accompagne les familles réfugiées sur le Val de Saône : soutien administratif, scolarité des enfants, vente de plats cuisinés, événements festifs et aide matérielle.",
   url: SITE_URL,
   logo: {
     "@type": "ImageObject",

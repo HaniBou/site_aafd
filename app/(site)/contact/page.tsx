@@ -1,11 +1,20 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
-import { CONTACT_EMAIL, CONTACT_PHONE, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/siteConfig'
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  CONTACT_PERSON,
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+  HELLOASSO_URL,
+} from '@/lib/siteConfig'
+import { LIENS_UTILES, ACCENTS_LIENS, domaineLisible } from '@/lib/liensUtiles'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: "Contactez l'AAFD Val de Saône pour toute question, demande d'aide ou proposition de bénévolat. Téléphone, email et formulaire disponibles.",
+  description: "Contactez l'AAFD Val de Saône pour toute question, demande d'aide ou proposition de bénévolat. Téléphone, email, formulaire et liens vers d'autres sites utiles.",
   alternates: { canonical: '/contact' },
   openGraph: { title: 'Contact | AAFD Val de Saône', description: "Contactez l'AAFD pour toute question ou proposition de bénévolat.", url: '/contact' },
 }
@@ -47,6 +56,9 @@ export default function ContactPage() {
         <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
           {CONTACT_PHONE}
         </a>
+        {CONTACT_PERSON && (
+          <p className="text-sm text-gray-600 mt-0.5">{CONTACT_PERSON}</p>
+        )}
       </div>
     </div>
 
@@ -80,6 +92,27 @@ export default function ContactPage() {
       </div>
     </div>
   </div>
+
+  {/* Don HelloAsso : traité comme une action, pas comme une coordonnée,
+      sinon le lien se perd au milieu du téléphone et de l'email. */}
+  <div className="mt-10 rounded-2xl border border-pink-100 bg-pink-50/60 p-6">
+    <h3 className="text-lg font-bold text-gray-900 mb-2">Soutenir l&apos;association</h3>
+    <p className="text-sm text-gray-600 mb-5 leading-relaxed">
+      Vos dons financent directement l&apos;aide matérielle aux familles :
+      transports, assurances, frais d&apos;avocats, hébergement.
+    </p>
+    <a
+      href={HELLOASSO_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-full bg-pink-600 px-6 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-pink-700 hover:shadow-xl"
+    >
+      Faire un don sur HelloAsso
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+      </svg>
+    </a>
+  </div>
 </div>
 
             {/* Colonne de droite - Formulaire */}
@@ -96,6 +129,99 @@ export default function ContactPage() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* Liens vers d'autres sites utiles */}
+      {/* Fond blanc franc : les halos flous d'origine dataient des tuiles sans
+          logo, qui avaient besoin d'une assise colorée. Les logos apportent
+          maintenant la couleur, et l'orange dilué virait au jaune sale. */}
+      <section className="bg-white py-16 md:py-24">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-14 text-center">
+            <span className="mb-4 block text-sm font-medium uppercase tracking-[0.2em] text-blue-900">
+              Ressources
+            </span>
+            <h2 className="text-gray-900">Liens vers d&apos;autres sites utiles</h2>
+            <p className="text-body-large mx-auto max-w-2xl text-gray-600">
+              L&apos;AAFD ne peut pas répondre à tout. Voici les structures vers lesquelles
+              nous orientons régulièrement les familles et les bénévoles.
+            </p>
+          </div>
+
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {LIENS_UTILES.map((lien) => {
+              const accent = ACCENTS_LIENS[lien.accent]
+              return (
+                <li key={lien.url}>
+                  <a
+                    href={lien.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    {/* Zone logo de hauteur fixe : elle aligne les tuiles entre
+                        elles quelles que soient les proportions du logo, qui
+                        s'y centre dans les deux axes à sa propre hauteur. */}
+                    <div className="mb-5 flex h-20 items-center justify-center">
+                      {lien.logo?.endsWith('.svg') ? (
+                        /* Les SVG ne passent pas par l'optimiseur de Next
+                           (dangerouslyAllowSVG désactivé, et l'activer
+                           ouvrirait aussi les envois Cloudinary de l'admin).
+                           Une balise img sert directement le fichier : sur un
+                           logo vectoriel il n'y a de toute façon rien à
+                           optimiser. */
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={lien.logo}
+                          alt=""
+                          className={`${lien.hauteurLogo ?? 'h-12'} w-auto max-w-full object-contain`}
+                        />
+                      ) : lien.logo ? (
+                        <Image
+                          src={lien.logo}
+                          alt=""
+                          width={240}
+                          height={80}
+                          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 22vw"
+                          className={`${lien.hauteurLogo ?? 'h-12'} w-auto max-w-full object-contain ${lien.fondOpaque ? 'rounded-lg' : ''}`}
+                        />
+                      ) : (
+                        <span className={`text-xl font-bold leading-tight ${accent.repli}`}>
+                          {lien.nom}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Le nom est redonné sous le logo, car plusieurs de ces
+                        logotypes sont illisibles à cette taille. Inutile quand
+                        c'est déjà le nom qui occupe la zone du logo. */}
+                    {lien.logo && (
+                      <p className="font-bold text-gray-900">{lien.nom}</p>
+                    )}
+                    <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                      {lien.description}
+                    </p>
+
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+                      <span className="truncate font-mono text-xs text-gray-400">
+                        {domaineLisible(lien.url)}
+                      </span>
+                      <span className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-all duration-300 ${accent.fleche}`}>
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 17L17 7M17 7H9m8 0v8" />
+                        </svg>
+                      </span>
+                    </div>
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+
+          <p className="mt-8 text-center text-sm text-gray-500">
+            Ces sites sont indépendants de l&apos;AAFD. Les liens s&apos;ouvrent dans un nouvel onglet.
+          </p>
         </div>
       </section>
     </main>

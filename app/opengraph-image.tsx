@@ -1,13 +1,11 @@
 import { ImageResponse } from 'next/og'
-import { yearsOfAction } from '@/lib/siteConfig'
+import { ASSOCIATION_FOUNDING_YEAR } from '@/lib/siteConfig'
 
 export const alt = "AAFD Val de Saône - Association d'Aide aux Familles en Difficulté"
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default function Image() {
-  const years = yearsOfAction()
-
   return new ImageResponse(
     (
       <div
@@ -80,7 +78,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          Accompagner les familles réfugiées depuis {years} ans
+          Accompagner les familles réfugiées depuis {ASSOCIATION_FOUNDING_YEAR}
         </p>
 
         {/* Stats row */}
@@ -91,8 +89,7 @@ export default function Image() {
           }}
         >
           {[
-            { value: String(years), label: 'ans' },
-            { value: '150', label: 'repas/mois' },
+            { value: String(ASSOCIATION_FOUNDING_YEAR), label: 'depuis' },
             { value: '10+', label: 'nationalités' },
             { value: '100%', label: 'bénévoles' },
           ].map((stat) => (

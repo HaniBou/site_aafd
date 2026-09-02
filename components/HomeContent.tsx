@@ -4,7 +4,7 @@ import { MainHero } from '@/components/MainHero'
 import { getCategoryStyles } from '@/lib/categoryStyles'
 import type { Actualite, Plat } from '@/types'
 import { actualiteHref } from '@/lib/slug'
-import { HELLOASSO_URL } from '@/lib/siteConfig'
+import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 import { Reveal } from '@/components/Reveal'
 import { CountUp } from '@/components/CountUp'
 
@@ -269,14 +269,12 @@ export default function HomeContent({
           <div className="text-center mb-12">
             <h2>L&apos;AAFD en chiffres</h2>
           </div>
-          <div className="grid gap-8 md:grid-cols-4">
+          <div className="grid gap-8 md:grid-cols-3">
             <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400"><CountUp value={17} /></div>
-              <div className="text-lg text-blue-100">années d&apos;expérience</div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400"><CountUp value={150} /></div>
-              <div className="text-lg text-blue-100">repas vendus par mois</div>
+              {/* Année affichée telle quelle, sans compteur animé : voir défiler
+                  0 → 2007 se lit comme un nombre, pas comme une date. */}
+              <div className="mb-2 text-5xl font-bold text-orange-400">{ASSOCIATION_FOUNDING_YEAR}</div>
+              <div className="text-lg text-blue-100">année de création</div>
             </div>
             <div className="text-center">
               <div className="mb-2 text-5xl font-bold text-orange-400"><CountUp value={10} suffix="+" /></div>

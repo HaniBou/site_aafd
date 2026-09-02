@@ -2,13 +2,13 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
-import { HELLOASSO_URL } from '@/lib/siteConfig'
+import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Notre association',
-  description: "Découvrez l'histoire, la mission et les actions de l'AAFD Val de Saône : 19 ans d'accompagnement des familles réfugiées, 100% bénévoles.",
+  description: "Découvrez l'histoire, la mission et les actions de l'AAFD Val de Saône : depuis 2007, l'accompagnement des familles réfugiées, 100% bénévoles.",
   alternates: { canonical: '/notre-association' },
-  openGraph: { title: 'Notre association | AAFD Val de Saône', description: "19 ans d'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
+  openGraph: { title: 'Notre association | AAFD Val de Saône', description: "Depuis 2007, l'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
 }
 
 export default function NotreAssociationPage() {
@@ -16,7 +16,7 @@ export default function NotreAssociationPage() {
     <main className="min-h-screen bg-white">
       <PageHero
         title="Notre association"
-        description="Depuis 19 ans, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône."
+        description={`Depuis ${ASSOCIATION_FOUNDING_YEAR}, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône.`}
         imageSrc="/images/hero_nous_connaitre.webp"
         imageAlt="Notre association AAFD"
       />
@@ -26,11 +26,11 @@ export default function NotreAssociationPage() {
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 md:grid-cols-2 items-center">
             <div>
-              <span className="text-blue-900 font-medium tracking-[0.2em] uppercase text-sm mb-4 block">Depuis 2007</span>
+              <span className="text-blue-900 font-medium tracking-[0.2em] uppercase text-sm mb-4 block">Depuis {ASSOCIATION_FOUNDING_YEAR}</span>
               <h2 className="text-gray-900 mb-6">Notre histoire</h2>
               <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
-                  Depuis <strong>19 ans</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté
+                  Depuis <strong>{ASSOCIATION_FOUNDING_YEAR}</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté
                   œuvre sur le territoire du Val de Saône pour accompagner les personnes en situation de précarité.
                 </p>
                 <p>
@@ -82,7 +82,7 @@ export default function NotreAssociationPage() {
               </h2>
               <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-light italic">
                 <p>
-                  Depuis 19 ans, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
+                  Depuis {ASSOCIATION_FOUNDING_YEAR}, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
                   Nous ne nous contentons pas d&apos;accompagner, nous tissons des liens de fraternité qui
                   dépassent les frontières et les parcours de vie.
                 </p>
@@ -115,22 +115,17 @@ export default function NotreAssociationPage() {
             {/* Ventes de plats */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <span className="text-orange-500 font-bold tracking-widest uppercase text-xs mb-3 block">Mensuel</span>
+                <span className="text-orange-500 font-bold tracking-widest uppercase text-xs mb-3 block">Environ tous les 2 mois</span>
                 <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ventes de plats traditionnels</h3>
                 <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                   <p>
-                    Chaque mois, nous organisons des <strong>ventes de plats traditionnels</strong> cuisinés
+                    Environ tous les deux mois, nous organisons des <strong>ventes de plats traditionnels</strong> cuisinés
                     par les familles que nous accompagnons.
                   </p>
                   <p>
                     Une occasion de découvrir les saveurs d&apos;<strong>Albanie, du Kosovo, de Bosnie, d&apos;Arménie,
                     d&apos;Algérie, de Guinée</strong> et d&apos;autres pays, tout en soutenant concrètement nos actions.
                   </p>
-                  <div className="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg not-italic">
-                    <p className="text-orange-800 font-medium text-sm">
-                      Plus de <strong>150 repas</strong> vendus par mois grâce à la mobilisation de nos bénévoles.
-                    </p>
-                  </div>
                 </div>
                 <Link
                   href="/vente-plats"
@@ -210,18 +205,18 @@ export default function NotreAssociationPage() {
             {[
               {
                 icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-                title: 'Accompagnement administratif',
-                desc: 'Aide aux démarches administratives, traduction de documents, accompagnement aux rendez-vous officiels.',
+                title: 'Aide aux tâches administratives',
+                desc: 'Aide aux démarches administratives de nos familles et accompagnement aux rendez-vous officiels.',
               },
               {
                 icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-                title: 'Aide au logement',
-                desc: 'Recherche de logements, médiation avec les propriétaires, aide au financement des cautions et loyers.',
+                title: 'Logements',
+                desc: 'Recherche de logements et aide au financement des cautions et des loyers.',
               },
               {
                 icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-                title: 'Cours de français',
-                desc: 'Organisation de cours de français pour faciliter l\'intégration et l\'autonomie des familles.',
+                title: 'Scolarité des enfants',
+                desc: 'Suivi de la scolarité des enfants et lien avec les établissements du Val de Saône.',
               },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="flex items-start gap-5 py-6">

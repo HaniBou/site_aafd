@@ -3,11 +3,15 @@
 
 export const CONTACT_EMAIL = "contact@entraide-aafd-valdesaone.fr";
 
-export const CONTACT_PHONE = "06 88 27 38 88";
+export const CONTACT_PHONE = "06 81 21 80 24";
+
+// Bénévole joignable sur ce numéro, affichée sous le téléphone de la page
+// Contact. Mettre la chaîne à "" fait disparaître la ligne sans autre retouche.
+export const CONTACT_PERSON = "Sylvie Orgeret";
 
 // Même numéro au format international, pour les données structurées : Google
 // rapproche mieux une fiche d'établissement d'un numéro en +33 que d'un 06.
-export const CONTACT_PHONE_E164 = "+33688273888";
+export const CONTACT_PHONE_E164 = "+33681218024";
 
 export const INSTAGRAM_HANDLE = "@aafd_asso";
 export const INSTAGRAM_URL = "https://www.instagram.com/aafd_asso/";
@@ -26,15 +30,11 @@ export const ASSOCIATION_NAME = "AAFD";
 export const ASSOCIATION_FULL_NAME =
   "Association d'Aide aux Familles en Difficulté";
 
-// Année de création, affichée sur « Notre association ».
+// Année de création. Le site dit « depuis 2007 » et jamais « depuis N ans » :
+// une ancienneté en années doit être corrigée chaque janvier dans chaque page,
+// et c'est ainsi que la carte de partage a fini par annoncer 17 ans quand le
+// site en annonçait 19.
 export const ASSOCIATION_FOUNDING_YEAR = 2007;
-
-// Le « depuis N ans » se calcule, sinon il faut le corriger à la main chaque
-// janvier dans chaque page — c'est ainsi que la carte de partage a fini par
-// annoncer 17 ans quand le site en annonçait 19.
-export function yearsOfAction(): number {
-  return new Date().getFullYear() - ASSOCIATION_FOUNDING_YEAR;
-}
 
 // Adresse du siège. Elle alimente les données structurées lues par Google :
 // c'est ce qui permet à l'association de remonter sur les recherches locales
