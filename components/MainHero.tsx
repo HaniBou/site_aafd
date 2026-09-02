@@ -40,7 +40,7 @@ export function MainHero() {
             <p className="text-white text-base md:text-lg leading-relaxed drop-shadow-lg">
               Accompagner, soutenir et créer du lien avec les{' '}
               <span className="text-white font-semibold">familles réfugiées</span>{' '}
-              depuis 17 ans.
+              depuis 19 ans.
             </p>
           </div>
 

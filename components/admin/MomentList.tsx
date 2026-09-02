@@ -49,13 +49,13 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 mb-0">Moments partagés</h1>
-            <p className="text-sm text-gray-600 mt-0.5">
+            <h1 className="text-2xl font-bold text-gray-900 mb-0">Moments partagés</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
               {moments.length} photo{moments.length > 1 ? 's' : ''} — galerie en bas de la page Témoignages
             </p>
           </div>
           <Link href="/admin/moments/nouveau"
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors shadow-sm flex items-center justify-center gap-2">
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-colors shadow-sm flex items-center justify-center gap-2">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -80,15 +80,15 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
 
         {/* Empty state */}
         {moments.length === 0 && (
-          <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="h-7 w-7 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-gray-600 font-medium mb-1">Aucune photo pour le moment</p>
-            <p className="text-sm text-gray-600 mb-5">
+            <h3 className="font-bold text-gray-800 mb-1">Aucune photo pour le moment</h3>
+            <p className="text-sm text-gray-500 mb-5">
               Tant que la galerie est vide, la section n&apos;apparaît pas sur le site.
             </p>
             <Link href="/admin/moments/nouveau"
@@ -116,8 +116,8 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
                 </div>
 
                 <div className="p-4 flex-1">
-                  <h3 className="text-sm font-bold text-gray-900 leading-snug mb-1">{moment.titre}</h3>
-                  <p className="text-xs text-gray-600">
+                  <h3 className="text-base font-bold text-gray-900 leading-snug mb-1">{moment.titre}</h3>
+                  <p className="text-sm text-gray-600">
                     {new Date(moment.date).toLocaleDateString('fr-FR', {
                       day: 'numeric', month: 'long', year: 'numeric',
                     })}
@@ -126,12 +126,12 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
 
                 <div className="border-t border-gray-100 flex">
                   <Link href={`/admin/moments/${moment.id}/modifier`}
-                    className="flex-1 py-2.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                    className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
                     Modifier
                   </Link>
                   <div className="w-px bg-gray-100" />
                   <button onClick={() => setDeleteTarget(moment)}
-                    className="flex-1 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                    className="flex-1 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
                     Supprimer
                   </button>
                 </div>

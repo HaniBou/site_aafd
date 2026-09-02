@@ -3,8 +3,9 @@ import { cookies } from 'next/headers';
 import { adminAuth } from '@/lib/firebase/admin';
 import {
   createSessionToken,
+  sessionDuration,
+  sessionCookieOptions,
   COOKIE_NAME,
-  SESSION_DURATION_SECONDS,
 } from '@/lib/auth/session';
 
 export const runtime = 'nodejs';
@@ -12,6 +13,9 @@ export const runtime = 'nodejs';
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const idToken = body?.idToken as string | undefined;
+  // Case « Rester connecté » : cochée par défaut côté formulaire, on ne raccourcit
+  // la session que si le bénévole l'a explicitement décochée.
+  const remember = body?.remember !== false;
 
   if (!idToken) {
     return NextResponse.json({ error: 'idToken requis' }, { status: 400 });
@@ -19,17 +23,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const decoded = await adminAuth.verifyIdToken(idToken);
-    const sessionToken = await createSessionToken(decoded.uid);
+    const maxAge = sessionDuration(remember);
+    const sessionToken = await createSessionToken(decoded.uid, maxAge);
 
     const store = await cookies();
     store.set({
       name: COOKIE_NAME,
       value: sessionToken,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: SESSION_DURATION_SECONDS,
-      path: '/',
+      ...sessionCookieOptions(maxAge),
     });
 
     return NextResponse.json({ success: true });

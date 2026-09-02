@@ -1,19 +1,26 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
+import {
+  assertSessionSecret,
+  verifySessionToken,
+  shouldRenew,
+  renewSessionToken,
+  sessionCookieOptions,
+  COOKIE_NAME,
+} from '@/lib/auth/session';
 
-const COOKIE_NAME = 'admin_session';
-
-function getSecret() {
-  const secret = process.env.ADMIN_SESSION_SECRET;
-  // Sans ce contrôle, la clé HMAC vaudrait la chaîne "undefined"
-  // et n'importe qui pourrait forger un cookie admin valide.
-  if (!secret || secret.length < 32) {
-    throw new Error(
-      'ADMIN_SESSION_SECRET est absent ou trop court (32 caractères minimum).',
-    );
+function redirectToLogin(request: NextRequest, clearCookie: boolean) {
+  const url = new URL('/admin/login', request.url);
+  // On mémorise la page demandée pour y revenir après connexion : un bénévole qui
+  // clique un favori vers /admin/reservations doit atterrir sur les réservations,
+  // pas sur le tableau de bord.
+  const { pathname, search } = request.nextUrl;
+  if (pathname !== '/admin') {
+    url.searchParams.set('next', pathname + search);
   }
-  return new TextEncoder().encode(secret);
+  const response = NextResponse.redirect(url);
+  if (clearCookie) response.cookies.delete(COOKIE_NAME);
+  return response;
 }
 
 export async function proxy(request: NextRequest) {
@@ -21,7 +28,7 @@ export async function proxy(request: NextRequest) {
 
   // Vérifié avant toute chose : une configuration incomplète doit échouer
   // bruyamment, jamais laisser passer.
-  const secret = getSecret();
+  assertSessionSecret();
 
   if (pathname === '/admin/login') {
     return NextResponse.next();
@@ -30,16 +37,30 @@ export async function proxy(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
 
   if (!token) {
-    return NextResponse.redirect(new URL('/admin/login', request.url));
+    return redirectToLogin(request, false);
   }
 
   try {
-    await jwtVerify(token, secret);
+    const payload = await verifySessionToken(token);
+
+    // Session glissante : tant que le bénévole revient de temps en temps, son cookie
+    // repart pour une durée pleine et il ne revoit jamais l'écran de connexion.
+    if (shouldRenew(payload)) {
+      const renewed = await renewSessionToken(payload);
+      if (renewed) {
+        const response = NextResponse.next();
+        response.cookies.set({
+          name: COOKIE_NAME,
+          value: renewed.token,
+          ...sessionCookieOptions(renewed.maxAge),
+        });
+        return response;
+      }
+    }
+
     return NextResponse.next();
   } catch {
-    const response = NextResponse.redirect(new URL('/admin/login', request.url));
-    response.cookies.delete(COOKIE_NAME);
-    return response;
+    return redirectToLogin(request, true);
   }
 }
 

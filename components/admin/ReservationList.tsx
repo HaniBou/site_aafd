@@ -195,7 +195,7 @@ export default function ReservationList({
                 onClick={() =>
                   groupe.cloture ? setCloture(groupe, false) : setClotureTarget(groupe)
                 }
-                className={`print:hidden text-xs font-semibold px-3 py-2 rounded-xl border transition-colors ${
+                className={`print:hidden text-sm font-semibold px-4 min-h-11 rounded-xl border transition-colors ${
                   groupe.cloture
                     ? 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border-emerald-200'
                     : 'text-gray-700 bg-white hover:bg-gray-100 border-gray-300'
@@ -262,7 +262,7 @@ export default function ReservationList({
                 </div>
 
                 <button onClick={() => setCancelTarget(r)}
-                  className="print:hidden sm:self-center flex items-center justify-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-100 px-4 py-2.5 rounded-xl transition-colors shrink-0">
+                  className="print:hidden sm:self-center flex items-center justify-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-4 min-h-11 rounded-xl transition-colors shrink-0">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -323,7 +323,7 @@ export default function ReservationList({
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 print:hidden">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Réservations</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Réservations</h1>
             <p className="text-sm text-gray-500 mt-0.5">
               {reservations.length} réservation{reservations.length > 1 ? 's' : ''} — {platCount} vente{platCount > 1 ? 's' : ''} en cours
               {groupesClotures.length > 0 && `, ${groupesClotures.length} clôturée${groupesClotures.length > 1 ? 's' : ''}`}

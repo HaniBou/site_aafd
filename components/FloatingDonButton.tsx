@@ -5,12 +5,15 @@ import { usePathname } from 'next/navigation'
 
 export function FloatingDonButton() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isOverFooter, setIsOverFooter] = useState(false)
   const pathname = usePathname()
   const isHomePage = pathname === '/'
   const isAdminPage = pathname?.startsWith('/admin')
 
   // Sur la page d'accueil, apparaît après scroll ; ailleurs, toujours visible.
-  const isVisible = !isHomePage || isScrolled
+  // Toujours escamoté au-dessus du pied de page : le blob rose y recouvrait
+  // les liens « Mentions légales » et « Espace bénévoles ».
+  const isVisible = (!isHomePage || isScrolled) && !isOverFooter
 
   useEffect(() => {
     if (!isHomePage) return
@@ -32,6 +35,22 @@ export function FloatingDonButton() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isHomePage])
 
+  useEffect(() => {
+    if (isAdminPage) return
+
+    const legalBar = document.getElementById('footer-legal-bar')
+    if (!legalBar) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsOverFooter(entry.isIntersecting),
+      // 180 px : hauteur du blob (112 px) plus sa marge basse, soit la zone que
+      // le bouton occupe réellement en bas de l'écran.
+      { rootMargin: '0px 0px 180px 0px' },
+    )
+    observer.observe(legalBar)
+    return () => observer.disconnect()
+  }, [isAdminPage, pathname])
+
   // Ne pas afficher sur les pages admin
   if (isAdminPage) {
     return null
@@ -44,6 +63,8 @@ export function FloatingDonButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Faire un don à l'AAFD (nouvel onglet)"
+      aria-hidden={!isVisible}
+      tabIndex={isVisible ? undefined : -1}
       style={{
         willChange: isVisible ? 'auto' : 'transform, opacity',
         bottom: 'calc(3.5rem + env(safe-area-inset-bottom))',

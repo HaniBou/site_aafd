@@ -132,67 +132,47 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
               }`}>
               <div className="flex gap-0">
                 {plat.image && plat.image !== 'none' && (
-                  <div className="relative w-28 sm:w-36 shrink-0">
+                  <div className="relative w-28 sm:w-36 shrink-0 self-stretch">
                     <Image src={plat.image} alt={plat.nom} fill className="object-cover" sizes="144px" />
                   </div>
                 )}
                 <div className="flex-1 p-4 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-gray-900 text-sm truncate">{plat.nom}</h3>
-                      {plat.cloture && (
-                        <span className="inline-block text-[11px] font-bold text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full mt-0.5 mr-1">
-                          VENTE CLÔTURÉE
-                        </span>
-                      )}
-                      {plat.typeMenu && (
-                        <span className="inline-block text-[11px] font-medium text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full mt-0.5">
-                          {plat.typeMenu}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex gap-2 shrink-0">
-                      <Link href={`/admin/plats/${plat.id}/modifier`}
-                        className="w-11 h-11 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center transition-colors"
-                        title="Modifier" aria-label="Modifier ce plat">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </Link>
-                      <button onClick={() => setConfirmId(plat.id)}
-                        className="w-11 h-11 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg flex items-center justify-center transition-colors"
-                        title="Supprimer" aria-label="Supprimer ce plat">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    {plat.cloture && (
+                      <span className="text-xs font-bold text-gray-700 bg-gray-200 px-2.5 py-0.5 rounded-full">
+                        VENTE CLÔTURÉE
+                      </span>
+                    )}
+                    {plat.typeMenu && (
+                      <span className="text-xs font-semibold text-orange-700 bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-100">
+                        {plat.typeMenu}
+                      </span>
+                    )}
                   </div>
 
-                  <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{plat.description}</p>
+                  <h3 className="text-base font-bold text-gray-900 leading-snug">{plat.nom}</h3>
+                  <p className="text-sm text-gray-600 mt-1.5 line-clamp-2 leading-relaxed">{plat.description}</p>
 
                   <div className="flex flex-wrap gap-3 mt-3">
                     <div className="flex items-center gap-1.5 bg-indigo-50 px-3 py-1 rounded-lg">
-                      <svg className="w-3.5 h-3.5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                           d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                       </svg>
-                      <span className="text-xs font-bold text-indigo-700">{plat.prix} €</span>
+                      <span className="text-sm font-bold text-indigo-700">{plat.prix} €</span>
                     </div>
                     <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg ${
                       plat.quantite === 0 ? 'bg-red-50' : plat.quantite < 5 ? 'bg-amber-50' : 'bg-green-50'
                     }`}>
-                      <span className={`text-xs font-bold ${
+                      <span className={`text-sm font-bold ${
                         plat.quantite === 0 ? 'text-red-600' : plat.quantite < 5 ? 'text-amber-600' : 'text-green-600'
                       }`}>
                         {plat.quantite === 0 ? 'Épuisé' : `${plat.quantite} dispo${plat.quantite > 1 ? 's' : ''}`}
                       </span>
                     </div>
                     {plat.cuisiniers && (
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <span className="text-sm text-gray-500 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -206,7 +186,7 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
               {/* Bottom bar */}
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/plats/${plat.id}/modifier`}
-                  className="flex-1 py-2.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />
@@ -214,7 +194,7 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
                   title={plat.cloture
                     ? 'Remettre ce plat en vente sur le site'
                     : 'Retirer ce plat du site — les réservations sont conservées'}
-                  className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${
+                  className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${
                     plat.cloture
                       ? 'text-emerald-700 hover:bg-emerald-50'
                       : 'text-gray-600 hover:bg-gray-100'
@@ -223,7 +203,7 @@ export default function PlatList({ plats }: { plats: Plat[] }) {
                 </button>
                 <div className="w-px bg-gray-100" />
                 <button onClick={() => setConfirmId(plat.id)}
-                  className="flex-1 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                  className="flex-1 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
                   Supprimer
                 </button>
               </div>

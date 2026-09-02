@@ -6,9 +6,9 @@ import { HELLOASSO_URL } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Notre association',
-  description: "Découvrez l'histoire, la mission et les actions de l'AAFD Val de Saône : 17 ans d'accompagnement des familles réfugiées, 100% bénévoles.",
+  description: "Découvrez l'histoire, la mission et les actions de l'AAFD Val de Saône : 19 ans d'accompagnement des familles réfugiées, 100% bénévoles.",
   alternates: { canonical: '/notre-association' },
-  openGraph: { title: 'Notre association | AAFD Val de Saône', description: "17 ans d'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
+  openGraph: { title: 'Notre association | AAFD Val de Saône', description: "19 ans d'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
 }
 
 export default function NotreAssociationPage() {
@@ -16,7 +16,7 @@ export default function NotreAssociationPage() {
     <main className="min-h-screen bg-white">
       <PageHero
         title="Notre association"
-        description="Depuis 17 ans, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône."
+        description="Depuis 19 ans, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône."
         imageSrc="/images/hero_nous_connaitre.webp"
         imageAlt="Notre association AAFD"
       />
@@ -30,7 +30,7 @@ export default function NotreAssociationPage() {
               <h2 className="text-gray-900 mb-6">Notre histoire</h2>
               <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                 <p>
-                  Depuis <strong>17 ans</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté
+                  Depuis <strong>19 ans</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté
                   œuvre sur le territoire du Val de Saône pour accompagner les personnes en situation de précarité.
                 </p>
                 <p>
@@ -82,7 +82,7 @@ export default function NotreAssociationPage() {
               </h2>
               <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-light italic">
                 <p>
-                  Depuis 17 ans, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
+                  Depuis 19 ans, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
                   Nous ne nous contentons pas d&apos;accompagner, nous tissons des liens de fraternité qui
                   dépassent les frontières et les parcours de vie.
                 </p>

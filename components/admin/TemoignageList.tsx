@@ -57,13 +57,15 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Témoignages</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Témoignages</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {temoignages.length} témoignage{temoignages.length > 1 ? 's' : ''}
+              {temoignages.length === 0
+                ? 'Aucun témoignage pour le moment'
+                : `${temoignages.length} témoignage${temoignages.length > 1 ? 's' : ''} publié${temoignages.length > 1 ? 's' : ''}`}
             </p>
           </div>
           <Link href="/admin/temoignages/nouveau"
-            className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+            className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -89,14 +91,14 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
 
         {/* Empty state */}
         {temoignages.length === 0 && (
-          <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="h-7 w-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <p className="text-gray-500 font-medium mb-1">Aucun témoignage pour le moment</p>
+            <h3 className="font-bold text-gray-800 mb-1">Aucun témoignage pour le moment</h3>
             <p className="text-sm text-gray-500 mb-5">Ajoutez des témoignages de familles ou de bénévoles.</p>
             <Link href="/admin/temoignages/nouveau"
               className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
@@ -127,22 +129,22 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <h3 className="text-sm font-bold text-gray-900">{item.nom}</h3>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                       item.type === 'Benevole'
                         ? 'bg-blue-50 text-blue-700 border border-blue-100'
                         : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                     }`}>
                       {item.type === 'Benevole' ? 'Bénévole' : 'Famille accompagnée'}
                     </span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(item.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </span>
                   </div>
-                  {item.role && <p className="text-xs text-gray-500 mb-1">{item.role}</p>}
-                  <p className="text-xs text-gray-500 italic line-clamp-3 leading-relaxed whitespace-pre-line">
+                  <h3 className="text-base font-bold text-gray-900 leading-snug">{item.nom}</h3>
+                  {item.role && <p className="text-sm text-gray-500 mt-0.5">{item.role}</p>}
+                  <p className="text-sm text-gray-600 italic line-clamp-3 leading-relaxed whitespace-pre-line mt-1.5">
                     &ldquo;{item.contenu}&rdquo;
-                  </p>
-                  <p className="text-[11px] text-gray-500 mt-1.5">
-                    {new Date(item.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
                 </div>
               </div>
@@ -150,12 +152,12 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
               {/* Action bar */}
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/temoignages/${item.id}/modifier`}
-                  className="flex-1 py-2.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />
                 <button onClick={() => setDeleteTarget(item)}
-                  className="flex-1 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                  className="flex-1 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
                   Supprimer
                 </button>
               </div>

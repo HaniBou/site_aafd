@@ -23,6 +23,33 @@ export const ASSOCIATION_NAME = "AAFD";
 export const ASSOCIATION_FULL_NAME =
   "Association d'Aide aux Familles en Difficulté";
 
+// Année de création, affichée sur « Notre association ».
+export const ASSOCIATION_FOUNDING_YEAR = 2007;
+
+// Le « depuis N ans » se calcule, sinon il faut le corriger à la main chaque
+// janvier dans chaque page — c'est ainsi que la carte de partage a fini par
+// annoncer 17 ans quand le site en annonçait 19.
+export function yearsOfAction(): number {
+  return new Date().getFullYear() - ASSOCIATION_FOUNDING_YEAR;
+}
+
+// Adresse du siège. Renseignée, elle alimente les données structurées lues par
+// Google : c'est ce qui permet à l'association de remonter sur les recherches
+// locales (« aide familles réfugiées Val de Saône »).
+// TODO avant mise en ligne : compléter avec l'adresse réelle de l'association.
+export const ASSOCIATION_ADDRESS = {
+  streetAddress: "",
+  postalCode: "",
+  addressLocality: "",
+  addressRegion: "Auvergne-Rhône-Alpes",
+  addressCountry: "FR",
+} as const;
+
+// Code de validation Google Search Console (balise meta). Facultatif : sans lui,
+// la propriété se vérifie par le DNS ou par le fichier HTML fourni par Google.
+export const GOOGLE_SITE_VERIFICATION =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "";
+
 // Expéditeurs Resend. Le domaine doit être vérifié dans Resend,
 // sinon les envois échouent en 403.
 export const MAIL_FROM = {

@@ -102,7 +102,7 @@ export default async function AdminDashboard() {
 
       {/* Welcome header */}
       <div className="mb-10">
-        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{today}</p>
+        <p className="text-sm text-gray-500 uppercase tracking-wider mb-1">{today}</p>
         <h1 className="text-3xl font-bold text-gray-900">Bonjour 👋</h1>
         <p className="text-gray-500 mt-1">Que souhaitez-vous faire aujourd&apos;hui ?</p>
       </div>
@@ -121,15 +121,15 @@ export default async function AdminDashboard() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900 text-sm">{s.label}</p>
-                    <p className="text-xs text-gray-500">{s.desc}</p>
+                    <p className="font-bold text-gray-900 text-base">{s.label}</p>
+                    <p className="text-sm text-gray-500">{s.desc}</p>
                   </div>
                 </div>
                 <span className={`text-2xl font-black ${c.text}`}>{counts[i]}</span>
               </div>
               <div className="px-5 py-3">
                 <Link href={s.href}
-                  className="block w-full text-center py-2 border border-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors">
+                  className="flex w-full items-center justify-center min-h-11 border border-gray-300 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-50 hover:border-gray-400 transition-colors">
                   Gérer
                 </Link>
               </div>
@@ -186,10 +186,10 @@ export default async function AdminDashboard() {
             },
           ].map(block => (
             <div key={block.title} className="bg-white rounded-xl p-4 shadow-sm">
-              <p className="text-sm font-semibold text-gray-900 mb-2">{block.title}</p>
-              <ol className="space-y-1.5">
+              <p className="text-base font-semibold text-gray-900 mb-2">{block.title}</p>
+              <ol className="space-y-2">
                 {block.steps.map((step, i) => (
-                  <li key={i} className="flex gap-2 text-xs text-gray-600">
+                  <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
                     <span className="text-indigo-400 font-bold shrink-0">{i + 1}.</span>
                     {step}
                   </li>
@@ -203,7 +203,7 @@ export default async function AdminDashboard() {
           <svg className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
           </svg>
-          <p className="text-xs text-amber-800">
+          <p className="text-sm text-amber-800 leading-relaxed">
             <strong>Conseil :</strong> après chaque publication, visitez le site pour vérifier que tout s&apos;affiche correctement.
             Les images trop lourdes peuvent ralentir la page — privilégiez des photos de moins de 5 Mo.
           </p>

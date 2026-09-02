@@ -49,13 +49,15 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Actualités</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Actualités</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {actualites.length} article{actualites.length > 1 ? 's' : ''}
+              {actualites.length === 0
+                ? 'Aucune actualité pour le moment'
+                : `${actualites.length} article${actualites.length > 1 ? 's' : ''} publié${actualites.length > 1 ? 's' : ''}`}
             </p>
           </div>
           <Link href="/admin/actualites/nouveau"
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -81,14 +83,14 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
 
         {/* Empty state */}
         {actualites.length === 0 && (
-          <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                   d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </div>
-            <p className="text-gray-500 font-medium mb-1">Aucune actualité pour le moment</p>
+            <h3 className="font-bold text-gray-800 mb-1">Aucune actualité pour le moment</h3>
             <p className="text-sm text-gray-500 mb-5">Publiez votre première actualité.</p>
             <Link href="/admin/actualites/nouveau"
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
@@ -111,39 +113,39 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
 
               <div className="flex gap-0">
                 {actu.image && actu.image !== 'none' && (
-                  <div className="relative w-24 sm:w-32 shrink-0 self-stretch">
+                  <div className="relative w-28 sm:w-36 shrink-0 self-stretch">
                     <Image src={actu.image} alt={actu.title} fill className="object-cover"
-                      sizes="(max-width: 640px) 96px, 128px" />
+                      sizes="144px" />
                   </div>
                 )}
                 <div className="flex-1 min-w-0 p-4">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
                     {actu.aLaUne && (
-                      <span className="bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+                      <span className="bg-orange-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full tracking-wide">
                         À LA UNE
                       </span>
                     )}
-                    <span className="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full border border-blue-100">
+                    <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-0.5 rounded-full border border-blue-100">
                       {actu.category}
                     </span>
                     <span className="text-xs text-gray-500">
                       {new Date(actu.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-gray-900 leading-snug">{actu.title}</h3>
-                  <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{actu.content}</p>
+                  <h3 className="text-base font-bold text-gray-900 leading-snug">{actu.title}</h3>
+                  <p className="text-sm text-gray-600 mt-1.5 line-clamp-2 leading-relaxed">{actu.content}</p>
                 </div>
               </div>
 
               {/* Action bar */}
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/actualites/${actu.id}/modifier`}
-                  className="flex-1 py-2.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />
                 <button onClick={() => setDeleteTarget(actu)}
-                  className="flex-1 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                  className="flex-1 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
                   Supprimer
                 </button>
               </div>

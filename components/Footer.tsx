@@ -109,15 +109,32 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-gray-800 pt-8">
-  <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+  {/* id repéré par FloatingDonButton : le bouton « Faire un don » s'escamote
+      quand cette barre est à l'écran, sinon il recouvre « Espace bénévoles ». */}
+  <div id="footer-legal-bar"
+    className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
     <p className="text-center md:text-left">
       &copy; {new Date().getFullYear()} AAFD Val de Saône. Tous droits réservés.
     </p>
-    <div className="flex items-center gap-4 text-xs text-center md:text-right">
+    <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-center md:text-right">
       <span>Association loi 1901 à but non lucratif</span>
       <span className="text-gray-700">|</span>
       <Link href="/mentions-legales" className="hover:text-blue-400 transition-colors">
         Mentions légales
+      </Link>
+      <span className="text-gray-700">|</span>
+      {/* Point d'entrée des bénévoles : l'accès est protégé par la connexion,
+          pas par le fait de connaître l'adresse par cœur. */}
+      <Link
+        href="/admin"
+        rel="nofollow"
+        className="inline-flex items-center gap-1.5 hover:text-blue-400 transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        Espace bénévoles
       </Link>
     </div>
   </div>
