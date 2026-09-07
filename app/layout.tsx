@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 import { SITE_URL as siteUrl, GOOGLE_SITE_VERIFICATION } from "@/lib/siteConfig";
+
+const figtree = Figtree({
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  variable: "--font-figtree",
+});
 
 export const viewport: Viewport = {
   themeColor: "#1f2937",
@@ -72,17 +79,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return ( 
-    <html lang="fr">
-      <head>
-        <link
-          rel="preload"
-          href="/fonts/DINSchriftRegular.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      </head>
+  return (
+    <html lang="fr" className={figtree.variable}>
       <body className="antialiased">
         {children}
       </body>

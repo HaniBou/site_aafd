@@ -84,7 +84,7 @@ export default function DateHeureField({
   return (
     <fieldset className="border-0 p-0 m-0">
       <legend className="block text-base font-bold text-gray-900 mb-1">
-        {label} {requis && <span className="text-orange-600">*</span>}
+        {label} {requis && <span className="text-orange-700">*</span>}
       </legend>
       {aide && <p className="text-sm text-gray-600 mb-3">{aide}</p>}
 

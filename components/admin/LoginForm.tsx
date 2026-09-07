@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/lib/firebase/client';
+import { Button } from '@/components/ui/Button';
 
 function getErrorMessage(code: string): string {
   switch (code) {
@@ -24,7 +25,7 @@ function getErrorMessage(code: string): string {
 }
 
 const FIELD_CLASS =
-  'w-full px-4 py-3.5 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition disabled:bg-gray-50';
+  'w-full px-4 py-3.5 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 outline-none transition disabled:bg-gray-50';
 
 export default function LoginForm({ next = '/admin' }: { next?: string }) {
   const [email, setEmail] = useState('');
@@ -158,7 +159,7 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
                   onClick={() => setShowPassword(v => !v)}
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   aria-pressed={showPassword}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-gray-500 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-gray-500 hover:text-blue-600 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -188,7 +189,7 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
                 checked={remember}
                 onChange={e => setRemember(e.target.checked)}
                 disabled={loading}
-                className="mt-0.5 w-6 h-6 rounded border-2 border-gray-300 text-indigo-600 focus:ring-4 focus:ring-indigo-200 cursor-pointer"
+                className="mt-0.5 w-6 h-6 rounded border-2 border-gray-300 text-blue-600 focus:ring-4 focus:ring-blue-200 cursor-pointer"
               />
               <span className="text-base text-gray-800 leading-snug">
                 Rester connecté sur cet ordinateur
@@ -205,10 +206,13 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="lg"
+            shape="rounded"
+            fullWidth
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading && (
               <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -221,7 +225,7 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
               : resetMode
                 ? 'Envoyer le lien par e-mail'
                 : 'Se connecter'}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -232,14 +236,14 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
               setError('');
               setNotice('');
             }}
-            className="text-base text-indigo-700 hover:text-indigo-900 underline underline-offset-4 py-2 text-left"
+            className="text-base text-blue-700 hover:text-blue-900 underline underline-offset-4 py-2 text-left"
           >
             {resetMode ? '← Revenir à la connexion' : "J'ai oublié mon mot de passe"}
           </button>
 
           <Link
             href="/"
-            className="text-base text-gray-600 hover:text-indigo-700 transition-colors py-2"
+            className="text-base text-gray-600 hover:text-blue-700 transition-colors py-2"
           >
             Retour au site
           </Link>

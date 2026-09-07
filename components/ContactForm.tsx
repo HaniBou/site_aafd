@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import { Button } from '@/components/ui/Button'
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -68,7 +69,7 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="nom" className="block text-sm font-semibold text-slate-900 mb-2">
+            <label htmlFor="nom" className="block text-sm font-semibold text-gray-900 mb-2">
               Nom <span className="text-red-500">*</span>
             </label>
             <input
@@ -78,13 +79,13 @@ export default function ContactForm() {
               value={formData.nom}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               placeholder="Votre nom"
             />
           </div>
 
           <div>
-            <label htmlFor="prenom" className="block text-sm font-semibold text-slate-900 mb-2">
+            <label htmlFor="prenom" className="block text-sm font-semibold text-gray-900 mb-2">
               Prénom <span className="text-red-500">*</span>
             </label>
             <input
@@ -94,7 +95,7 @@ export default function ContactForm() {
               value={formData.prenom}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               placeholder="Votre prénom"
             />
           </div>
@@ -102,7 +103,7 @@ export default function ContactForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-slate-900 mb-2">
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -112,13 +113,13 @@ export default function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               placeholder="votre.email@exemple.fr"
             />
           </div>
 
           <div>
-            <label htmlFor="telephone" className="block text-sm font-semibold text-slate-900 mb-2">
+            <label htmlFor="telephone" className="block text-sm font-semibold text-gray-900 mb-2">
               Téléphone
             </label>
             <input
@@ -127,14 +128,14 @@ export default function ContactForm() {
               name="telephone"
               value={formData.telephone}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               placeholder="06 12 34 56 78"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="sujet" className="block text-sm font-semibold text-slate-900 mb-2">
+          <label htmlFor="sujet" className="block text-sm font-semibold text-gray-900 mb-2">
             Sujet <span className="text-red-500">*</span>
           </label>
           <select
@@ -143,7 +144,7 @@ export default function ContactForm() {
             value={formData.sujet}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
           >
             <option value="">Sélectionnez un sujet</option>
             <option value="demande_aide">Demande d&apos;aide alimentaire</option>
@@ -155,7 +156,7 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-sm font-semibold text-slate-900 mb-2">
+          <label htmlFor="message" className="block text-sm font-semibold text-gray-900 mb-2">
             Message <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -165,15 +166,15 @@ export default function ContactForm() {
             onChange={handleChange}
             required
             rows={6}
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all resize-none"
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all resize-none"
             placeholder="Décrivez votre demande..."
           />
         </div>
 
         {(status === 'success' || status === 'error') && (
-          <div className={`mb-4 p-4 rounded-2xl flex items-start border ${status === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+          <div className={`mb-4 p-4 rounded-2xl flex items-start border ${status === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
             <svg
-              className={`h-6 w-6 mt-0.5 ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}
+              className={`h-6 w-6 mt-0.5 ${status === 'success' ? 'text-emerald-600' : 'text-red-600'}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -187,8 +188,8 @@ export default function ContactForm() {
             <div className="ml-4">
               {status === 'success' ? (
                 <>
-                  <h3 className="text-lg font-semibold text-green-900">Message envoyé avec succès !</h3>
-                  <p className="text-green-700 mt-1">Nous vous répondrons dans les plus brefs délais.</p>
+                  <h3 className="text-lg font-semibold text-emerald-900">Message envoyé avec succès !</h3>
+                  <p className="text-emerald-700 mt-1">Nous vous répondrons dans les plus brefs délais.</p>
                 </>
               ) : (
                 <>
@@ -201,10 +202,13 @@ export default function ContactForm() {
         )}
 
         <div>
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="lg"
+            shape="rounded"
+            fullWidth
             disabled={status === 'sending'}
-            className="w-full bg-blue-600 text-white font-semibold py-4 px-8 rounded-xl hover:bg-blue-700 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             {status === 'sending' ? (
               <>
@@ -222,10 +226,10 @@ export default function ContactForm() {
                 Envoyer le message
               </>
             )}
-          </button>
+          </Button>
         </div>
 
-        <p className="text-sm text-slate-600 text-center">
+        <p className="text-sm text-gray-600 text-center">
           Vos données personnelles sont utilisées uniquement pour répondre à votre demande et ne sont jamais partagées.
         </p>
       </form>

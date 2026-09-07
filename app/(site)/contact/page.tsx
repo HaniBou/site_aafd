@@ -11,6 +11,7 @@ import {
   HELLOASSO_URL,
 } from '@/lib/siteConfig'
 import { LIENS_UTILES, ACCENTS_LIENS, domaineLisible } from '@/lib/liensUtiles'
+import { Button } from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -29,7 +30,7 @@ export default function ContactPage() {
         imageAlt="Contactez-nous"
       />
 
-      <section className="py-16 md:py-24 bg-slate-50">
+      <section className="py-16 md:py-24 bg-gray-50">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
@@ -94,26 +95,27 @@ export default function ContactPage() {
       Vos dons financent directement l&apos;aide matérielle aux familles :
       transports, assurances, frais d&apos;avocats, hébergement.
     </p>
-    <a
+    <Button
       href={HELLOASSO_URL}
+      variant="donate"
+      size="sm"
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full bg-pink-600 px-6 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-pink-700 hover:shadow-xl"
     >
       Faire un don sur HelloAsso
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
       </svg>
-    </a>
+    </Button>
   </div>
 </div>
 
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-10">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Envoyez-nous un message
                 </h2>
-                <p className="text-slate-600 mb-8">
+                <p className="text-gray-600 mb-8">
                   Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.
                 </p>
                 <ContactForm />

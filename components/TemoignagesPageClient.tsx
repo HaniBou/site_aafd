@@ -2,11 +2,12 @@
 
 import { useMemo } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import type { Temoignage, Moment } from "@/types";
 import { HELLOASSO_URL } from "@/lib/siteConfig";
 import { Reveal } from "@/components/Reveal";
+import { Button } from "@/components/ui/Button";
+import { CtaBand } from '@/components/ui/CtaBand';
 
 type Props = {
   temoignages: Temoignage[];
@@ -17,8 +18,8 @@ type Props = {
 export default function TemoignagesPageClient({ temoignages, moments, loadError = false }: Props) {
   const familyFallbacks = [
     { container: "bg-gradient-to-br from-blue-100 to-blue-200 text-blue-300", quote: "text-blue-900" },
-    { container: "bg-gradient-to-br from-orange-100 to-orange-200 text-orange-300", quote: "text-orange-600" },
-    { container: "bg-gradient-to-br from-green-100 to-green-200 text-green-300", quote: "text-green-700" },
+    { container: "bg-gradient-to-br from-orange-100 to-orange-200 text-orange-300", quote: "text-orange-700" },
+    { container: "bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-300", quote: "text-emerald-700" },
   ];
 
   const benevoleFallbacks = [
@@ -27,7 +28,7 @@ export default function TemoignagesPageClient({ temoignages, moments, loadError 
     "bg-gradient-to-br from-orange-100 to-orange-200 text-orange-300",
     "bg-gradient-to-br from-red-100 to-red-200 text-red-300",
     "bg-gradient-to-br from-yellow-100 to-yellow-200 text-yellow-400",
-    "bg-gradient-to-br from-green-100 to-green-200 text-green-300",
+    "bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-300",
   ];
 
   const { familles, benevoles } = useMemo(() => {
@@ -186,25 +187,23 @@ export default function TemoignagesPageClient({ temoignages, moments, loadError 
         </section>
       )}
 
-      <section className="bg-blue-900 py-16 md:py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>Vous aussi, écrivez votre histoire avec l&apos;AAFD</h2>
-          <p className="mb-8 text-xl text-blue-100">Rejoignez notre communauté et devenez acteur du changement</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors">
-              Devenir bénévole
-            </Link>
-            <a
-              href={HELLOASSO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
-            >
-              Faire un don
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title={<>Vous aussi, écrivez votre histoire avec l&apos;AAFD</>}
+        description="Rejoignez notre communauté et devenez acteur du changement"
+      >
+        <Button href="/nous-rejoindre" variant="primary" size="lg">
+          Devenir bénévole
+        </Button>
+        <Button
+          href={HELLOASSO_URL}
+          variant="onDark"
+          size="lg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Faire un don
+        </Button>
+      </CtaBand>
     </main>
   );
 }

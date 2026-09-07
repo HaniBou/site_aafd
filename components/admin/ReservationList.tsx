@@ -8,6 +8,7 @@ import ConfirmModal from '@/components/admin/ConfirmModal';
 import EtatVenteBadge from '@/components/admin/EtatVenteBadge';
 import { useAdminToast } from '@/components/admin/AdminToast';
 import { formatDateJour, type VenteAvecEtat } from '@/lib/vente';
+import { Button } from '@/components/ui/Button';
 
 type GroupePlat = {
   key: string;
@@ -209,7 +210,7 @@ export default function ReservationList({
           {groupe.vente ? (
             <Link
               href={`/admin/ventes/${groupe.vente.id}`}
-              className="font-bold text-gray-900 text-sm hover:text-orange-600 transition-colors"
+              className="font-bold text-gray-900 text-sm hover:text-orange-700 transition-colors"
             >
               {groupe.titre}
             </Link>
@@ -224,10 +225,10 @@ export default function ReservationList({
 
         <div className="flex items-center gap-3 shrink-0">
           <div className="text-right">
-            <p className={`text-xs font-medium ${groupe.archive ? 'text-gray-600' : 'text-orange-600'}`}>
+            <p className={`text-xs font-medium ${groupe.archive ? 'text-gray-600' : 'text-orange-700'}`}>
               Portions
             </p>
-            <p className={`text-xl font-black leading-none ${groupe.archive ? 'text-gray-700' : 'text-orange-600'}`}>
+            <p className={`text-xl font-bold leading-none ${groupe.archive ? 'text-gray-700' : 'text-orange-700'}`}>
               {groupe.total}
             </p>
           </div>
@@ -272,7 +273,7 @@ export default function ReservationList({
                   </span>
                   <span className="text-xs text-gray-600">{formatDate(r.dateReservation)}</span>
                   {r.emailEnvoye === true && (
-                    <span className="print:hidden flex items-center gap-1 bg-green-50 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full border border-green-100">
+                    <span className="print:hidden flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs font-medium px-2 py-0.5 rounded-full border border-emerald-100">
                       <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
@@ -300,26 +301,27 @@ export default function ReservationList({
                     <div>
                       <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-0.5">Email</p>
                       <a href={`mailto:${r.clientEmail}`}
-                        className="text-sm text-indigo-600 hover:text-indigo-800 hover:underline truncate block transition-colors">
+                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline truncate block transition-colors">
                         {r.clientEmail}
                       </a>
                     </div>
                     <div>
                       <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-0.5">Téléphone</p>
                       <a href={`tel:${r.clientTelephone}`}
-                        className="text-sm text-indigo-600 hover:text-indigo-800 hover:underline transition-colors">
+                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors">
                         {r.clientTelephone}
                       </a>
                     </div>
                   </div>
 
-                  <button onClick={() => setCancelTarget(r)}
-                    className="print:hidden sm:self-center flex items-center justify-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-4 min-h-11 rounded-xl transition-colors shrink-0">
+                  <Button onClick={() => setCancelTarget(r)}
+                    variant="dangerSoft" size="sm" shape="rounded"
+                    className="print:hidden sm:self-center shrink-0">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     Annuler
-                  </button>
+                  </Button>
                 </div>
 
                 {r.message && (
@@ -384,29 +386,29 @@ export default function ReservationList({
           <div className="flex items-center gap-3 shrink-0 print:hidden">
             <div className="bg-purple-50 border border-purple-200 rounded-xl px-4 py-2 text-center">
               <p className="text-xs font-medium text-purple-600">À préparer</p>
-              <p className="text-2xl font-black text-purple-700 leading-none mt-0.5">{totalEnCours}</p>
+              <p className="text-2xl font-bold text-purple-700 leading-none mt-0.5">{totalEnCours}</p>
             </div>
 
             {reservations.length > 0 && (
               <>
-                <button onClick={() => exportCSV(groupes)}
-                  title="Télécharger la liste des commandes pour l'ouvrir dans Excel"
-                  className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm">
+                <Button onClick={() => exportCSV(groupes)}
+                  variant="success" size="sm" shape="rounded"
+                  title="Télécharger la liste des commandes pour l'ouvrir dans Excel">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                       d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
                   <span className="hidden sm:inline">Tableau Excel</span>
-                </button>
+                </Button>
 
-                <button onClick={() => window.print()}
-                  className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-sm">
+                <Button onClick={() => window.print()}
+                  variant="secondary" size="sm" shape="rounded">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                       d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                   </svg>
                   <span className="hidden sm:inline">Imprimer</span>
-                </button>
+                </Button>
               </>
             )}
           </div>

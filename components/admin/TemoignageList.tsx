@@ -7,9 +7,10 @@ import Image from 'next/image';
 import type { Temoignage } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 const AVATAR_COLORS = [
-  'from-blue-400 to-indigo-500',
+  'from-blue-400 to-blue-500',
   'from-orange-400 to-red-500',
   'from-emerald-400 to-teal-500',
   'from-purple-400 to-pink-500',
@@ -63,13 +64,13 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
                 : `${temoignages.length} témoignage${temoignages.length > 1 ? 's' : ''} publié${temoignages.length > 1 ? 's' : ''}`}
             </p>
           </div>
-          <Link href="/admin/temoignages/nouveau"
-            className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+          <Button href="/admin/temoignages/nouveau" variant="primary" size="sm" shape="rounded"
+            className="w-full sm:w-auto">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Ajouter un témoignage
-          </Link>
+          </Button>
         </div>
 
         {deleteError && (
@@ -97,10 +98,9 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
             </div>
             <h3 className="font-bold text-gray-800 mb-1">Aucun témoignage pour le moment</h3>
             <p className="text-sm text-gray-500 mb-5">Ajoutez des témoignages de familles ou de bénévoles.</p>
-            <Link href="/admin/temoignages/nouveau"
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
+            <Button href="/admin/temoignages/nouveau" variant="primary" size="sm" shape="rounded">
               Ajouter un témoignage
-            </Link>
+            </Button>
           </div>
         )}
 
@@ -145,7 +145,7 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
 
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/temoignages/${item.id}/modifier`}
-                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />

@@ -33,13 +33,13 @@ export function Navigation() {
     const isActive = pathname === href
     if (isActive) {
       return `px-4 py-2 text-sm font-semibold rounded-full transition-all shadow-lg scale-105 ${
-        isOrange ? 'bg-orange-600 text-white' : 'bg-blue-900 text-white'
+        isOrange ? 'bg-orange-700 text-white' : 'bg-blue-900 text-white'
       }`
     }
     return `px-4 py-2 text-sm font-semibold rounded-full transition-all ${
       isScrolled
         ? isOrange
-          ? 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+          ? 'text-gray-700 hover:bg-orange-50 hover:text-orange-700'
           : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
         : 'text-white hover:bg-white/15 drop-shadow-md'
     }`

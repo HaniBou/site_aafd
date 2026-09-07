@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import type { Actualite } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 type FormState = {
   title: string;
@@ -146,14 +146,13 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <Link href="/admin/actualites"
-            aria-label="Retour aux actualités"
-            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+          <Button href="/admin/actualites" variant="ghost" size="sm" shape="rounded"
+            className="shrink-0 -ml-1" aria-label="Retour aux actualités">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Retour</span>
-          </Link>
+          </Button>
 
           <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
 
@@ -241,7 +240,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
                     className={`h-full rounded-full transition-all duration-200 ${
                       uploadPhase === 'compressing'
                         ? 'bg-gray-300 animate-pulse'
-                        : 'bg-gradient-to-r from-blue-500 to-indigo-500'
+                        : 'bg-gradient-to-r from-blue-500 to-blue-500'
                     }`}
                     style={uploadPhase === 'uploading' ? { width: `${uploadProgress}%` } : { width: '40%' }}
                   />
@@ -303,7 +302,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
             className={`w-full flex items-center gap-4 rounded-xl p-3 transition-colors text-left ${
               form.aLaUne ? 'bg-orange-50' : 'hover:bg-gray-50'
             }`}>
-            <div className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${form.aLaUne ? 'bg-orange-500' : 'bg-gray-200'}`}>
+            <div className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${form.aLaUne ? 'bg-orange-700' : 'bg-gray-200'}`}>
               <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.aLaUne ? 'translate-x-6' : 'translate-x-0'}`} />
             </div>
             <div className="flex-1">
@@ -311,7 +310,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
               <p className="text-xs text-gray-500 mt-0.5">S&apos;affiche en premier et mis en avant sur le site</p>
             </div>
             {form.aLaUne && (
-              <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2.5 py-1 rounded-full shrink-0">
+              <span className="text-xs font-bold text-orange-700 bg-orange-100 px-2.5 py-1 rounded-full shrink-0">
                 Activé
               </span>
             )}
@@ -319,12 +318,11 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
         </div>
 
         <div className="flex gap-3 pb-8">
-          <Link href="/admin/actualites"
-            className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center">
+          <Button href="/admin/actualites" variant="secondary" size="sm" shape="rounded" className="flex-1">
             Annuler
-          </Link>
-          <button type="submit" disabled={busy || isUploading}
-            className="flex-[2] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 rounded-xl text-sm font-bold transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-md">
+          </Button>
+          <Button type="submit" variant="success" size="sm" shape="rounded" className="flex-[2]"
+            disabled={busy || isUploading}>
             {busy && !isUploading && (
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -332,7 +330,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
               </svg>
             )}
             {isUploading ? "Upload en cours…" : busy ? 'Enregistrement…' : isEditing ? 'Enregistrer les modifications' : "Publier l'actualité"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

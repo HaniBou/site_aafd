@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import type { Vente } from '@/types';
 import { toDateTimeLocalValue, fromDateTimeLocalValue } from '@/lib/vente';
 import { useAdminToast } from '@/components/admin/AdminToast';
 import DateHeureField from '@/components/admin/DateHeureField';
+import { Button } from '@/components/ui/Button';
 
 type FormState = {
   titre: string;
@@ -108,16 +108,19 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <Link
+          <Button
             href={retour}
+            variant="ghost"
+            size="sm"
+            shape="rounded"
+            className="shrink-0 -ml-1"
             aria-label="Retour"
-            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Retour</span>
-          </Link>
+          </Button>
 
           <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
 
@@ -143,7 +146,7 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
           <div className="flex items-center gap-3 pb-1 border-b border-gray-100">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-black text-orange-700">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-bold text-orange-700">
               1
             </span>
             <p className="text-base font-bold text-gray-900">Le nom de la vente</p>
@@ -151,7 +154,7 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
 
           <div>
             <label htmlFor="titre" className={LABEL}>
-              Titre <span className="text-orange-600">*</span>
+              Titre <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>
               C&apos;est le grand titre que les visiteurs verront sur le site. Indiquez le mois,
@@ -189,7 +192,7 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
           <div className="flex items-center gap-3 pb-1 border-b border-gray-100">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-black text-orange-700">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-bold text-orange-700">
               2
             </span>
             <p className="text-base font-bold text-gray-900">Les dates</p>
@@ -217,7 +220,7 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
           <div className="flex items-center gap-3 pb-1 border-b border-gray-100">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-black text-orange-700">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-base font-bold text-orange-700">
               3
             </span>
             <p className="text-base font-bold text-gray-900">Le lieu</p>
@@ -225,7 +228,7 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
 
           <div>
             <label htmlFor="lieu-retrait" className={LABEL}>
-              Où venir chercher les plats <span className="text-orange-600">*</span>
+              Où venir chercher les plats <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>
               L&apos;adresse affichée sur le site et envoyée dans l&apos;email de confirmation.
@@ -255,10 +258,13 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="lg"
+            shape="rounded"
+            fullWidth
             disabled={busy}
-            className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white py-4 rounded-xl text-base font-bold transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-sm"
           >
             {busy && (
               <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -268,14 +274,18 @@ export default function VenteFormClient({ vente }: { vente?: Vente }) {
               </svg>
             )}
             {busy ? 'Enregistrement…' : isEditing ? 'Enregistrer les modifications' : 'Créer la vente'}
-          </button>
+          </Button>
 
-          <Link
+          <Button
             href={retour}
-            className="mt-3 block w-full py-3.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors text-base font-semibold text-center"
+            variant="secondary"
+            size="lg"
+            shape="rounded"
+            fullWidth
+            className="mt-3"
           >
             Annuler et revenir en arrière
-          </Link>
+          </Button>
         </div>
       </form>
     </div>

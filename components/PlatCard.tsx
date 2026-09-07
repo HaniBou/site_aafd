@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { Plat } from "@/types";
+import { Button } from "@/components/ui/Button";
 
 interface PlatCardProps {
   plat: Plat;
@@ -33,7 +34,7 @@ export default function PlatCard({
       className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full h-full flex flex-col"
     >
       <div
-        className="group relative aspect-[4/3] bg-orange-500 overflow-hidden cursor-pointer"
+        className="group relative aspect-[4/3] bg-orange-700 overflow-hidden cursor-pointer"
         onClick={handleImageClick}
         onMouseEnter={() => setIsImageHovered(true)}
         onMouseLeave={() => setIsImageHovered(false)}
@@ -99,11 +100,11 @@ export default function PlatCard({
               Réservations closes
             </span>
           ) : plat.quantite > 0 ? (
-            <span className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
               ✓ Disponible
             </span>
           ) : (
-            <span className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
               Épuisé
             </span>
           )}
@@ -114,7 +115,7 @@ export default function PlatCard({
           {plat.nom}
         </h3>
         {plat.typeMenu && (
-          <p className="text-orange-600 text-sm mb-1 font-semibold">{plat.typeMenu}</p>
+          <p className="text-orange-700 text-sm mb-1 font-semibold">{plat.typeMenu}</p>
         )}
         {plat.cuisiniers && (
           <p className="text-gray-700 text-sm italic mb-1">
@@ -122,7 +123,7 @@ export default function PlatCard({
           </p>
         )}
         <div className="flex items-center justify-between mt-1 mb-1">
-          <div className="text-lg font-bold text-orange-600">
+          <div className="text-lg font-bold text-orange-700">
             {plat.prix}€
           </div>
           {reservationOuverte && plat.quantite > 0 && (
@@ -131,16 +132,16 @@ export default function PlatCard({
             </div>
           )}
         </div>
-        <button
+        <Button
+          variant="primary"
+          size="sm"
+          shape="rounded"
+          fullWidth
+          className="mt-1"
           onClick={e => {
             e.stopPropagation();
             onReserve(plat);
           }}
-          className={`w-full font-semibold py-2 px-3 rounded-lg text-sm transition-all mt-1 ${
-            reservationOuverte && plat.quantite > 0
-              ? 'bg-orange-600 text-white hover:bg-orange-700 active:scale-95 shadow-md hover:shadow-lg'
-              : 'bg-gray-200 text-gray-600 cursor-not-allowed'
-          }`}
           disabled={!reservationOuverte || plat.quantite === 0}
         >
           {!reservationOuverte
@@ -148,7 +149,7 @@ export default function PlatCard({
             : plat.quantite > 0
             ? 'Réserver ce plat'
             : 'Non disponible'}
-        </button>
+        </Button>
       </div>
     </div>
   );

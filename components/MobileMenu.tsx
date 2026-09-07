@@ -118,8 +118,8 @@ export function MobileMenu() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2.5 text-sm font-semibold rounded-full transition-all ${
                   pathname === href
-                    ? orange ? 'bg-orange-600 text-white' : 'bg-blue-900 text-white'
-                    : orange ? 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+                    ? orange ? 'bg-orange-700 text-white' : 'bg-blue-900 text-white'
+                    : orange ? 'text-gray-700 hover:bg-orange-50 hover:text-orange-700'
                              : 'text-gray-700 hover:bg-blue-50 hover:text-blue-900'
                 }`}
               >

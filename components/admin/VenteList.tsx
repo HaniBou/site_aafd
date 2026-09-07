@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 import EtatVenteBadge from '@/components/admin/EtatVenteBadge';
 import { formatDateJour, type VenteResume } from '@/lib/vente';
 
@@ -51,7 +52,7 @@ export default function VenteList({ ventes }: { ventes: VenteResume[] }) {
         </div>
 
         <Link href={`/admin/ventes/${vente.id}`} className="block group">
-          <h3 className="text-base font-bold text-gray-900 leading-snug group-hover:text-orange-600 transition-colors">
+          <h3 className="text-base font-bold text-gray-900 leading-snug group-hover:text-orange-700 transition-colors">
             {vente.titre}
           </h3>
         </Link>
@@ -78,7 +79,7 @@ export default function VenteList({ ventes }: { ventes: VenteResume[] }) {
       <div className="border-t border-gray-100 flex">
         <Link
           href={`/admin/ventes/${vente.id}`}
-          className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center"
+          className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center"
         >
           Voir et gérer
         </Link>
@@ -134,15 +135,12 @@ export default function VenteList({ ventes }: { ventes: VenteResume[] }) {
                 : 'Aucune vente en ligne — la page publique annonce la prochaine'}
             </p>
           </div>
-          <Link
-            href="/admin/ventes/nouveau"
-            className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-colors shadow-sm"
-          >
+          <Button href="/admin/ventes/nouveau" variant="primary" size="sm" shape="rounded">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
             Nouvelle vente
-          </Link>
+          </Button>
         </div>
 
         {error && (
@@ -163,7 +161,7 @@ export default function VenteList({ ventes }: { ventes: VenteResume[] }) {
         {ventes.length === 0 ? (
           <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-7 h-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-7 h-7 text-orange-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -172,12 +170,9 @@ export default function VenteList({ ventes }: { ventes: VenteResume[] }) {
             <p className="text-sm text-gray-500 mb-5">
               Créez une vente, ajoutez-lui ses plats, puis mettez-la en ligne le moment venu.
             </p>
-            <Link
-              href="/admin/ventes/nouveau"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition-colors inline-block"
-            >
+            <Button href="/admin/ventes/nouveau" variant="primary" size="sm" shape="rounded">
               Créer une vente
-            </Link>
+            </Button>
           </div>
         ) : (
           <>

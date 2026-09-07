@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import type { Plat } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 type FormState = {
   nom: string;
@@ -156,14 +156,19 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <Link href={retour}
+          <Button
+            href={retour}
+            variant="ghost"
+            size="sm"
+            shape="rounded"
+            className="shrink-0 -ml-1"
             aria-label="Retour à la vente"
-            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+          >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Retour</span>
-          </Link>
+          </Button>
 
           <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
 
@@ -196,7 +201,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
             <div className="relative w-full h-56 bg-gray-100">
               <Image src={imageSrc} alt="Aperçu" fill className="object-cover" sizes="(max-width: 672px) 100vw, 672px" />
               {previewUrl && (
-                <div className="absolute top-3 left-3 bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
+                <div className="absolute top-3 left-3 bg-emerald-700 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
                   Nouvelle photo
                 </div>
               )}
@@ -217,7 +222,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
               }`}
             >
               {isUploading ? (
-                <svg className="animate-spin h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-6 w-6 text-orange-700" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
@@ -227,7 +232,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               )}
-              <span className="text-sm font-semibold text-orange-600">
+              <span className="text-sm font-semibold text-orange-700">
                 {isUploading
                   ? uploadPhase === 'compressing' ? 'Compression…' : `Envoi en cours…`
                   : imageSrc ? 'Changer la photo' : 'Ajouter une photo *'}
@@ -246,7 +251,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
                       : `Envoi vers le serveur — ${uploadProgress}%`}
                   </span>
                   {uploadPhase === 'uploading' && (
-                    <span className="text-xs font-bold text-orange-600">{uploadProgress}%</span>
+                    <span className="text-xs font-bold text-orange-700">{uploadProgress}%</span>
                   )}
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -282,7 +287,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
 
           <div>
             <label htmlFor="nom-du-plat" className={LABEL}>
-              Nom du plat <span className="text-orange-600">*</span>
+              Nom du plat <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>Le nom affiché en gros sur la carte du plat.</p>
             <input id="nom-du-plat"
@@ -321,7 +326,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
 
           <div>
             <label htmlFor="description" className={LABEL}>
-              Description <span className="text-orange-600">*</span>
+              Description <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>
               Les ingrédients, les accompagnements, et surtout les allergènes. Ce texte apparaît
@@ -343,7 +348,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
 
           <div>
             <label htmlFor="prix" className={LABEL}>
-              Prix d&apos;une part <span className="text-orange-600">*</span>
+              Prix d&apos;une part <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>En euros. Utilisez un point pour les centimes : 12.50</p>
             <div className="relative max-w-[12rem]">
@@ -364,7 +369,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
 
           <div>
             <label htmlFor="quantite-disponible" className={LABEL}>
-              Nombre de parts à vendre <span className="text-orange-600">*</span>
+              Nombre de parts à vendre <span className="text-orange-700">*</span>
             </label>
             <p className={AIDE}>
               Combien de parts vous pouvez préparer. Le site les décompte tout seul à chaque
@@ -384,10 +389,13 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
         </div>
 
         <div className="pb-8">
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="lg"
+            shape="rounded"
+            fullWidth
             disabled={busy || isUploading}
-            className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white py-4 rounded-xl text-base font-bold transition-colors disabled:opacity-60 flex items-center justify-center gap-2 shadow-sm"
           >
             {busy && !isUploading && (
               <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -402,14 +410,18 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
               : isEditing
               ? 'Enregistrer les modifications'
               : 'Ajouter ce plat à la vente'}
-          </button>
+          </Button>
 
-          <Link
+          <Button
             href={retour}
-            className="mt-3 block w-full py-3.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors text-base font-semibold text-center"
+            variant="secondary"
+            size="lg"
+            shape="rounded"
+            fullWidth
+            className="mt-3"
           >
             Annuler et revenir en arrière
-          </Link>
+          </Button>
         </div>
       </form>
     </div>

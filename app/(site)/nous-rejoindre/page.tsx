@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 
-import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
+import { Button } from '@/components/ui/Button'
+import { CtaBand } from '@/components/ui/CtaBand'
 
 export const metadata: Metadata = {
   title: 'Devenir bénévole',
@@ -45,7 +46,7 @@ export default function NousRejoindre() {
       </div>
 
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
-        <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-orange-50 p-4 text-orange-600">
+        <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-orange-50 p-4 text-orange-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
@@ -57,7 +58,7 @@ export default function NousRejoindre() {
       </div>
 
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
-        <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-green-50 p-4 text-green-700">
+        <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-emerald-50 p-4 text-emerald-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
@@ -107,7 +108,7 @@ export default function NousRejoindre() {
   </div>
 </section>
 
-<section className="bg-slate-50 py-20 md:py-28 overflow-hidden">
+<section className="bg-gray-50 py-20 md:py-28 overflow-hidden">
   <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
       <h2 className="text-gray-900">
@@ -140,7 +141,7 @@ export default function NousRejoindre() {
   </div>
 </section>
 
-      <section className="bg-blue-900 py-24 text-white overflow-hidden relative">
+      <section className="on-dark bg-blue-900 py-16 md:py-24 text-white overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full blur-[120px]"></div>
         </div>
@@ -154,18 +155,15 @@ export default function NousRejoindre() {
               { step: "3", title: "Participez", desc: "Lancez-vous sur une mission qui vous plaît." }
             ].map((s, i) => (
               <div key={i} className="group">
-                <div className="text-5xl font-black text-orange-500 mb-4">{s.step}</div>
+                <div className="text-5xl font-bold text-orange-700 mb-4">{s.step}</div>
                 <h3 className="text-xl font-bold mb-2">{s.title}</h3>
                 <p className="text-blue-100 text-sm">{s.desc}</p>
               </div>
             ))}
           </div>
-          <a 
-            href="/contact"
-            className="inline-block rounded-full bg-orange-600 px-10 py-4 text-lg font-bold text-white hover:bg-orange-700 hover:scale-105 transition-all shadow-lg"
-          >
+          <Button href="/contact" variant="primary" size="lg">
             Nous rejoindre
-          </a>
+          </Button>
         </div>
       </section>      
 
@@ -179,7 +177,7 @@ export default function NousRejoindre() {
               { q: "Faut-il parler plusieurs langues ?", a: "Pas nécessairement. Le français suffit pour la majorité de nos actions de terrain." },
               { q: "Dois-je habiter sur le Val de Saône ?", a: "C'est préférable pour faciliter vos déplacements, mais pas obligatoire." }
             ].map((item, idx) => (
-              <details key={idx} className="group border border-gray-100 rounded-xl bg-slate-50/50 p-6">
+              <details key={idx} className="group border border-gray-100 rounded-xl bg-gray-50/50 p-6">
                 <summary className="list-none cursor-pointer flex justify-between items-center font-bold text-gray-900">
                   {item.q}
                   <span className="text-blue-600 group-open:rotate-180 transition-transform">+</span>
@@ -193,30 +191,17 @@ export default function NousRejoindre() {
         </div>
       </section>
 
-      <section className="bg-blue-900 py-16 md:py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>
-            Ensemble, créons du lien et de la solidarité
-          </h2>
-          <p className="mb-8 text-xl text-blue-100">
-            Rejoignez une communauté engagée et bienveillante
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/contact"
-              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors"
-            >
-              Devenir bénévole
-            </a>
-            <Link
-              href="/actualites"
-              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
-            >
-              Découvrir nos actions
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title="Ensemble, créons du lien et de la solidarité"
+        description="Rejoignez une communauté engagée et bienveillante"
+      >
+        <Button href="/contact" variant="primary" size="lg">
+          Devenir bénévole
+        </Button>
+        <Button href="/actualites" variant="onDark" size="lg">
+          Découvrir nos actions
+        </Button>
+      </CtaBand>
     </main>
   )
 }

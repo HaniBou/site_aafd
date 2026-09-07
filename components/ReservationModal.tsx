@@ -4,6 +4,7 @@ import { useState, useRef, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Plat, Vente } from "@/types";
 import { formatDateHeure } from "@/lib/vente";
+import { Button } from "@/components/ui/Button";
 
 type ReservationModalProps = {
   isOpen: boolean;
@@ -100,7 +101,7 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
       onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
     >
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-modal-in">
-        <div className="bg-orange-600 text-white p-6 rounded-t-2xl">
+        <div className="bg-orange-700 text-white p-6 rounded-t-2xl">
           <div className="flex justify-between items-start">
             <div>
               <h3 id="reservation-modal-title" className="text-2xl font-bold mb-2">Réserver</h3>
@@ -231,13 +232,13 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
           </div>
 
           {submitStatus === "success" && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
-              <svg className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-3">
+              <svg className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <p className="font-semibold text-green-900">Réservation confirmée ! ✅</p>
-                <p className="text-sm text-green-700 mt-1">Vous recevrez un email de confirmation sous peu.</p>
+                <p className="font-semibold text-emerald-900">Réservation confirmée ! ✅</p>
+                <p className="text-sm text-emerald-700 mt-1">Vous recevrez un email de confirmation sous peu.</p>
               </div>
             </div>
           )}
@@ -273,30 +274,37 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
 
           {submitStatus === "success" || submitStatus === "warning" ? (
             <div className="pt-4">
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="md"
+                shape="rounded"
+                fullWidth
                 onClick={onClose}
-                className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-md"
               >
                 Fermer
-              </button>
+              </Button>
             </div>
           ) : (
             <div className="flex gap-3 pt-4">
-              <button
-                type="button"
+              <Button
+                variant="secondary"
+                size="md"
+                shape="rounded"
+                className="flex-1"
                 onClick={onClose}
-                className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Annuler
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
+                variant="primary"
+                size="md"
+                shape="rounded"
+                className="flex-1"
                 disabled={isSubmitting || !!emailError}
-                className="flex-1 px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Envoi..." : "Confirmer"}
-              </button>
+              </Button>
             </div>
           )}
 

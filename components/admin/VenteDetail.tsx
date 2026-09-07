@@ -8,6 +8,7 @@ import ConfirmModal from '@/components/admin/ConfirmModal';
 import PlatList from '@/components/admin/PlatList';
 import EtatVenteBadge from '@/components/admin/EtatVenteBadge';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 import { formatDateCompacte, formatDateJour, type EtatVente } from '@/lib/vente';
 
 type Props = {
@@ -143,7 +144,7 @@ export default function VenteDetail({ vente, etat, plats, nbCommandes }: Props) 
               {nbCommandes > 0 && (
                 <Link
                   href="/admin/reservations"
-                  className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-800 underline underline-offset-2"
                 >
                   {nbCommandes} commande{nbCommandes > 1 ? 's' : ''} reçue{nbCommandes > 1 ? 's' : ''}
                 </Link>
@@ -166,22 +167,28 @@ export default function VenteDetail({ vente, etat, plats, nbCommandes }: Props) 
 
             <div className="mt-4">
               {enLigne ? (
-                <button
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  shape="rounded"
+                  fullWidth
                   onClick={() => setConfirmFermeture(true)}
                   disabled={busy}
-                  className="w-full rounded-xl border border-gray-300 bg-white py-3.5 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors disabled:opacity-60"
                 >
                   Clôturer la vente
-                </button>
+                </Button>
               ) : (
                 <>
-                  <button
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    shape="rounded"
+                    fullWidth
                     onClick={() => changerStatut('ouverte')}
                     disabled={busy || plats.length === 0}
-                    className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 active:bg-orange-700 py-3.5 text-base font-bold text-white shadow-sm transition-colors disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed"
                   >
                     Mettre en ligne sur le site
-                  </button>
+                  </Button>
                   {plats.length === 0 && (
                     <p className="mt-2 text-center text-sm text-amber-700">
                       Ajoutez au moins un plat pour pouvoir mettre la vente en ligne.
@@ -195,7 +202,7 @@ export default function VenteDetail({ vente, etat, plats, nbCommandes }: Props) 
           <div className="border-t border-gray-100 flex">
             <Link
               href={`/admin/ventes/${vente.id}/modifier`}
-              className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center"
+              className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center"
             >
               Modifier
             </Link>

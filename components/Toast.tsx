@@ -49,7 +49,7 @@ export default function Toast({ message, show, tone, onClose }: ToastProps) {
       <div
         className={`rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-4 border-2 ${
           isSuccess
-            ? 'bg-green-50 border-green-300'
+            ? 'bg-emerald-50 border-emerald-300'
             : isError
             ? 'bg-red-50 border-red-300'
             : 'bg-blue-50 border-blue-300'
@@ -57,7 +57,7 @@ export default function Toast({ message, show, tone, onClose }: ToastProps) {
       >
         <div
           className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-            isSuccess ? 'bg-green-500' : isError ? 'bg-red-500' : 'bg-blue-500'
+            isSuccess ? 'bg-emerald-700' : isError ? 'bg-red-600' : 'bg-blue-700'
           }`}
         >
           {isSuccess ? (
@@ -77,7 +77,7 @@ export default function Toast({ message, show, tone, onClose }: ToastProps) {
 
         <p
           className={`flex-1 text-sm font-semibold ${
-            isSuccess ? 'text-green-800' : isError ? 'text-red-800' : 'text-blue-800'
+            isSuccess ? 'text-emerald-800' : isError ? 'text-red-800' : 'text-blue-800'
           }`}
         >
           {message}

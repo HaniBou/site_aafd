@@ -1,33 +1,49 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'DINSchriftRegular';
-  src: url('/fonts/DINSchriftRegular.woff2') format('woff2'),
-       url('/fonts/DINSchriftRegular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --blue-primary: #1e40af;
-  --blue-secondary: #1e3a8a;
-  --orange-accent: #f97316;
+}
+
+/* Couleurs d'action du site. Chaque valeur reprend un palier Tailwind (indiqué
+   en commentaire) et a été vérifiée à 4.5:1 minimum avec sa couleur de texte.
+   C'est le seul endroit à modifier pour changer l'identité : les boutons et
+   l'anneau de focus ne référencent que ces jetons. */
+@theme {
+  --color-brand: oklch(55.3% 0.195 38.402);          /* orange-700 · blanc 5.23:1 */
+  --color-brand-hover: oklch(47% 0.157 37.304);      /* orange-800 · blanc 7.35:1 */
+  --color-brand-active: oklch(40.8% 0.123 38.172);   /* orange-900 · blanc 9.42:1 */
+
+  --color-donate: oklch(52.5% 0.223 3.958);          /* pink-700 · blanc 5.89:1 */
+  --color-donate-hover: oklch(45.9% 0.187 3.815);    /* pink-800 · blanc 7.90:1 */
+  --color-donate-active: oklch(40.8% 0.153 2.432);   /* pink-900 */
+
+  --color-success: oklch(50.8% 0.118 165.612);       /* emerald-700 · blanc 5.37:1 */
+  --color-success-hover: oklch(43.2% 0.095 166.913); /* emerald-800 */
+  --color-success-active: oklch(37.8% 0.077 168.94); /* emerald-900 */
+
+  --color-danger: oklch(57.7% 0.245 27.325);         /* red-600 · blanc 4.76:1 */
+  --color-danger-hover: oklch(50.5% 0.213 27.518);   /* red-700 */
+  --color-danger-active: oklch(44.4% 0.177 26.899);  /* red-800 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: DINSchriftRegular, Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Volontairement distinct de --color-brand : un anneau orange autour d'un bouton
+   orange ne se détacherait pas (WCAG 1.4.11 demande 3:1 avec la couleur voisine). */
+:root {
+  --focus-ring: oklch(48.8% 0.243 264.376); /* blue-700 */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: DINSchriftRegular, Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   font-feature-settings: "kern" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -99,6 +115,28 @@ input:disabled,
 select:disabled,
 [disabled] {
   cursor: not-allowed !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+summary:focus-visible {
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+footer,
+.on-dark {
+  --focus-ring: #ffffff;
 }
 
 @layer utilities {

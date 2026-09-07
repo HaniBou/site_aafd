@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
+import { Button } from '@/components/ui/Button'
+import { CtaBand } from '@/components/ui/CtaBand'
 
 export const metadata: Metadata = {
   title: 'Notre association',
@@ -55,7 +56,7 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-gray-50">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20">
             <div className="relative group w-56 md:w-72 flex-shrink-0">
@@ -78,7 +79,7 @@ export default function NotreAssociationPage() {
                 « Au cœur de notre engagement,{' '}
                 <span className="text-blue-900">l&apos;humain avant tout.</span> »
               </h2>
-              <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-light italic">
+              <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-normal italic">
                 <p>
                   Depuis {ASSOCIATION_FOUNDING_YEAR}, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
                   Nous ne nous contentons pas d&apos;accompagner, nous tissons des liens de fraternité qui
@@ -91,7 +92,7 @@ export default function NotreAssociationPage() {
               </div>
               <div className="mt-10 flex flex-col items-center md:items-start">
                 <p className="text-xl font-semibold text-gray-900">[Prénom Nom]</p>
-                <p className="text-gray-500 font-light tracking-wide">Présidente de l&apos;AAFD</p>
+                <p className="text-gray-500 font-normal tracking-wide">Présidente de l&apos;AAFD</p>
                 <div className="mt-4 w-12 h-px bg-blue-900/30" />
               </div>
             </div>
@@ -111,7 +112,7 @@ export default function NotreAssociationPage() {
           <div className="space-y-24">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <span className="text-orange-500 font-bold tracking-widest uppercase text-xs mb-3 block">Environ tous les 2 mois</span>
+                <span className="text-orange-700 font-bold tracking-widest uppercase text-xs mb-3 block">Environ tous les 2 mois</span>
                 <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ventes de plats traditionnels</h3>
                 <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                   <p>
@@ -123,12 +124,9 @@ export default function NotreAssociationPage() {
                     d&apos;Algérie, de Guinée</strong> et d&apos;autres pays, tout en soutenant concrètement nos actions.
                   </p>
                 </div>
-                <Link
-                  href="/vente-plats"
-                  className="mt-6 inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-full hover:bg-orange-700 transition-colors font-semibold text-sm shadow"
-                >
+                <Button href="/vente-plats" variant="primary" size="sm" className="mt-6">
                   Commander nos plats
-                </Link>
+                </Button>
               </div>
               <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl">
                 <Image src="/images/plats.webp" alt="Ventes de plats" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
@@ -161,7 +159,7 @@ export default function NotreAssociationPage() {
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <span className="text-green-600 font-bold tracking-widest uppercase text-xs mb-3 block">Engagement territorial</span>
+                <span className="text-emerald-600 font-bold tracking-widest uppercase text-xs mb-3 block">Engagement territorial</span>
                 <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Nettoyons notre Val de Saône</h3>
                 <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
                   <p>
@@ -186,7 +184,7 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      <section className="bg-blue-900 py-16 md:py-24 text-white">
+      <section className="on-dark bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="mb-4">Accompagnement au quotidien</h2>
@@ -213,7 +211,7 @@ export default function NotreAssociationPage() {
               },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="flex items-start gap-5 py-6">
-                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-orange-500/20">
+                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-orange-700/20">
                   <svg className="h-5 w-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
                   </svg>
@@ -258,27 +256,23 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      <section className="bg-blue-900 py-16 md:py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>Envie de vous impliquer ?</h2>
-          <p className="mb-8 text-body-large text-blue-100">
-            Rejoignez notre équipe de bénévoles ou soutenez nos actions par un don
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/nous-rejoindre" className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors shadow-lg">
-              Devenir bénévole
-            </Link>
-            <a
-              href={HELLOASSO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
-            >
-              Faire un don
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title="Envie de vous impliquer ?"
+        description="Rejoignez notre équipe de bénévoles ou soutenez nos actions par un don"
+      >
+        <Button href="/nous-rejoindre" variant="primary" size="lg">
+          Devenir bénévole
+        </Button>
+        <Button
+          href={HELLOASSO_URL}
+          variant="onDark"
+          size="lg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Faire un don
+        </Button>
+      </CtaBand>
     </main>
   )
 }

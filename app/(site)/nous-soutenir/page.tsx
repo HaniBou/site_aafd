@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 import { CONTACT_EMAIL } from '@/lib/siteConfig'
+import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
   title: 'Nous soutenir',
@@ -19,7 +19,7 @@ export default function NousSoutenirPage() {
         description="Votre soutien est essentiel pour continuer à accompagner les familles en difficulté et développer nos actions sur le Val de Saône."
         imageSrc="/images/donate.webp"
         imageAlt="Nous soutenir"
-        accentColor="bg-green-400"
+        accentColor="bg-emerald-400"
       />
 
 <section className="py-20 bg-white">
@@ -32,19 +32,19 @@ export default function NousSoutenirPage() {
     <div className="grid md:grid-cols-3 gap-12">
       <div className="text-center md:text-left">
         <h3 className="text-xl font-bold text-blue-900 mb-4 tracking-tight">Aide au logement</h3>
-        <p className="text-gray-600 leading-relaxed font-light">
+        <p className="text-gray-600 leading-relaxed font-normal">
           Financement de cautions et loyers pour permettre aux familles d&apos;accéder à un foyer décent.
         </p>
       </div>
       <div className="text-center md:text-left">
-        <h3 className="text-xl font-bold text-orange-600 mb-4 tracking-tight">Frais juridiques</h3>
-        <p className="text-gray-600 leading-relaxed font-light">
+        <h3 className="text-xl font-bold text-orange-700 mb-4 tracking-tight">Frais juridiques</h3>
+        <p className="text-gray-600 leading-relaxed font-normal">
           Prise en charge des honoraires pour défendre les droits fondamentaux des familles réfugiées.
         </p>
       </div>
       <div className="text-center md:text-left">
-        <h3 className="text-xl font-bold text-green-700 mb-4 tracking-tight">Besoins quotidiens</h3>
-        <p className="text-gray-600 leading-relaxed font-light">
+        <h3 className="text-xl font-bold text-emerald-700 mb-4 tracking-tight">Besoins quotidiens</h3>
+        <p className="text-gray-600 leading-relaxed font-normal">
           Soutien pour les transports, les assurances et l&apos;équipement de première nécessité.
         </p>
       </div>
@@ -80,7 +80,7 @@ export default function NousSoutenirPage() {
               <div className="space-y-4 mb-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-1">
-                    <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -90,7 +90,7 @@ export default function NousSoutenirPage() {
                 </div>
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-1">
-                    <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -100,7 +100,7 @@ export default function NousSoutenirPage() {
                 </div>
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-1">
-                    <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -122,7 +122,7 @@ export default function NousSoutenirPage() {
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center rounded-full bg-orange-100 p-3 mb-4">
-                  <svg className="h-10 w-10 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-10 w-10 text-orange-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
@@ -156,12 +156,9 @@ export default function NousSoutenirPage() {
                 </div>
               </div>
 
-              <Link
-                href="/notre-action"
-                className="block w-full text-center rounded-full bg-orange-600 px-6 py-3 text-base font-semibold text-white hover:bg-orange-500 transition-colors"
-              >
+              <Button href="/notre-action" variant="primary" size="md" fullWidth>
                 Découvrir nos événements
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -181,19 +178,19 @@ export default function NousSoutenirPage() {
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <svg className="h-6 w-6 text-green-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span><strong>Mécénat financier</strong> : soutenez nos actions par un don déductible à 60%</span>
                   </li>
                   <li className="flex items-start">
-                    <svg className="h-6 w-6 text-green-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span><strong>Mécénat de compétences</strong> : mettez vos expertises à notre service</span>
                   </li>
                   <li className="flex items-start">
-                    <svg className="h-6 w-6 text-green-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span><strong>Parrainage d&apos;événements</strong> : associez votre image à nos actions</span>
@@ -212,7 +209,7 @@ export default function NousSoutenirPage() {
         </div>
       </section>
 
-<section className="bg-blue-900 py-16 md:py-24 text-white">
+<section className="on-dark bg-blue-900 py-16 md:py-24 text-white">
   <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
       <h2 className="text-white">
@@ -254,20 +251,18 @@ export default function NousSoutenirPage() {
       Que ce soit par un don ou en donnant de votre temps, votre soutien est précieux.
     </p>
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-      <Link
+      <Button
         href="https://www.helloasso.com/associations/association-d-aide-aux-familles-en-difficulte-en-val-de-saone"
+        variant="donate"
+        size="lg"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block rounded-full bg-blue-900 px-8 py-4 text-lg font-semibold text-white hover:bg-blue-800 transition-colors"
       >
         Faire un don
-      </Link>
-      <Link
-        href="/nous-rejoindre"
-        className="inline-block rounded-full border-2 border-blue-900 px-8 py-4 text-lg font-semibold text-blue-900 hover:bg-blue-900 hover:text-white transition-colors"
-      >
+      </Button>
+      <Button href="/nous-rejoindre" variant="secondary" size="lg">
         Nous rejoindre
-      </Link>
+      </Button>
     </div>
   </div>
 </section>

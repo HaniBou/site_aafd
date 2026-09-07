@@ -7,6 +7,7 @@ import Image from 'next/image';
 import type { Moment } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 export default function MomentList({ moments }: { moments: Moment[] }) {
   const router = useRouter();
@@ -53,13 +54,13 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
               {moments.length} photo{moments.length > 1 ? 's' : ''} — galerie en bas de la page Témoignages
             </p>
           </div>
-          <Link href="/admin/moments/nouveau"
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-colors shadow-sm flex items-center justify-center gap-2">
+          <Button href="/admin/moments/nouveau" variant="primary" size="sm" shape="rounded"
+            className="w-full sm:w-auto">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Ajouter une photo
-          </Link>
+          </Button>
         </div>
 
         {deleteError && (
@@ -89,10 +90,9 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
             <p className="text-sm text-gray-500 mb-5">
               Tant que la galerie est vide, la section n&apos;apparaît pas sur le site.
             </p>
-            <Link href="/admin/moments/nouveau"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block transition-colors">
+            <Button href="/admin/moments/nouveau" variant="primary" size="sm" shape="rounded">
               Ajouter une photo
-            </Link>
+            </Button>
           </div>
         )}
 
@@ -123,7 +123,7 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
 
                 <div className="border-t border-gray-100 flex">
                   <Link href={`/admin/moments/${moment.id}/modifier`}
-                    className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                    className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center">
                     Modifier
                   </Link>
                   <div className="w-px bg-gray-100" />

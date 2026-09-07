@@ -7,6 +7,7 @@ import Image from 'next/image';
 import type { Plat } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 export default function PlatList({ plats, venteId }: { plats: Plat[]; venteId: string }) {
   const router = useRouter();
@@ -54,15 +55,12 @@ export default function PlatList({ plats, venteId }: { plats: Plat[]; venteId: s
               : `${plats.length} plat${plats.length > 1 ? 's' : ''}`}
           </p>
         </div>
-        <Link
-          href={`/admin/ventes/${venteId}/plats/nouveau`}
-          className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-colors shadow-sm"
-        >
+        <Button href={`/admin/ventes/${venteId}/plats/nouveau`} variant="primary" size="sm" shape="rounded">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
           </svg>
           Ajouter un plat
-        </Link>
+        </Button>
       </div>
 
       {deleteError && (
@@ -83,19 +81,16 @@ export default function PlatList({ plats, venteId }: { plats: Plat[]; venteId: s
       {plats.length === 0 ? (
         <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-10 text-center">
           <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-7 h-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-7 h-7 text-orange-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <h3 className="font-bold text-gray-800 mb-1">Aucun plat dans cette vente</h3>
           <p className="text-sm text-gray-500 mb-5">Ajoutez les plats que les bénévoles préparent.</p>
-          <Link
-            href={`/admin/ventes/${venteId}/plats/nouveau`}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition-colors inline-block"
-          >
+          <Button href={`/admin/ventes/${venteId}/plats/nouveau`} variant="primary" size="sm" shape="rounded">
             Ajouter un plat
-          </Link>
+          </Button>
         </div>
       ) : (
         <div className="space-y-3">
@@ -118,18 +113,18 @@ export default function PlatList({ plats, venteId }: { plats: Plat[]; venteId: s
                   <p className="text-sm text-gray-600 mt-1.5 line-clamp-2 leading-relaxed">{plat.description}</p>
 
                   <div className="flex flex-wrap gap-3 mt-3">
-                    <div className="flex items-center gap-1.5 bg-indigo-50 px-3 py-1 rounded-lg">
-                      <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="flex items-center gap-1.5 bg-blue-50 px-3 py-1 rounded-lg">
+                      <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                           d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                       </svg>
-                      <span className="text-sm font-bold text-indigo-700">{plat.prix} €</span>
+                      <span className="text-sm font-bold text-blue-700">{plat.prix} €</span>
                     </div>
                     <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg ${
-                      plat.quantite === 0 ? 'bg-red-50' : plat.quantite < 5 ? 'bg-amber-50' : 'bg-green-50'
+                      plat.quantite === 0 ? 'bg-red-50' : plat.quantite < 5 ? 'bg-amber-50' : 'bg-emerald-50'
                     }`}>
                       <span className={`text-sm font-bold ${
-                        plat.quantite === 0 ? 'text-red-600' : plat.quantite < 5 ? 'text-amber-600' : 'text-green-600'
+                        plat.quantite === 0 ? 'text-red-600' : plat.quantite < 5 ? 'text-amber-600' : 'text-emerald-600'
                       }`}>
                         {plat.quantite === 0 ? 'Épuisé' : `${plat.quantite} dispo${plat.quantite > 1 ? 's' : ''}`}
                       </span>
@@ -149,7 +144,7 @@ export default function PlatList({ plats, venteId }: { plats: Plat[]; venteId: s
 
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/plats/${plat.id}/modifier`}
-                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />

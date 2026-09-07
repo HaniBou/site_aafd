@@ -6,7 +6,7 @@ export type AccentLien =
   | "rose"
   | "amber"
   | "sky"
-  | "indigo";
+  | "purple";
 
 export type LienUtile = {
   nom: string;
@@ -86,7 +86,7 @@ export const LIENS_UTILES: readonly LienUtile[] = [
     nom: "Les Chant' sans pap' yé !",
     url: "https://www.chantsanspapier.click/",
     description: "Chorale engagée aux côtés des personnes sans papiers.",
-    accent: "indigo",
+    accent: "purple",
     logo: "/images/liens/chant-sans-pap.jpg",
     hauteurLogo: "h-20",
     fondOpaque: true,
@@ -102,7 +102,7 @@ export const ACCENTS_LIENS: Record<
     repli: "text-blue-900",
   },
   orange: {
-    fleche: "bg-orange-50 text-orange-700 group-hover:bg-orange-600 group-hover:text-white",
+    fleche: "bg-orange-50 text-orange-700 group-hover:bg-orange-800 group-hover:text-white",
     repli: "text-orange-900",
   },
   emerald: {
@@ -125,9 +125,9 @@ export const ACCENTS_LIENS: Record<
     fleche: "bg-sky-50 text-sky-700 group-hover:bg-sky-600 group-hover:text-white",
     repli: "text-sky-900",
   },
-  indigo: {
-    fleche: "bg-indigo-50 text-indigo-700 group-hover:bg-indigo-600 group-hover:text-white",
-    repli: "text-indigo-900",
+  purple: {
+    fleche: "bg-purple-50 text-purple-700 group-hover:bg-purple-700 group-hover:text-white",
+    repli: "text-purple-900",
   },
 };
 

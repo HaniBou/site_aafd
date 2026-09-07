@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import type { Temoignage } from '@/types';
 import { uploadImage } from '@/lib/uploadImage';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 type FormState = {
   nom: string;
@@ -145,14 +145,13 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <Link href="/admin/temoignages"
-            aria-label="Retour aux témoignages"
-            className="flex items-center gap-1.5 shrink-0 -ml-1 px-2 py-1.5 rounded-lg text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+          <Button href="/admin/temoignages" variant="ghost" size="sm" shape="rounded"
+            className="shrink-0 -ml-1" aria-label="Retour aux témoignages">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Retour</span>
-          </Link>
+          </Button>
 
           <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden="true" />
 
@@ -211,7 +210,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
             <div className="relative w-full h-40 bg-gray-100">
               <Image src={imageSrc} alt="Aperçu" fill className="object-cover" sizes="(max-width: 672px) 100vw, 672px" />
               {previewUrl && (
-                <div className="absolute top-3 left-3 bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
+                <div className="absolute top-3 left-3 bg-emerald-700 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
                   Nouvelle photo
                 </div>
               )}
@@ -322,12 +321,11 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
         </div>
 
         <div className="flex gap-3 pb-8">
-          <Link href="/admin/temoignages"
-            className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center">
+          <Button href="/admin/temoignages" variant="secondary" size="sm" shape="rounded" className="flex-1">
             Annuler
-          </Link>
-          <button type="submit" disabled={busy || isUploading || !form.type}
-            className="flex-[2] bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3.5 rounded-xl text-sm font-bold transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-md">
+          </Button>
+          <Button type="submit" variant="success" size="sm" shape="rounded" className="flex-[2]"
+            disabled={busy || isUploading || !form.type}>
             {busy && !isUploading && (
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -335,7 +333,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
               </svg>
             )}
             {isUploading ? 'Upload en cours…' : busy ? 'Enregistrement…' : isEditing ? 'Enregistrer les modifications' : 'Ajouter le témoignage'}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

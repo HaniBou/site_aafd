@@ -13,6 +13,8 @@ import {
 } from '@/lib/siteConfig'
 import { Reveal } from '@/components/Reveal'
 import { CountUp } from '@/components/CountUp'
+import { Button } from '@/components/ui/Button'
+import { CtaBand } from '@/components/ui/CtaBand'
 
 const PHOTOS_INSTAGRAM_PAR_DEFAUT = [
   { src: '/images/ensemble.webp', alt: 'Bénévoles et familles réunis' },
@@ -70,11 +72,11 @@ export default function HomeContent({
       <MainHero />
 
       {featuredActu && (
-        <section className="py-12 md:py-16 bg-slate-50">
+        <section className="py-12 md:py-16 bg-gray-50">
           <div className="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-8">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h2 className="inline-block px-4 py-2 mb-0 bg-orange-600 text-white text-sm font-medium tracking-wide rounded-full">
+                <h2 className="inline-block px-4 py-2 mb-0 bg-orange-700 text-white text-sm font-medium tracking-wide rounded-full">
                   À la une
                 </h2>
               </div>
@@ -134,15 +136,12 @@ export default function HomeContent({
                     </svg>
                   </Link>
                   {featuredActu.category === "Vente" && (
-                    <Link
-                      href="/vente-plats"
-                      className="inline-flex items-center gap-2 bg-orange-600 text-white px-5 py-2 rounded-full hover:bg-orange-700 transition-all font-semibold text-sm shadow-lg hover:shadow-xl"
-                    >
+                    <Button href="/vente-plats" variant="primary" size="sm">
                       Commander
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
-                    </Link>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -194,7 +193,7 @@ export default function HomeContent({
       </section>
 
       {evenementsAgenda.length > 0 && (
-        <section className="py-20 bg-blue-900 text-white">
+        <section className="on-dark bg-blue-900 py-16 md:py-24 text-white">
           <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2>Prochains rendez-vous</h2>
@@ -206,8 +205,8 @@ export default function HomeContent({
                   href={actualiteHref(evt)}
                   className="group bg-white/5 hover:bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 hover:border-white/25 flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 transition-all duration-300 hover:-translate-y-1 shadow-xl"
                 >
-                  <div className="bg-orange-600 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
-                    <span className="text-3xl font-black leading-none">
+                  <div className="bg-orange-700 text-white w-20 h-20 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg shadow-orange-500/20">
+                    <span className="text-3xl font-bold leading-none">
                       {new Date(evt.date).getDate()}
                     </span>
                     <span className="text-[11px] uppercase font-bold">
@@ -222,7 +221,7 @@ export default function HomeContent({
                       {evt.title}
                     </h3>
                   </div>
-                  <div className="hidden sm:flex p-3 rounded-full bg-orange-500 group-hover:bg-orange-600 transition-colors shadow-lg shrink-0">
+                  <div className="hidden sm:flex p-3 rounded-full bg-orange-700 group-hover:bg-orange-800 transition-colors shadow-lg shrink-0">
                     <svg className="w-6 h-6 text-white transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
@@ -235,7 +234,7 @@ export default function HomeContent({
         </section>
       )}
 
-      <section className="py-16 md:py-24 bg-slate-50">
+      <section className="py-16 md:py-24 bg-gray-50">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-gray-900">
@@ -286,7 +285,7 @@ export default function HomeContent({
         </div>
       </section>
 
-      <section className="bg-blue-900 py-16 md:py-24 text-white">
+      <section className="on-dark bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2>L&apos;AAFD en chiffres</h2>
@@ -312,7 +311,7 @@ export default function HomeContent({
         <section className="py-16 md:py-24 bg-white">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <span className="inline-block rounded-full bg-green-100 px-4 py-1.5 text-sm font-bold text-green-800 mb-3">
+              <span className="inline-block rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-bold text-emerald-800 mb-3">
                 Réservations ouvertes
               </span>
               <h2 className="text-gray-900">{venteEnCours?.titre ?? 'Nos plats du moment'}</h2>
@@ -354,10 +353,10 @@ export default function HomeContent({
                     <div className="flex flex-1 flex-col p-5">
                       <h3 className="mb-1 text-gray-900">{plat.nom}</h3>
                       {plat.typeMenu && (
-                        <p className="mb-0 text-sm font-semibold text-orange-600">{plat.typeMenu}</p>
+                        <p className="mb-0 text-sm font-semibold text-orange-700">{plat.typeMenu}</p>
                       )}
                       <div className="mt-auto flex items-center justify-between pt-4">
-                        <span className="text-lg font-bold text-orange-600">{plat.prix} €</span>
+                        <span className="text-lg font-bold text-orange-700">{plat.prix} €</span>
                         <span className="text-xs text-gray-600">
                           {plat.quantite} restant{plat.quantite > 1 ? 's' : ''}
                         </span>
@@ -369,15 +368,12 @@ export default function HomeContent({
             </div>
 
             <div className="mt-10 text-center">
-              <Link
-                href="/vente-plats"
-                className="group inline-flex items-center gap-2 rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-orange-700"
-              >
+              <Button href="/vente-plats" variant="primary" size="lg" className="group">
                 Voir tous nos plats
                 <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -437,11 +433,13 @@ export default function HomeContent({
 
           <Reveal delay={200}>
             <div className="mt-10 text-center">
-              <a
+              <Button
                 href={INSTAGRAM_URL}
+                variant="instagram"
+                size="lg"
+                className="group"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-2xl hover:brightness-110"
               >
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
@@ -450,37 +448,29 @@ export default function HomeContent({
                 <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </a>
+              </Button>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <section className="bg-blue-900 py-16 md:py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>Rejoignez notre communauté</h2>
-          <p className="mb-8 text-xl text-blue-100">
-            Que vous souhaitiez devenir bénévole, faire un don ou simplement en savoir plus,
-            nous serions ravis de vous accueillir.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/nous-rejoindre"
-              className="inline-block rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white hover:bg-orange-700 transition-colors shadow-lg"
-            >
-              Devenir bénévole
-            </Link>
-            <a
-              href={HELLOASSO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
-            >
-              Faire un don
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title="Rejoignez notre communauté"
+        description="Que vous souhaitiez devenir bénévole, faire un don ou simplement en savoir plus, nous serions ravis de vous accueillir."
+      >
+        <Button href="/nous-rejoindre" variant="primary" size="lg">
+          Devenir bénévole
+        </Button>
+        <Button
+          href={HELLOASSO_URL}
+          variant="onDark"
+          size="lg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Faire un don
+        </Button>
+      </CtaBand>
     </main>
   )
 }

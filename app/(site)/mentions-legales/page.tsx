@@ -36,7 +36,7 @@ export default function MentionsLegalesPage() {
                 </li>
                 <li>
                   <strong>Numéro RNA / SIRET :</strong>{' '}
-                  <span className="text-orange-600 font-semibold">[Numéro à compléter]</span>
+                  <span className="text-orange-700 font-semibold">[Numéro à compléter]</span>
                 </li>
                 <li>
                   <strong>Téléphone :</strong>{' '}
@@ -53,7 +53,7 @@ export default function MentionsLegalesPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Directeur de publication</h2>
               <p>
                 Le directeur de publication est{' '}
-                <span className="text-orange-600 font-semibold">[Prénom Nom, Présidente de l&apos;AAFD]</span>.
+                <span className="text-orange-700 font-semibold">[Prénom Nom, Présidente de l&apos;AAFD]</span>.
               </p>
             </div>
 

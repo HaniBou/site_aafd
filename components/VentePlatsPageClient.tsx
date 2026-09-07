@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import ReservationModal from "@/components/ReservationModal";
 import { PageHero } from "@/components/PageHero";
@@ -10,6 +9,8 @@ import type { Plat, Vente } from "@/types";
 import { Reveal } from "@/components/Reveal";
 import { formatDateHeure, formatDateJour } from "@/lib/vente";
 import { HELLOASSO_URL } from "@/lib/siteConfig";
+import { Button } from "@/components/ui/Button";
+import { CtaBand } from '@/components/ui/CtaBand';
 
 type Props = {
   vente: Vente | null;
@@ -57,7 +58,7 @@ export default function VentePlatsPageClient({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               <Reveal>
-                <div className="w-12 h-0.5 bg-orange-500 mb-6" />
+                <div className="w-12 h-0.5 bg-orange-700 mb-6" />
                 <h2 className="text-gray-900">
                   {prochaineVente
                     ? 'La prochaine vente se prépare'
@@ -71,7 +72,7 @@ export default function VentePlatsPageClient({
 
                 {prochaineVente && (
                   <div className="mt-8 border-l-2 border-orange-500 pl-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-600">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
                       Prochaine vente
                     </p>
                     <p className="mt-2 text-2xl font-bold text-gray-900">{prochaineVente.titre}</p>
@@ -88,26 +89,24 @@ export default function VentePlatsPageClient({
                 )}
 
                 <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                  <Link
-                    href="/actualites"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-orange-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-colors hover:bg-orange-700"
-                  >
+                  <Button href="/actualites" variant="primary" size="lg" className="group">
                     Suivre nos actualités
                     <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </Link>
-                  <a
+                  </Button>
+                  <Button
                     href={HELLOASSO_URL}
+                    variant="donate"
+                    size="lg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-pink-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition-all hover:bg-pink-700 hover:shadow-2xl"
                   >
                     Faire un don
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                     </svg>
-                  </a>
+                  </Button>
                 </div>
               </Reveal>
 
@@ -132,7 +131,7 @@ export default function VentePlatsPageClient({
       )}
 
       {(loadError || vente) && (
-      <section className="py-16 bg-slate-50">
+      <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
           {loadError ? (
@@ -146,7 +145,7 @@ export default function VentePlatsPageClient({
                 <span
                   className={`inline-block rounded-full px-4 py-1.5 text-sm font-bold ${
                     commandesOuvertes
-                      ? 'bg-green-100 text-green-800'
+                      ? 'bg-emerald-100 text-emerald-800'
                       : 'bg-amber-100 text-amber-800'
                   }`}
                 >
@@ -160,7 +159,7 @@ export default function VentePlatsPageClient({
 
               {vente.dateLimiteCommande && (
                 <div className="mx-auto max-w-xl mb-12 rounded-2xl bg-white border border-gray-200 p-5 shadow-sm text-center">
-                  <p className="text-xs font-bold uppercase tracking-wider text-orange-600 mb-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-orange-700 mb-1">
                     {commandesOuvertes ? 'Réservez avant le' : 'Les réservations étaient ouvertes jusqu’au'}
                   </p>
                   <p className="font-semibold text-gray-900">{formatDateHeure(vente.dateLimiteCommande)}</p>
@@ -237,7 +236,7 @@ export default function VentePlatsPageClient({
               ].map((etape, i) => (
                 <Reveal key={etape.titre} delay={i * 130}>
                   <div className="text-center">
-                    <div className="mx-auto w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-4 shadow-lg">
+                    <div className="mx-auto w-20 h-20 rounded-full bg-orange-700 flex items-center justify-center mb-4 shadow-lg">
                       <span className="text-4xl font-bold text-white">{i + 1}</span>
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{etape.titre}</h3>
@@ -270,25 +269,17 @@ export default function VentePlatsPageClient({
         />
       )}
 
-      <section className="py-16 bg-blue-900 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2>Une question sur nos plats ?</h2>
-          <p className="text-xl md:text-2xl text-blue-100 mb-8">
-            N&apos;hésitez pas à nous contacter pour plus d&apos;informations
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center gap-3 rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white hover:text-blue-900 transition-colors"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              Nous contacter
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title="Une question sur nos plats ?"
+        description={<>N&apos;hésitez pas à nous contacter pour plus d&apos;informations</>}
+      >
+        <Button href="/contact" variant="onDark" size="lg">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Nous contacter
+        </Button>
+      </CtaBand>
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 import {
   getActualitesAdmin,
   getVentesAdmin,
@@ -67,12 +67,12 @@ const SECTIONS = [
   },
 ];
 
-const COLOR: Record<string, { bg: string; text: string; badge: string; btn: string }> = {
-  blue:    { bg: 'bg-blue-50',    text: 'text-blue-600',    badge: 'bg-blue-500',    btn: 'bg-blue-600 hover:bg-blue-700' },
-  orange:  { bg: 'bg-orange-50',  text: 'text-orange-600',  badge: 'bg-orange-500',  btn: 'bg-orange-600 hover:bg-orange-700' },
-  emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', badge: 'bg-emerald-500', btn: 'bg-emerald-600 hover:bg-emerald-700' },
-  purple:  { bg: 'bg-purple-50',  text: 'text-purple-600',  badge: 'bg-purple-500',  btn: 'bg-purple-600 hover:bg-purple-700' },
-  teal:    { bg: 'bg-teal-50',    text: 'text-teal-600',    badge: 'bg-teal-500',    btn: 'bg-teal-600 hover:bg-teal-700' },
+const COLOR: Record<string, { bg: string; text: string; badge: string }> = {
+  blue:    { bg: 'bg-blue-50',    text: 'text-blue-700',    badge: 'bg-blue-700' },
+  orange:  { bg: 'bg-orange-50',  text: 'text-orange-700',  badge: 'bg-orange-700' },
+  emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-700' },
+  purple:  { bg: 'bg-purple-50',  text: 'text-purple-700',  badge: 'bg-purple-700' },
+  teal:    { bg: 'bg-teal-50',    text: 'text-teal-700',    badge: 'bg-teal-700' },
 };
 
 export default async function AdminDashboard() {
@@ -122,22 +122,21 @@ export default async function AdminDashboard() {
                     <p className="text-sm text-gray-500">{s.desc}</p>
                   </div>
                 </div>
-                <span className={`text-2xl font-black ${c.text}`}>{counts[i]}</span>
+                <span className={`text-2xl font-bold ${c.text}`}>{counts[i]}</span>
               </div>
               <div className="px-5 py-3">
-                <Link href={s.href}
-                  className="flex w-full items-center justify-center min-h-11 border border-gray-300 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-50 hover:border-gray-400 transition-colors">
+                <Button href={s.href} variant="secondary" size="sm" shape="rounded" fullWidth>
                   Gérer
-                </Link>
+                </Button>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-blue-50 to-blue-50 border border-blue-100 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -195,7 +194,7 @@ export default async function AdminDashboard() {
               <ol className="space-y-2">
                 {block.steps.map((step, i) => (
                   <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
-                    <span className="text-indigo-400 font-bold shrink-0">{i + 1}.</span>
+                    <span className="text-blue-400 font-bold shrink-0">{i + 1}.</span>
                     {step}
                   </li>
                 ))}

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import type { Actualite } from '@/types';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { useAdminToast } from '@/components/admin/AdminToast';
+import { Button } from '@/components/ui/Button';
 
 export default function ActuList({ actualites }: { actualites: Actualite[] }) {
   const router = useRouter();
@@ -55,13 +56,13 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
                 : `${actualites.length} article${actualites.length > 1 ? 's' : ''} publié${actualites.length > 1 ? 's' : ''}`}
             </p>
           </div>
-          <Link href="/admin/actualites/nouveau"
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+          <Button href="/admin/actualites/nouveau" variant="primary" size="sm" shape="rounded"
+            className="w-full sm:w-auto">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Ajouter une actualité
-          </Link>
+          </Button>
         </div>
 
         {deleteError && (
@@ -89,10 +90,9 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
             </div>
             <h3 className="font-bold text-gray-800 mb-1">Aucune actualité pour le moment</h3>
             <p className="text-sm text-gray-500 mb-5">Publiez votre première actualité.</p>
-            <Link href="/admin/actualites/nouveau"
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2.5 px-6 rounded-xl text-sm inline-block">
+            <Button href="/admin/actualites/nouveau" variant="primary" size="sm" shape="rounded">
               Ajouter une actualité
-            </Link>
+            </Button>
           </div>
         )}
 
@@ -117,7 +117,7 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
                 <div className="flex-1 min-w-0 p-4">
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
                     {actu.aLaUne && (
-                      <span className="bg-orange-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full tracking-wide">
+                      <span className="bg-orange-700 text-white text-xs font-bold px-2.5 py-0.5 rounded-full tracking-wide">
                         À LA UNE
                       </span>
                     )}
@@ -135,7 +135,7 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
 
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/actualites/${actu.id}/modifier`}
-                  className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">
+                  className="flex-1 py-3.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors text-center">
                   Modifier
                 </Link>
                 <div className="w-px bg-gray-100" />
