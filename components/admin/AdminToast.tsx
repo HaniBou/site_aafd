@@ -7,13 +7,6 @@ type Notify = (message: string, tone?: ToastTone) => void;
 
 const AdminToastContext = createContext<Notify>(() => {});
 
-/**
- * Notification unique pour toute l'administration.
- *
- * Le provider vit dans le layout `/admin`, qui ne se démonte pas lors des
- * navigations internes : un formulaire peut donc annoncer son succès juste
- * avant de rediriger vers la liste, et le message survit au changement de page.
- */
 export function useAdminToast(): Notify {
   return useContext(AdminToastContext);
 }

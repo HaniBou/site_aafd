@@ -14,8 +14,6 @@ import {
   HELLOASSO_URL,
 } from "@/lib/siteConfig";
 
-// Décrit l'association pour Google : nom, logo, contacts, comptes officiels.
-// Uniquement sur les pages publiques, jamais dans l'admin.
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "NGO",
@@ -34,8 +32,6 @@ const organizationSchema = {
   email: CONTACT_EMAIL,
   telephone: CONTACT_PHONE_E164,
   foundingDate: String(ASSOCIATION_FOUNDING_YEAR),
-  // Pas de `nonprofitStatus` : l'énumération schema.org ne couvre que les
-  // statuts néerlandais, britanniques et américains, rien pour la loi 1901.
   areaServed: {
     "@type": "AdministrativeArea",
     name: "Val de Saône, France",
@@ -52,8 +48,6 @@ const organizationSchema = {
   sameAs: [INSTAGRAM_URL, HELLOASSO_URL],
 };
 
-// Déclare le site lui-même et le rattache à l'association : c'est ce lien qui
-// permet à Google d'associer les articles publiés à l'entité « AAFD ».
 const webSiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -69,8 +63,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <JsonLd data={organizationSchema} />
       <JsonLd data={webSiteSchema} />
-      {/* Sans JavaScript, l'apparition au scroll ne se déclencherait jamais :
-          on neutralise l'état masqué pour ne rien rendre invisible. */}
       <noscript>
         <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
       </noscript>

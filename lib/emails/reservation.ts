@@ -19,8 +19,6 @@ export type ReservationEmailPayload = {
 
 export type ReservationEmailResult = { ok: true } | { ok: false; error: string };
 
-// Envoie d'abord la confirmation au client, puis la notification à l'association :
-// si le premier envoi échoue, le second n'a pas lieu d'être.
 export async function sendReservationEmails({
   platNom,
   clientNom,
@@ -33,7 +31,6 @@ export async function sendReservationEmails({
   lieuRetrait,
 }: ReservationEmailPayload): Promise<ReservationEmailResult> {
   try {
-  // Champs échappés : ils sont interpolés dans le HTML des emails.
   const safe = {
     platNom: escapeHtml(platNom),
     clientNom: escapeHtml(clientNom),
@@ -64,7 +61,6 @@ export async function sendReservationEmails({
     ${safe.lieuRetrait ? `<tr><td style="padding: 8px 0; color: #999; font-size: 14px">Lieu</td><td style="padding: 8px 0; text-align: right; color: #111; font-weight: 500">${safe.lieuRetrait}</td></tr>` : ''}
   `;
 
-  // ÉTAPE 1: Vérifier d'abord l'email du CLIENT (prioritaire)
   let clientEmailResult;
   try {
     clientEmailResult = await resend.emails.send({
@@ -114,7 +110,6 @@ export async function sendReservationEmails({
       `,
     });
 
-    // Vérifier si l'email au client a échoué
     if (clientEmailResult.error) {
       const error = clientEmailResult.error;
       console.error('Erreur email client:', error);
@@ -137,7 +132,6 @@ export async function sendReservationEmails({
     return { ok: false as const, error: 'Adresse email client invalide. Veuillez vérifier votre email.' };
   }
 
-  // ÉTAPE 2: Email client OK → Envoyer à l'association
   const { error } = await resend.emails.send({
     from: MAIL_FROM.reservations,
     to: [CONTACT_EMAIL],

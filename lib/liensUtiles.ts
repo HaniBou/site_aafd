@@ -1,4 +1,3 @@
-
 export type AccentLien =
   | "blue"
   | "orange"
@@ -93,7 +92,6 @@ export const LIENS_UTILES: readonly LienUtile[] = [
     fondOpaque: true,
   },
 ];
-
 
 export const ACCENTS_LIENS: Record<
   AccentLien,

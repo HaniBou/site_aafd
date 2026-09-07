@@ -20,7 +20,6 @@ export default function NousRejoindre() {
         imageAlt="Nous rejoindre"
       />
 
-      {/* Pourquoi nous rejoindre */}
 <section className="py-16 md:py-24 bg-white">
   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
@@ -33,7 +32,6 @@ export default function NousRejoindre() {
     </div>
 
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {/* Carte 1 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-blue-50 p-4 text-blue-900">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +44,6 @@ export default function NousRejoindre() {
         </p>
       </div>
 
-      {/* Carte 2 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-orange-50 p-4 text-orange-600">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,7 +56,6 @@ export default function NousRejoindre() {
         </p>
       </div>
 
-      {/* Carte 3 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-green-50 p-4 text-green-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +68,6 @@ export default function NousRejoindre() {
         </p>
       </div>
 
-      {/* Carte 4 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-purple-50 p-4 text-purple-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +80,6 @@ export default function NousRejoindre() {
         </p>
       </div>
 
-      {/* Carte 5 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-red-50 p-4 text-red-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +92,6 @@ export default function NousRejoindre() {
         </p>
       </div>
 
-      {/* Carte 6 */}
       <div className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
         <div className="mb-6 inline-flex items-center justify-center rounded-2xl bg-yellow-50 p-4 text-yellow-700">
           <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,7 +107,6 @@ export default function NousRejoindre() {
   </div>
 </section>
 
-      {/* Les missions - STYLE TIMELINE ÉPURÉE */}
 <section className="bg-slate-50 py-20 md:py-28 overflow-hidden">
   <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
@@ -134,7 +126,6 @@ export default function NousRejoindre() {
         { title: "Recherche de partenariats", desc: "Développement du réseau avec les entreprises et collectivités." }
       ].map((mission, idx) => (
         <div key={idx} className="mb-12 last:mb-0 relative group">
-          {/* Le point sur la ligne */}
           <div className="absolute -left-[11px] top-1.25 w-5 h-5 rounded-full bg-blue-700 "></div>
           
           <div className="pl-8 md:group-odd:text-right md:group-odd:pr-8 md:group-odd:pl-0 md:group-odd:-translate-x-full">
@@ -149,8 +140,6 @@ export default function NousRejoindre() {
   </div>
 </section>
 
-
-      {/* Comment nous rejoindre - RESTE IMPACTANT */}
       <section className="bg-blue-900 py-24 text-white overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full blur-[120px]"></div>
@@ -180,7 +169,6 @@ export default function NousRejoindre() {
         </div>
       </section>      
 
-      {/* FAQ - SANS EMOJIS */}
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Questions fréquentes</h2>
@@ -205,7 +193,6 @@ export default function NousRejoindre() {
         </div>
       </section>
 
-      {/* CTA Final */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>

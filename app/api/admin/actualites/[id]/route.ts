@@ -47,8 +47,6 @@ export async function PUT(
   const oldImage = existing.data()?.image as string | undefined;
   const oldSlug = existing.data()?.slug as string | undefined;
 
-  // Le slug suit le titre : sans ça, renommer un article laisse une URL
-  // qui ne correspond plus à son contenu.
   const { title } = body as { title?: string };
   const update: Record<string, unknown> = { ...(body as Record<string, unknown>) };
   if (title) {

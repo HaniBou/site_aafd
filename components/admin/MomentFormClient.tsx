@@ -50,13 +50,9 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
-  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
-  // déjà envoyée sur Cloudinary.
   const validate = (): string | null => {
     if (!form.titre.trim()) return 'Le titre est obligatoire.';
     if (!form.date) return 'La date est obligatoire.';
-    // Contrairement aux autres contenus, la photo est ici l'essentiel :
-    // un moment partagé sans image n'aurait rien à afficher.
     if (!form.imageFile && !form.existingImage) return 'Une photo est obligatoire.';
     return null;
   };
@@ -116,8 +112,6 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
       router.push('/admin/moments');
       router.refresh();
     } catch (err) {
-      // L'image vient d'être envoyée mais le moment n'a pas été enregistré :
-      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
       if (uploadedUrl) {
         await fetch('/api/admin/upload', {
           method: 'DELETE',
@@ -136,7 +130,6 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/moments"
@@ -171,7 +164,6 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
           </div>
         )}
 
-        {/* Photo */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           {imageSrc && (
             <div className="relative w-full h-56 bg-gray-100">
@@ -241,7 +233,6 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
           </div>
         </div>
 
-        {/* Champs */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
@@ -273,7 +264,6 @@ export default function MomentFormClient({ moment }: { moment?: Moment }) {
           </div>
         </div>
 
-        {/* Submit */}
         <div className="flex gap-3 pb-8">
           <Link href="/admin/moments"
             className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center">

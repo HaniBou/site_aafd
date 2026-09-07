@@ -61,9 +61,6 @@ export async function POST(request: NextRequest) {
   let venteRetenue: Vente | null = null;
 
   try {
-    // Transaction atomique : vérification du stock + décrément + création
-    // de la réservation. Si deux personnes réservent la dernière portion
-    // en même temps, une seule passe.
     await adminDb.runTransaction(async (transaction) => {
       const platDoc = await transaction.get(platRef);
       if (!platDoc.exists) throw new Error(PLAT_INTROUVABLE);
@@ -114,8 +111,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // La réservation est enregistrée : l'échec des emails ne doit plus la remettre
-  // en cause, on se contente de le tracer sur le document.
   const vente = venteRetenue as Vente | null;
 
   const emails = await sendReservationEmails({

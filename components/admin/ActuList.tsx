@@ -46,7 +46,6 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
       />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Actualités</h1>
@@ -65,7 +64,6 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
           </Link>
         </div>
 
-        {/* Delete error */}
         {deleteError && (
           <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex gap-2 items-center">
             <svg className="h-4 w-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +79,6 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
           </div>
         )}
 
-        {/* Empty state */}
         {actualites.length === 0 && (
           <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -99,7 +96,6 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
           </div>
         )}
 
-        {/* List */}
         <div className="space-y-3">
           {actualites.map(actu => (
             <div key={actu.id}
@@ -137,7 +133,6 @@ export default function ActuList({ actualites }: { actualites: Actualite[] }) {
                 </div>
               </div>
 
-              {/* Action bar */}
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/actualites/${actu.id}/modifier`}
                   className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">

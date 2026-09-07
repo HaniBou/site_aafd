@@ -28,7 +28,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
   const submittingRef = useRef(false);
   const router = useRouter();
 
-  // Fonction de validation d'email
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -48,8 +47,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validation avant de poser le verrou, sinon un email refusé bloque
-    // définitivement le formulaire.
     if (!validateEmail(formData.email)) {
       setEmailError("Veuillez entrer une adresse email valide");
       return;
@@ -61,9 +58,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
     setSubmitStatus(null);
 
     try {
-      // Tout se passe côté serveur : vérification du stock, décrément, écriture
-      // de la réservation puis envoi des emails. Le navigateur n'écrit jamais
-      // dans Firestore.
       const response = await fetch("/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -85,7 +79,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
 
       setSubmitStatus(reservation.emailEnvoye ? "success" : "warning");
 
-      // Rafraîchit les stocks affichés sans recharger la page.
       router.refresh();
     } catch (error) {
       setEmailWarning(error instanceof Error ? error.message : "Une erreur est survenue.");
@@ -107,7 +100,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
       onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
     >
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-modal-in">
-        {/* En-tête du modal */}
         <div className="bg-orange-600 text-white p-6 rounded-t-2xl">
           <div className="flex justify-between items-start">
             <div>
@@ -127,9 +119,7 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
           </div>
         </div>
 
-        {/* Formulaire */}
         <form ref={formRef} onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Nom */}
           <div>
             <label htmlFor="nom" className="block text-sm font-semibold text-gray-700 mb-2">
               Nom complet *
@@ -145,7 +135,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             />
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
               Email *
@@ -171,7 +160,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             )}
           </div>
 
-          {/* Téléphone */}
           <div>
             <label htmlFor="telephone" className="block text-sm font-semibold text-gray-700 mb-2">
               Téléphone *
@@ -187,7 +175,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             />
           </div>
 
-          {/* Quantité */}
           <div>
             <label htmlFor="quantite" className="block text-sm font-semibold text-gray-700 mb-2">
               Quantité *
@@ -205,7 +192,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             </select>
           </div>
 
-          {/* Récapitulatif du prix */}
           {typeof plat.prix === "number" && (
             <div className="rounded-lg bg-orange-50 border border-orange-200 p-4">
               <div className="flex items-center justify-between text-sm text-gray-700">
@@ -230,7 +216,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             </div>
           )}
 
-          {/* Message optionnel */}
           <div>
             <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
               Message (optionnel)
@@ -245,7 +230,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             />
           </div>
 
-          {/* Message de statut */}
           {submitStatus === "success" && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
               <svg className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -287,7 +271,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
             </div>
           )}
 
-          {/* Boutons */}
           {submitStatus === "success" || submitStatus === "warning" ? (
             <div className="pt-4">
               <button

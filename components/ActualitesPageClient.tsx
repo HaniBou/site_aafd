@@ -50,7 +50,6 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
         imageAlt="Actualités"
       />
 
-      {/* À la une */}
       {actuALaUne && (
         <section className="py-16 md:py-20 bg-white">
           <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
@@ -114,7 +113,6 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
         </section>
       )}
 
-      {/* Filtres + grille */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
           <div className="flex flex-wrap gap-2 mb-12">
@@ -197,7 +195,6 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
         </div>
       </section>
 
-      {/* CTA */}
       <section className="bg-gradient-to-br from-blue-900 to-blue-700 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>Restez informé</h2>

@@ -13,8 +13,6 @@ export const runtime = 'nodejs';
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const idToken = body?.idToken as string | undefined;
-  // Case « Rester connecté » : cochée par défaut côté formulaire, on ne raccourcit
-  // la session que si le bénévole l'a explicitement décochée.
   const remember = body?.remember !== false;
 
   if (!idToken) {

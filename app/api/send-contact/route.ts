@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
   try {
     const { nom, prenom, email, telephone, sujet, message } = await request.json();
 
-    // Validation des données
     if (!nom || !prenom || !email || !sujet || !message) {
       return NextResponse.json(
         { error: 'Tous les champs requis doivent être remplis' },
@@ -28,7 +27,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Champs échappés : ils sont interpolés dans le HTML des emails.
     const safe = {
       nom: escapeHtml(nom),
       prenom: escapeHtml(prenom),
@@ -39,11 +37,10 @@ export async function POST(request: NextRequest) {
     };
     const subjetHeader = String(sujet).replace(/[\r\n]+/g, ' ').slice(0, 150);
 
-    // Envoi de l'email
     const { data, error } = await resend.emails.send({
       from: MAIL_FROM.contact,
       to: [CONTACT_EMAIL],
-      replyTo: email, // L'email du contact pour faciliter la réponse
+      replyTo: email,
       subject: `[Contact AAFD] ${subjetHeader}`,
       html: `
         <div
@@ -148,7 +145,6 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Erreur Resend:', error);
       
-      // Gestion spécifique du code 403
       if (error.message?.includes('403') || error.statusCode === 403) {
         return NextResponse.json(
           { error: 'Configuration email incorrecte. Contactez l\'administrateur.' },
@@ -162,7 +158,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Envoyer un accusé de réception au client
     try {
       await resend.emails.send({
         from: MAIL_FROM.general,
@@ -274,7 +269,6 @@ export async function POST(request: NextRequest) {
       });
     } catch (confirmationError) {
       console.error('Erreur email confirmation:', confirmationError);
-      // On ne fait pas échouer la requête si l'email de confirmation échoue
     }
 
     return NextResponse.json(

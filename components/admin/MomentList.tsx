@@ -46,7 +46,6 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
       />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-0">Moments partagés</h1>
@@ -78,7 +77,6 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
           </div>
         )}
 
-        {/* Empty state */}
         {moments.length === 0 && (
           <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -98,7 +96,6 @@ export default function MomentList({ moments }: { moments: Moment[] }) {
           </div>
         )}
 
-        {/* Grille */}
         {moments.length > 0 && (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {moments.map(moment => (

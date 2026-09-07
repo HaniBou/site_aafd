@@ -5,7 +5,6 @@ import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 export function MainHero() {
   return (
     <section className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
-      {/* Image de fond */}
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero_accueil.webp"
@@ -16,17 +15,13 @@ export function MainHero() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-        {/* Voile haut : lisibilité de la navigation avant le premier scroll */}
         <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
       </div>
 
-      {/* Contenu principal */}
       <div className="relative z-20 pb-16 md:pb-24">
         <div className="mx-auto max-w-screen-2xl px-8 md:px-16">
-          {/* Ligne décorative orange */}
           <div className="w-16 h-0.5 bg-orange-500 mb-6 animate-hero-line" />
 
-          {/* Titre — rendu immédiatement, c'est l'élément LCP */}
           <h1
             className="font-bold text-white leading-tight tracking-tight mb-8 drop-shadow-2xl"
             style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
@@ -35,7 +30,6 @@ export function MainHero() {
             <span className="block text-orange-400 italic font-light">en Difficulté.</span>
           </h1>
 
-          {/* Barre verticale + description */}
           <div className="flex items-start gap-6 max-w-lg mb-10 animate-hero-fade">
             <div className="w-px h-14 bg-orange-500/50 shrink-0 mt-1" />
             <p className="text-white text-base md:text-lg leading-relaxed drop-shadow-lg">
@@ -45,7 +39,6 @@ export function MainHero() {
             </p>
           </div>
 
-          {/* Boutons CTA */}
           <div className="flex flex-col sm:flex-row gap-4 animate-hero-fade-late">
             <Link
               href="/nous-rejoindre"
@@ -68,7 +61,6 @@ export function MainHero() {
         </div>
       </div>
 
-      {/* Indicateur de scroll */}
       <div
         className="absolute bottom-10 right-10 z-30 flex flex-col items-center gap-3 animate-scroll-hint"
         aria-hidden="true"

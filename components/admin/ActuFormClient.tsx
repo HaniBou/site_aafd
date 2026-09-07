@@ -60,8 +60,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
-  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
-  // déjà envoyée sur Cloudinary.
   const validate = (): string | null => {
     if (!form.title.trim()) return 'Le titre est obligatoire.';
     if (!form.category) return 'La catégorie est obligatoire.';
@@ -128,8 +126,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
       router.push('/admin/actualites');
       router.refresh();
     } catch (err) {
-      // L'image vient d'être envoyée mais l'enregistrement a échoué :
-      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
       if (uploadedUrl) {
         await fetch('/api/admin/upload', {
           method: 'DELETE',
@@ -148,10 +144,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
-            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/actualites"
             aria-label="Retour aux actualités"
@@ -172,7 +165,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 
-        {/* Error */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex gap-3">
             <svg className="h-5 w-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,7 +178,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           </div>
         )}
 
-        {/* Image section */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           {imageSrc && (
             <div className="relative w-full h-48 bg-gray-100">
@@ -264,7 +255,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           </div>
         </div>
 
-        {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
@@ -307,7 +297,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           </div>
         </div>
 
-        {/* À la une */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
           <button type="button"
             onClick={() => setForm({ ...form, aLaUne: !form.aLaUne })}
@@ -329,7 +318,6 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           </button>
         </div>
 
-        {/* Submit */}
         <div className="flex gap-3 pb-8">
           <Link href="/admin/actualites"
             className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center">

@@ -59,8 +59,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
-  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
-  // déjà envoyée sur Cloudinary.
   const validate = (): string | null => {
     if (!form.nom.trim()) return 'Le nom est obligatoire.';
     if (!form.type) return 'Le type de témoignage est obligatoire.';
@@ -127,8 +125,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
       router.push('/admin/temoignages');
       router.refresh();
     } catch (err) {
-      // L'image vient d'être envoyée mais l'enregistrement a échoué :
-      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
       if (uploadedUrl) {
         await fetch('/api/admin/upload', {
           method: 'DELETE',
@@ -147,10 +143,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
-            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href="/admin/temoignages"
             aria-label="Retour aux témoignages"
@@ -171,7 +164,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 
-        {/* Error */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex gap-3">
             <svg className="h-5 w-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -185,7 +177,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           </div>
         )}
 
-        {/* Type selector */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Type de témoignage *</p>
           <div className="grid grid-cols-2 gap-3">
@@ -215,7 +206,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           )}
         </div>
 
-        {/* Photo section */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           {imageSrc && (
             <div className="relative w-full h-40 bg-gray-100">
@@ -292,7 +282,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           </div>
         </div>
 
-        {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
@@ -332,7 +321,6 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           </div>
         </div>
 
-        {/* Submit */}
         <div className="flex gap-3 pb-8">
           <Link href="/admin/temoignages"
             className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-center">

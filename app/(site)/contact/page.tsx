@@ -29,7 +29,6 @@ export default function ContactPage() {
         imageAlt="Contactez-nous"
       />
 
-      {/* Section avec formulaire et infos de contact */}
       <section className="py-16 md:py-24 bg-slate-50">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -42,9 +41,7 @@ export default function ContactPage() {
     L&apos;association AAFD s&apos;engage à répondre dans les meilleurs délais. Chaque message est important pour nous.
   </p>
 
-  {/* Liste des contacts épurée */}
   <div className="space-y-8">
-    {/* Téléphone */}
     <div className="flex items-center gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,7 +59,6 @@ export default function ContactPage() {
       </div>
     </div>
 
-    {/* Email */}
     <div className="flex items-center gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -77,7 +73,6 @@ export default function ContactPage() {
       </div>
     </div>
 
-    {/* Instagram */}
     <div className="flex items-center gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
         <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -93,8 +88,6 @@ export default function ContactPage() {
     </div>
   </div>
 
-  {/* Don HelloAsso : traité comme une action, pas comme une coordonnée,
-      sinon le lien se perd au milieu du téléphone et de l'email. */}
   <div className="mt-10 rounded-2xl border border-pink-100 bg-pink-50/60 p-6">
     <h3 className="text-lg font-bold text-gray-900 mb-2">Soutenir l&apos;association</h3>
     <p className="text-sm text-gray-600 mb-5 leading-relaxed">
@@ -115,7 +108,6 @@ export default function ContactPage() {
   </div>
 </div>
 
-            {/* Colonne de droite - Formulaire */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10">
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -132,10 +124,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Liens vers d'autres sites utiles */}
-      {/* Fond blanc franc : les halos flous d'origine dataient des tuiles sans
-          logo, qui avaient besoin d'une assise colorée. Les logos apportent
-          maintenant la couleur, et l'orange dilué virait au jaune sale. */}
       <section className="bg-white py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
@@ -160,17 +148,8 @@ export default function ContactPage() {
                     rel="noopener noreferrer"
                     className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                   >
-                    {/* Zone logo de hauteur fixe : elle aligne les tuiles entre
-                        elles quelles que soient les proportions du logo, qui
-                        s'y centre dans les deux axes à sa propre hauteur. */}
                     <div className="mb-5 flex h-20 items-center justify-center">
                       {lien.logo?.endsWith('.svg') ? (
-                        /* Les SVG ne passent pas par l'optimiseur de Next
-                           (dangerouslyAllowSVG désactivé, et l'activer
-                           ouvrirait aussi les envois Cloudinary de l'admin).
-                           Une balise img sert directement le fichier : sur un
-                           logo vectoriel il n'y a de toute façon rien à
-                           optimiser. */
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={lien.logo}
@@ -193,9 +172,6 @@ export default function ContactPage() {
                       )}
                     </div>
 
-                    {/* Le nom est redonné sous le logo, car plusieurs de ces
-                        logotypes sont illisibles à cette taille. Inutile quand
-                        c'est déjà le nom qui occupe la zone du logo. */}
                     {lien.logo && (
                       <p className="font-bold text-gray-900">{lien.nom}</p>
                     )}

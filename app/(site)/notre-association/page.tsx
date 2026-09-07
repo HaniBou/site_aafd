@@ -21,7 +21,6 @@ export default function NotreAssociationPage() {
         imageAlt="Notre association AAFD"
       />
 
-      {/* Notre histoire */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 md:grid-cols-2 items-center">
@@ -56,7 +55,6 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      {/* Mot de la présidente */}
       <section className="py-20 bg-slate-50">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20">
@@ -101,7 +99,6 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      {/* Nos actions principales */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -112,7 +109,6 @@ export default function NotreAssociationPage() {
           </div>
 
           <div className="space-y-24">
-            {/* Ventes de plats */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <span className="text-orange-500 font-bold tracking-widest uppercase text-xs mb-3 block">Environ tous les 2 mois</span>
@@ -139,7 +135,6 @@ export default function NotreAssociationPage() {
               </div>
             </div>
 
-            {/* Événements festifs */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl order-2 md:order-1">
                 <Image src="/images/evenement.webp" alt="Événements festifs" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
@@ -164,7 +159,6 @@ export default function NotreAssociationPage() {
               </div>
             </div>
 
-            {/* Nettoyage */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <span className="text-green-600 font-bold tracking-widest uppercase text-xs mb-3 block">Engagement territorial</span>
@@ -192,7 +186,6 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      {/* Accompagnement quotidien */}
       <section className="bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -235,7 +228,6 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      {/* Nos valeurs */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
@@ -266,7 +258,6 @@ export default function NotreAssociationPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>Envie de vous impliquer ?</h2>

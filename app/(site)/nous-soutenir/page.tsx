@@ -3,11 +3,6 @@ import Link from 'next/link'
 import { PageHero } from '@/components/PageHero'
 import { CONTACT_EMAIL } from '@/lib/siteConfig'
 
-// Page en préparation : masquée du site (aucun lien, absente du sitemap,
-// interdite aux robots) mais toujours accessible par son URL directe pour
-// pouvoir la finir. Pour la remettre en ligne : retirer le `robots` ci-dessous,
-// la réintégrer dans app/sitemap.ts, app/robots.ts, Navigation, MobileMenu et
-// Footer, et repointer les boutons « Faire un don » vers /nous-soutenir.
 export const metadata: Metadata = {
   title: 'Nous soutenir',
   description: "Soutenez l'AAFD Val de Saône : faites un don (66% déductible des impôts), devenez partenaire ou participez à nos événements caritatifs.",
@@ -27,7 +22,6 @@ export default function NousSoutenirPage() {
         accentColor="bg-green-400"
       />
 
-      {/* Pourquoi nous soutenir : Style Épuré */}
 <section className="py-20 bg-white">
   <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
@@ -58,7 +52,6 @@ export default function NousSoutenirPage() {
   </div>
 </section>
 
-      {/* Comment nous soutenir */}
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -68,7 +61,6 @@ export default function NousSoutenirPage() {
           </div>
 
           <div className="grid gap-8 lg:grid-cols-2">
-            {/* Faire un don */}
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center rounded-full bg-blue-100 p-3 mb-4">
@@ -127,7 +119,6 @@ export default function NousSoutenirPage() {
               </div>
             </div>
 
-            {/* Participer aux événements */}
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center rounded-full bg-orange-100 p-3 mb-4">
@@ -176,7 +167,6 @@ export default function NousSoutenirPage() {
         </div>
       </section>
 
-      {/* Devenir partenaire */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
@@ -222,7 +212,6 @@ export default function NousSoutenirPage() {
         </div>
       </section>
 
-     {/* Section Impact : L'AAFD en chiffres (Style harmonisé) */}
 <section className="bg-blue-900 py-16 md:py-24 text-white">
   <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
@@ -232,7 +221,6 @@ export default function NousSoutenirPage() {
     </div>
 
     <div className="grid gap-12 md:grid-cols-3">
-      {/* Palier 1 */}
       <div className="text-center">
         <div className="mb-2 text-5xl font-bold text-orange-400">30€</div>
         <div className="text-lg text-blue-100 ">
@@ -240,7 +228,6 @@ export default function NousSoutenirPage() {
         </div>
       </div>
 
-      {/* Palier 2 */}
       <div className="text-center">
         <div className="mb-2 text-5xl font-bold text-orange-400">100€</div>
         <div className="text-lg text-blue-100 ">
@@ -248,7 +235,6 @@ export default function NousSoutenirPage() {
         </div>
       </div>
 
-      {/* Palier 3 */}
       <div className="text-center">
         <div className="mb-2 text-5xl font-bold text-orange-400">500€</div>
         <div className="text-lg text-blue-100">
@@ -259,7 +245,6 @@ export default function NousSoutenirPage() {
   </div>
 </section>
 
-     {/* CTA */}
 <section className="py-16 md:py-20">
   <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
     <h2 className="text-gray-900">

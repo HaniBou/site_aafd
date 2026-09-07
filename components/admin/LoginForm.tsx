@@ -26,8 +26,6 @@ function getErrorMessage(code: string): string {
 const FIELD_CLASS =
   'w-full px-4 py-3.5 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition disabled:bg-gray-50';
 
-/** `next` : page demandée avant la redirection vers la connexion, déjà validée
- *  côté serveur. */
 export default function LoginForm({ next = '/admin' }: { next?: string }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,7 +76,6 @@ export default function LoginForm({ next = '/admin' }: { next?: string }) {
       await sendPasswordResetEmail(auth, email.trim());
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? '';
-      // On ne révèle pas si l'adresse existe : même message dans les deux cas.
       if (code === 'auth/invalid-email' || code === 'auth/too-many-requests') {
         setError(getErrorMessage(code));
         setLoading(false);

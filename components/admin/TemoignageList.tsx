@@ -54,7 +54,6 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
       />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Témoignages</h1>
@@ -73,7 +72,6 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
           </Link>
         </div>
 
-        {/* Delete error */}
         {deleteError && (
           <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex gap-2 items-center">
             <svg className="h-4 w-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +87,6 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
           </div>
         )}
 
-        {/* Empty state */}
         {temoignages.length === 0 && (
           <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
             <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -107,13 +104,11 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
           </div>
         )}
 
-        {/* List */}
         <div className="space-y-3">
           {temoignages.map((item, i) => (
             <div key={item.id}
               className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
               <div className="flex gap-4 p-4">
-                {/* Avatar */}
                 {item.image && item.image !== 'none' ? (
                   <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-gray-200 shrink-0">
                     <Image src={item.image} alt={item.nom} fill className="object-cover" sizes="64px" />
@@ -127,7 +122,6 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
                   </div>
                 )}
 
-                {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
                     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
@@ -149,7 +143,6 @@ export default function TemoignageList({ temoignages }: { temoignages: Temoignag
                 </div>
               </div>
 
-              {/* Action bar */}
               <div className="border-t border-gray-100 flex">
                 <Link href={`/admin/temoignages/${item.id}/modifier`}
                   className="flex-1 py-3.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors text-center">

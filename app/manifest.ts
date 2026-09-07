@@ -1,10 +1,5 @@
 import type { MetadataRoute } from 'next';
 
-/**
- * Rend le site installable ("Ajouter à l'écran d'accueil" sur mobile, "Installer"
- * dans Chrome sur ordinateur). Le raccourci « Espace bénévoles » ouvre directement
- * l'administration : une icône à cliquer, aucune adresse à taper.
- */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "AAFD Val de Saône - Association d'Aide aux Familles en Difficulté",

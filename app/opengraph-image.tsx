@@ -22,7 +22,6 @@ export default function Image() {
           position: 'relative',
         }}
       >
-        {/* Accent top-left */}
         <div
           style={{
             position: 'absolute',
@@ -34,7 +33,6 @@ export default function Image() {
           }}
         />
 
-        {/* Badge */}
         <div
           style={{
             background: '#f97316',
@@ -52,7 +50,6 @@ export default function Image() {
           Association loi 1901 · Val de Saône
         </div>
 
-        {/* Title */}
         <h1
           style={{
             color: 'white',
@@ -67,7 +64,6 @@ export default function Image() {
           AAFD Val de Saône
         </h1>
 
-        {/* Subtitle */}
         <p
           style={{
             color: '#93c5fd',
@@ -81,7 +77,6 @@ export default function Image() {
           Accompagner les familles réfugiées depuis {ASSOCIATION_FOUNDING_YEAR}
         </p>
 
-        {/* Stats row */}
         <div
           style={{
             display: 'flex',

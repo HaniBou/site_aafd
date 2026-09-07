@@ -84,7 +84,6 @@ export default async function AdminDashboard() {
     getReservationsAdmin(),
   ]);
 
-  // Même ordre que SECTIONS
   const counts = [
     actualites.length,
     ventes.length,
@@ -100,14 +99,12 @@ export default async function AdminDashboard() {
   return (
     <main className="max-w-5xl mx-auto px-4 py-8">
 
-      {/* Welcome header */}
       <div className="mb-10">
         <p className="text-sm text-gray-500 uppercase tracking-wider mb-1">{today}</p>
         <h1 className="text-3xl font-bold text-gray-900">Bonjour 👋</h1>
         <p className="text-gray-500 mt-1">Que souhaitez-vous faire aujourd&apos;hui ?</p>
       </div>
 
-      {/* Section cards */}
       <div className="grid sm:grid-cols-2 gap-5 mb-12">
         {SECTIONS.map((s, i) => {
           const c = COLOR[s.color];
@@ -138,7 +135,6 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      {/* Guide */}
       <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shrink-0">

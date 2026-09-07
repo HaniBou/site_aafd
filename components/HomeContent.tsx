@@ -69,13 +69,11 @@ export default function HomeContent({
     <main className="min-h-screen bg-white">
       <MainHero />
 
-      {/* Actualité à la une */}
       {featuredActu && (
         <section className="py-12 md:py-16 bg-slate-50">
           <div className="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-8">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                {/* h2 : sans lui, on saute du h1 du héros au h3 du titre d'article */}
                 <h2 className="inline-block px-4 py-2 mb-0 bg-orange-600 text-white text-sm font-medium tracking-wide rounded-full">
                   À la une
                 </h2>
@@ -153,7 +151,6 @@ export default function HomeContent({
         </section>
       )}
 
-      {/* Qui sommes-nous */}
       <section>
         <div className="bg-white py-16 md:py-24">
           <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -238,7 +235,6 @@ export default function HomeContent({
         </section>
       )}
 
-      {/* Ce qui nous anime */}
       <section className="py-16 md:py-24 bg-slate-50">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -290,7 +286,6 @@ export default function HomeContent({
         </div>
       </section>
 
-      {/* Chiffres clés */}
       <section className="bg-blue-900 py-16 md:py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -298,8 +293,6 @@ export default function HomeContent({
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             <div className="text-center">
-              {/* Année affichée telle quelle, sans compteur animé : voir défiler
-                  0 → 2007 se lit comme un nombre, pas comme une date. */}
               <div className="mb-2 text-5xl font-bold text-orange-400">{ASSOCIATION_FOUNDING_YEAR}</div>
               <div className="text-lg text-blue-100">année de création</div>
             </div>
@@ -315,7 +308,6 @@ export default function HomeContent({
         </div>
       </section>
 
-      {/* Nos plats du moment */}
       {platsDuMoment.length > 0 && (
         <section className="py-16 md:py-24 bg-white">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
@@ -391,7 +383,6 @@ export default function HomeContent({
         </section>
       )}
 
-      {/* Instagram */}
       <section className="py-20 md:py-24 bg-white overflow-hidden">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <Reveal>
@@ -465,7 +456,6 @@ export default function HomeContent({
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="bg-blue-900 py-16 md:py-20 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2>Rejoignez notre communauté</h2>

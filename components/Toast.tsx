@@ -7,7 +7,6 @@ export type ToastTone = 'success' | 'error' | 'info';
 interface ToastProps {
   message: string;
   show: boolean;
-  /** Explicite. À défaut, le ton est déduit du texte du message. */
   tone?: ToastTone;
   onClose?: () => void;
 }
@@ -16,8 +15,6 @@ export default function Toast({ message, show, tone, onClose }: ToastProps) {
   const [visible, setVisible] = useState(show);
   const [prevShow, setPrevShow] = useState(show);
 
-  // Ajustement pendant le rendu plutôt que dans un effet : évite un rendu
-  // en cascade à chaque apparition du toast.
   if (prevShow !== show) {
     setPrevShow(show);
     if (show) setVisible(true);

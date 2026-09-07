@@ -68,8 +68,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
     return () => URL.revokeObjectURL(url);
   }, [form.imageFile]);
 
-  // Validé avant l'upload : sinon un champ manquant fait perdre l'image
-  // déjà envoyée sur Cloudinary.
   const validate = (): string | null => {
     if (!form.nom.trim()) return 'Le nom du plat est obligatoire.';
     if (!form.description.trim()) return 'La description est obligatoire.';
@@ -138,8 +136,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
       router.push(retour);
       router.refresh();
     } catch (err) {
-      // L'image vient d'être envoyée mais le plat n'a pas été enregistré :
-      // on la supprime pour ne pas laisser d'orpheline sur Cloudinary.
       if (uploadedUrl) {
         await fetch('/api/admin/upload', {
           method: 'DELETE',
@@ -158,10 +154,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        {/* Un seul groupe aligné à gauche : le titre suit le lien de retour
-            et se tronque, au lieu d'être poussé à droite et d'écraser le lien. */}
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <Link href={retour}
             aria-label="Retour à la vente"
@@ -183,10 +176,8 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
         </div>
       </div>
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 
-        {/* Error */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex gap-3">
             <svg className="h-5 w-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -200,9 +191,7 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
           </div>
         )}
 
-        {/* Image section */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          {/* Preview */}
           {imageSrc && (
             <div className="relative w-full h-56 bg-gray-100">
               <Image src={imageSrc} alt="Aperçu" fill className="object-cover" sizes="(max-width: 672px) 100vw, 672px" />
@@ -214,7 +203,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
             </div>
           )}
 
-          {/* Upload zone */}
           <div className="p-4">
             <button
               type="button"
@@ -249,7 +237,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
               )}
             </button>
 
-            {/* Progress bar */}
             {isUploading && (
               <div className="mt-3">
                 <div className="flex items-center justify-between mb-1.5">
@@ -290,7 +277,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
           </div>
         </div>
 
-        {/* Fields */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
           <p className="text-base font-bold text-gray-900 pb-1 border-b border-gray-100">Le plat</p>
 
@@ -352,7 +338,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
           </div>
         </div>
 
-        {/* Price & Quantity */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
           <p className="text-base font-bold text-gray-900 pb-1 border-b border-gray-100">Prix et nombre de parts</p>
 
@@ -398,7 +383,6 @@ export default function PlatFormClient({ plat, venteId, venteTitre }: Props) {
           </div>
         </div>
 
-        {/* Submit */}
         <div className="pb-8">
           <button
             type="submit"

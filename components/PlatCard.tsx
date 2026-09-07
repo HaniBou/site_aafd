@@ -19,23 +19,19 @@ export default function PlatCard({
 }: PlatCardProps) {
   const [showOverlay, setShowOverlay] = useState(false);
 
-  // Gestion overlay mobile : clic affiche/masque overlay
   const handleImageClick = (e: React.MouseEvent) => {
-    // Ne déclenche que sur mobile
     if (window.innerWidth < 768) {
       e.stopPropagation();
       setShowOverlay((v) => !v);
     }
   };
 
-  // Pour desktop : overlay uniquement au hover de l'image (pas toute la carte)
   const [isImageHovered, setIsImageHovered] = useState(false);
 
   return (
     <div
       className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-100 w-full h-full flex flex-col"
     >
-      {/* Image + overlay */}
       <div
         className="group relative aspect-[4/3] bg-orange-500 overflow-hidden cursor-pointer"
         onClick={handleImageClick}
@@ -59,7 +55,6 @@ export default function PlatCard({
             <span className="text-6xl opacity-90">{iconFallback}</span>
           </div>
         )}
-        {/* Overlay description : hover (desktop) ou showOverlay (mobile) */}
         <div
           className={
             `absolute inset-0 flex flex-col justify-center items-center p-6 text-white text-center transition-opacity duration-300 backdrop-blur-sm bg-black/70`
@@ -67,7 +62,6 @@ export default function PlatCard({
           }
           style={{ pointerEvents: showOverlay || isImageHovered ? 'auto' : 'none' }}
           onClick={e => {
-            // Sur mobile, cliquer l'overlay le masque
             if (window.innerWidth < 768) {
               e.stopPropagation();
               setShowOverlay(false);
@@ -85,7 +79,6 @@ export default function PlatCard({
             </ul>
           )}
         </div>
-        {/* Affordance : sans elle, personne ne découvre l'overlay */}
         {(plat.description || (plat.items && plat.items.length > 0)) && (
           <span
             className={`absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm transition-opacity duration-300 ${
@@ -100,7 +93,6 @@ export default function PlatCard({
           </span>
         )}
 
-        {/* Badge disponibilité */}
         <div className="absolute top-4 right-4">
           {!reservationOuverte ? (
             <span className="bg-gray-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
@@ -117,23 +109,18 @@ export default function PlatCard({
           )}
         </div>
       </div>
-      {/* Contenu */}
       <div className="p-3 text-center flex flex-col gap-1">
-        {/* Nom du plat */}
         <h3 className="text-gray-900 mb-1 font-bold text-base leading-tight">
           {plat.nom}
         </h3>
-        {/* Type de menu en sous-titre si présent */}
         {plat.typeMenu && (
           <p className="text-orange-600 text-sm mb-1 font-semibold">{plat.typeMenu}</p>
         )}
-        {/* Cuisiniers */}
         {plat.cuisiniers && (
           <p className="text-gray-700 text-sm italic mb-1">
             concocté par {plat.cuisiniers}
           </p>
         )}
-        {/* Prix et quantité */}
         <div className="flex items-center justify-between mt-1 mb-1">
           <div className="text-lg font-bold text-orange-600">
             {plat.prix}€
@@ -144,7 +131,6 @@ export default function PlatCard({
             </div>
           )}
         </div>
-        {/* Bouton réserver (miniature) */}
         <button
           onClick={e => {
             e.stopPropagation();

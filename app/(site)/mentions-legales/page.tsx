@@ -23,7 +23,6 @@ export default function MentionsLegalesPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg text-gray-600 space-y-12">
 
-            {/* 1. Éditeur */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Éditeur du site</h2>
               <p>Le présent site est édité par :</p>
@@ -50,7 +49,6 @@ export default function MentionsLegalesPage() {
               </ul>
             </div>
 
-            {/* 2. Directeur de publication */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Directeur de publication</h2>
               <p>
@@ -59,7 +57,6 @@ export default function MentionsLegalesPage() {
               </p>
             </div>
 
-            {/* 3. Hébergeur */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Hébergement</h2>
               <p>Le site est hébergé par :</p>
@@ -70,7 +67,6 @@ export default function MentionsLegalesPage() {
               </ul>
             </div>
 
-            {/* 4. Propriété intellectuelle */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Propriété intellectuelle</h2>
               <p>
@@ -85,7 +81,6 @@ export default function MentionsLegalesPage() {
               </p>
             </div>
 
-            {/* 5. Données personnelles */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Protection des données personnelles</h2>
               <p>
@@ -134,7 +129,6 @@ export default function MentionsLegalesPage() {
               </p>
             </div>
 
-            {/* 6. Liens hypertextes */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Liens hypertextes</h2>
               <p>
@@ -144,7 +138,6 @@ export default function MentionsLegalesPage() {
               </p>
             </div>
 
-            {/* 7. Droit applicable */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Droit applicable</h2>
               <p>

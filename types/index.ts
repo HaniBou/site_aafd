@@ -63,7 +63,6 @@ export type Reservation = {
   emailErreur?: string | null;
 };
 
-/** Photo de la galerie « Moments partagés » (page Témoignages). */
 export type Moment = {
   id: string;
   titre: string;

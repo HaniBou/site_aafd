@@ -11,9 +11,6 @@ import {
 
 function redirectToLogin(request: NextRequest, clearCookie: boolean) {
   const url = new URL('/admin/login', request.url);
-  // On mémorise la page demandée pour y revenir après connexion : un bénévole qui
-  // clique un favori vers /admin/reservations doit atterrir sur les réservations,
-  // pas sur le tableau de bord.
   const { pathname, search } = request.nextUrl;
   if (pathname !== '/admin') {
     url.searchParams.set('next', pathname + search);
@@ -26,8 +23,6 @@ function redirectToLogin(request: NextRequest, clearCookie: boolean) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Vérifié avant toute chose : une configuration incomplète doit échouer
-  // bruyamment, jamais laisser passer.
   assertSessionSecret();
 
   if (pathname === '/admin/login') {
@@ -43,8 +38,6 @@ export async function proxy(request: NextRequest) {
   try {
     const payload = await verifySessionToken(token);
 
-    // Session glissante : tant que le bénévole revient de temps en temps, son cookie
-    // repart pour une durée pleine et il ne revoit jamais l'écran de connexion.
     if (shouldRenew(payload)) {
       const renewed = await renewSessionToken(payload);
       if (renewed) {

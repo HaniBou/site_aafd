@@ -20,7 +20,6 @@ export default function ContactForm() {
       ...formData,
       [e.target.name]: e.target.value
     })
-    // Réinitialise le message de succès/erreur si l'utilisateur modifie un champ
     if (status === 'success' || status === 'error') {
       setStatus('idle')
       setErrorMessage('')
@@ -33,7 +32,6 @@ export default function ContactForm() {
     setErrorMessage('')
 
     try {
-      // Envoi via l'API route Resend
       const response = await fetch('/api/send-contact', {
         method: 'POST',
         headers: {
@@ -49,7 +47,6 @@ export default function ContactForm() {
       }
 
       setStatus('success')
-      // Réinitialiser le formulaire
       setFormData({
         nom: '',
         prenom: '',
@@ -68,9 +65,7 @@ export default function ContactForm() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Formulaire */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Nom et Prénom */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="nom" className="block text-sm font-semibold text-slate-900 mb-2">
@@ -105,7 +100,6 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* Email et Téléphone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-slate-900 mb-2">
@@ -139,7 +133,6 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* Sujet */}
         <div>
           <label htmlFor="sujet" className="block text-sm font-semibold text-slate-900 mb-2">
             Sujet <span className="text-red-500">*</span>
@@ -161,7 +154,6 @@ export default function ContactForm() {
           </select>
         </div>
 
-        {/* Message */}
         <div>
           <label htmlFor="message" className="block text-sm font-semibold text-slate-900 mb-2">
             Message <span className="text-red-500">*</span>
@@ -178,9 +170,6 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Bouton d'envoi */}
-
-        {/* Message de succès ou d'erreur juste au-dessus du bouton */}
         {(status === 'success' || status === 'error') && (
           <div className={`mb-4 p-4 rounded-2xl flex items-start border ${status === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
             <svg
@@ -236,7 +225,6 @@ export default function ContactForm() {
           </button>
         </div>
 
-        {/* Note de confidentialité */}
         <p className="text-sm text-slate-600 text-center">
           Vos données personnelles sont utilisées uniquement pour répondre à votre demande et ne sont jamais partagées.
         </p>

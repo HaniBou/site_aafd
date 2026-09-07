@@ -10,9 +10,6 @@ export function FloatingDonButton() {
   const isHomePage = pathname === '/'
   const isAdminPage = pathname?.startsWith('/admin')
 
-  // Sur la page d'accueil, apparaît après scroll ; ailleurs, toujours visible.
-  // Toujours escamoté au-dessus du pied de page : le blob rose y recouvrait
-  // les liens « Mentions légales » et « Espace bénévoles ».
   const isVisible = (!isHomePage || isScrolled) && !isOverFooter
 
   useEffect(() => {
@@ -30,7 +27,7 @@ export function FloatingDonButton() {
       }
     }
 
-    handleScroll() // Check initial position
+    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isHomePage])
@@ -43,15 +40,12 @@ export function FloatingDonButton() {
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsOverFooter(entry.isIntersecting),
-      // 180 px : hauteur du blob (112 px) plus sa marge basse, soit la zone que
-      // le bouton occupe réellement en bas de l'écran.
       { rootMargin: '0px 0px 180px 0px' },
     )
     observer.observe(legalBar)
     return () => observer.disconnect()
   }, [isAdminPage, pathname])
 
-  // Ne pas afficher sur les pages admin
   if (isAdminPage) {
     return null
   }
@@ -75,7 +69,6 @@ export function FloatingDonButton() {
           : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
       }`}>
     
-      {/* Blob Rose de fond (décalé) */}
       <div 
         className="absolute inset-0 bg-pink-300 opacity-40 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105"
         style={{
@@ -87,7 +80,6 @@ export function FloatingDonButton() {
         }}
       ></div>
 
-      {/* Blob Rose principal (Bouton) */}
       <div 
         className="relative w-28 h-28 flex flex-col items-center justify-center text-white font-bold text-center text-sm uppercase tracking-wide leading-tight transition-transform duration-300 hover:-translate-y-1 active:scale-95 shadow-2xl"
         style={{

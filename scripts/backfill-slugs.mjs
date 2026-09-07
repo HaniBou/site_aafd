@@ -1,11 +1,3 @@
-/**
- * Recalcule le slug de chaque actualité à partir de son titre, et garantit
- * l'unicité. À lancer une fois après la mise en place des URLs parlantes,
- * ou après avoir renommé des articles avec une ancienne version du site.
- *
- *   node --env-file=.env.local scripts/backfill-slugs.mjs          (aperçu)
- *   node --env-file=.env.local scripts/backfill-slugs.mjs --write  (applique)
- */
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
@@ -33,7 +25,6 @@ const app = getApps().length
 
 const db = getFirestore(app);
 
-// Doit rester identique à buildSlug() dans lib/slug.ts
 function buildSlug(title) {
   const slug = String(title ?? '')
     .toLowerCase()

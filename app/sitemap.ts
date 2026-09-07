@@ -3,8 +3,6 @@ import { getActualitesAdmin } from '@/lib/firebase/fetchers'
 import { SITE_URL as siteUrl } from '@/lib/siteConfig'
 import { actualiteHref } from '@/lib/slug'
 
-// Le sitemap serait figé au build : sans ce revalidate, un article publié
-// depuis l'admin n'y apparaîtrait qu'au prochain déploiement.
 export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -51,9 +49,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
-    // Ni /mentions-legales ni /nous-soutenir : elles sont en `noindex`.
-    // Soumettre au sitemap une page qu'on demande par ailleurs de ne pas indexer
-    // fait remonter un avertissement dans Search Console.
   ]
 
   let actualitePages: MetadataRoute.Sitemap = []

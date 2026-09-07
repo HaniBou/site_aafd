@@ -10,25 +10,16 @@ import { SITE_URL, ASSOCIATION_NAME, ASSOCIATION_FULL_NAME } from '@/lib/siteCon
 import { JsonLd } from '@/components/JsonLd'
 import type { Actualite } from '@/types'
 
-// Pas de `revalidate` ici volontairement : avec la mise en cache, Next sert la
-// page d'erreur de notFound() avec un statut 200 (soft 404, indexé par Google).
-// Vérifié : sans revalidate, /actualites/<slug-inexistant> renvoie bien 404.
-
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-/**
- * Cherche l'article par son slug. Si le segment est un ancien identifiant
- * Firestore, on retourne aussi le slug cible pour rediriger en 301.
- */
 async function resolveActualite(
   slug: string,
 ): Promise<{ actualite: Actualite | null; redirectTo?: string }> {
   const bySlug = await getActualiteBySlugAdmin(slug)
   if (bySlug) return { actualite: bySlug }
 
-  // Ancienne URL /actualites/<id> : les liens déjà partagés doivent survivre.
   if (looksLikeFirestoreId(slug)) {
     const byId = await getActualiteByIdAdmin(slug)
     if (byId?.slug && byId.slug !== slug) {

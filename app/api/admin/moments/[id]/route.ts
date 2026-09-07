@@ -46,7 +46,6 @@ export async function PUT(
 
   await adminDb.collection('moments').doc(id).update(update);
 
-  // L'ancienne image n'est plus référencée nulle part.
   if (image !== undefined && image !== oldImage) {
     await deleteCloudinaryImage(oldImage);
   }

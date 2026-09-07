@@ -29,7 +29,6 @@ export default async function TemoignagesPage() {
       getMomentsAdmin(),
     ])
     temoignages = temoins
-    // On n'affiche que les photos réellement exploitables.
     moments = photos.filter(moment => moment.image && moment.image !== 'none')
   } catch (error) {
     console.error('[temoignages] chargement des données', error)

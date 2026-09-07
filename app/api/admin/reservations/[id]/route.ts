@@ -46,9 +46,6 @@ async function cancelReservation(id: string, data: FirebaseFirestore.DocumentDat
   const platId = data.platId as string | undefined;
   const quantite = Number(data.quantite);
 
-  // Le plat a pu être supprimé depuis. `batch.update` sur un document absent
-  // fait échouer tout le lot : la réservation devenait alors impossible à
-  // annuler. On ne restitue le stock que si le plat existe encore.
   let platExiste = false;
   if (platId) {
     platExiste = (await adminDb.collection('plats').doc(platId).get()).exists;

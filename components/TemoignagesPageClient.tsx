@@ -154,8 +154,6 @@ export default function TemoignagesPageClient({ temoignages, moments, loadError 
         </div>
       </section>
 
-      {/* Moments partagés — alimenté depuis l'admin.
-          La section disparaît tant qu'aucune photo n'a été ajoutée. */}
       {moments.length > 0 && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">

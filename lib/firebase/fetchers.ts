@@ -3,8 +3,6 @@ import { buildSlug } from '@/lib/slug';
 import { retraitAVenir } from '@/lib/vente';
 import type { Plat, Actualite, Temoignage, Reservation, Moment, Vente } from '@/types';
 
-// Firestore Timestamps are class instances — Next.js cannot pass them from
-// Server Components to Client Components. Convert every Timestamp to an ISO string.
 function serializeDoc(data: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(data)) {
@@ -96,8 +94,6 @@ export async function getActualiteBySlugAdmin(slug: string): Promise<Actualite |
   return { id: doc.id, ...serializeDoc(doc.data()) } as Actualite;
 }
 
-// Deux articles ne peuvent pas partager la même URL : on suffixe -2, -3…
-// `excludeId` permet de garder son slug à un article qu'on modifie.
 export async function buildUniqueActualiteSlug(
   title: string,
   excludeId?: string,

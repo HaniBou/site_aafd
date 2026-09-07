@@ -16,8 +16,8 @@ function isSupportedImage(bytes: Uint8Array): boolean {
   const png = startsWith(bytes, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
   const gif = startsWith(bytes, [0x47, 0x49, 0x46, 0x38]);
   const webp =
-    startsWith(bytes, [0x52, 0x49, 0x46, 0x46]) && // "RIFF"
-    startsWith(bytes, [0x57, 0x45, 0x42, 0x50], 8); // "WEBP"
+    startsWith(bytes, [0x52, 0x49, 0x46, 0x46]) &&
+    startsWith(bytes, [0x57, 0x45, 0x42, 0x50], 8);
 
   return jpeg || png || gif || webp;
 }
@@ -43,14 +43,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Aucun fichier' }, { status: 400 });
   }
 
-  // Doit rester aligné avec la limite annoncée dans les formulaires admin.
-  const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
+  const MAX_SIZE = 10 * 1024 * 1024;
   if (file.size > MAX_SIZE) {
     return NextResponse.json({ error: 'Fichier trop volumineux (max 10 Mo)' }, { status: 400 });
   }
 
-  // file.type vient du navigateur et est falsifiable : on vérifie la signature
-  // réelle du fichier (magic bytes).
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (!isSupportedImage(bytes)) {
     return NextResponse.json(
@@ -85,8 +82,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ url: data.secure_url });
 }
 
-// Appelé par les formulaires admin quand l'enregistrement échoue après un
-// upload réussi : sans ça, l'image resterait orpheline sur Cloudinary.
 export async function DELETE(request: NextRequest) {
   try {
     await checkSession();
