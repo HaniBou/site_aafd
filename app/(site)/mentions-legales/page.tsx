@@ -1,14 +1,11 @@
 import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
-import { CookiePreferencesButton } from '@/components/CookiePreferencesButton'
-import { buttonClasses } from '@/components/ui/Button'
 import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
   ASSOCIATION_ADDRESS,
   ASSOCIATION_NAME,
   ASSOCIATION_FULL_NAME,
-  GA_MEASUREMENT_ID,
 } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
@@ -122,8 +119,8 @@ export default function MentionsLegalesPage() {
                 cédées à des tiers à des fins commerciales.
               </p>
               <p className="mt-3">
-                Si vous y consentez, une <strong>mesure d&apos;audience</strong> anonyme est également
-                réalisée via Google Analytics (voir la section 6 ci-dessous).
+                Une <strong>mesure de fréquentation anonyme</strong> est par ailleurs réalisée,
+                sans cookie et sans donnée personnelle (voir la section 6 ci-dessous).
               </p>
 
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Bases légales</h3>
@@ -132,7 +129,10 @@ export default function MentionsLegalesPage() {
                   Formulaires de contact et de réservation : exécution de mesures précontractuelles
                   et intérêt légitime de l&apos;association à répondre à votre demande.
                 </li>
-                <li>Mesure d&apos;audience : votre consentement, révocable à tout moment.</li>
+                <li>
+                  Mesure de fréquentation : intérêt légitime de l&apos;association à connaître
+                  l&apos;usage de son site, au moyen de statistiques anonymes.
+                </li>
               </ul>
 
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Durée de conservation</h3>
@@ -154,73 +154,55 @@ export default function MentionsLegalesPage() {
             <div id="cookies" className="scroll-mt-28">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Cookies</h2>
               <p>
-                Un cookie est un petit fichier déposé sur votre appareil lors de la consultation
-                du site. Ce site en utilise deux catégories.
+                Ce site <strong>n&apos;utilise aucun cookie publicitaire, de traçage ou de
+                mesure d&apos;audience tierce</strong>. Il ne fait appel à aucun service
+                d&apos;analyse externe : ni Google Analytics, ni équivalent. C&apos;est pourquoi
+                aucune bannière de consentement ne vous est présentée.
               </p>
 
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
                 Cookies strictement nécessaires
               </h3>
               <p>
-                Exemptés de consentement, ils ne servent à aucun suivi et sont indispensables au
-                fonctionnement du site :
+                Un seul cookie est susceptible d&apos;être déposé, exempté de consentement car
+                indispensable au fonctionnement du site :
               </p>
               <ul className="list-disc pl-6 mt-2 space-y-1">
-                <li>
-                  <code>aafd_consent</code> — mémorise votre choix en matière de cookies pour ne pas
-                  vous le redemander à chaque page. Durée : 6 mois.
-                </li>
                 <li>
                   <code>admin_session</code> — maintient la connexion à l&apos;espace bénévoles.
                   Déposé uniquement après authentification d&apos;un membre de l&apos;association.
+                  Les visiteurs du site public ne le reçoivent jamais.
                 </li>
               </ul>
 
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-                Cookies de mesure d&apos;audience
+                Compteur de fréquentation anonyme
               </h3>
               <p>
-                Le site utilise <strong>Google Analytics 4</strong> afin de mesurer la fréquentation
-                (nombre de visites, pages consultées, provenance) et d&apos;améliorer le contenu
-                proposé. Ces cookies ne sont <strong>déposés qu&apos;après votre accord explicite</strong>{' '}
-                et aucune donnée n&apos;est envoyée à Google tant que vous n&apos;avez pas accepté.
-                Ils ne sont utilisés ni à des fins publicitaires, ni pour du profilage.
+                L&apos;association utilise son propre compteur de visites, hébergé avec le site
+                et sans aucun service tiers. Seuls des <strong>totaux</strong> sont enregistrés :
+                nombre de visites par jour, nombre de consultations par page, et nom de domaine
+                du site par lequel vous êtes arrivé (par exemple « Google » ou « Instagram »).
               </p>
-              <ul className="list-disc pl-6 mt-2 space-y-1">
-                <li>
-                  <code>_ga</code> — distingue les visiteurs les uns des autres. Durée : 13 mois.
-                </li>
-                <li>
-                  <code>_ga_*</code> — maintient l&apos;état de la session de mesure. Durée : 13 mois.
-                </li>
-              </ul>
               <p className="mt-3">
-                Le responsable de ce traitement est l&apos;AAFD Val de Saône ; le sous-traitant est{' '}
-                <strong>Google Ireland Limited</strong>. Les données peuvent être transférées vers
-                les États-Unis, encadrées par les clauses contractuelles types de la Commission
-                européenne et par l&apos;adhésion de Google au{' '}
-                <em>EU-U.S. Data Privacy Framework</em>. La politique de confidentialité de Google est
-                consultable sur policies.google.com/privacy.
+                Aucune adresse IP, aucun identifiant de visiteur, aucun parcours individuel et
+                aucune adresse complète de provenance ne sont conservés. Ces statistiques ne
+                permettent pas de vous identifier, ne sont recoupées avec aucun autre traitement
+                et ne sont transmises à personne.
               </p>
-
-              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-                Gérer ou retirer votre consentement
-              </h3>
-              <p>
-                Vous pouvez accepter, refuser ou modifier votre choix à tout moment, sans que cela
-                n&apos;affecte l&apos;accès au site. Le retrait est aussi simple que l&apos;accord :
-                les cookies de mesure déjà déposés sont alors supprimés.
+              <p className="mt-3">
+                Un simple marqueur technique (<code>aafd_visite_comptee</code>) est placé dans la
+                mémoire de session de votre navigateur, uniquement pour ne pas compter deux fois
+                la même visite. Il ne contient aucune valeur identifiante et disparaît dès la
+                fermeture de l&apos;onglet.
               </p>
-              {GA_MEASUREMENT_ID && (
-                <p className="mt-4 not-prose">
-                  <CookiePreferencesButton
-                    className={buttonClasses({ variant: 'secondary', size: 'sm', shape: 'rounded' })}
-                  />
-                </p>
-              )}
-              <p className="mt-3 text-sm">
-                Vous pouvez également paramétrer votre navigateur pour bloquer les cookies, ou
-                installer le module de désactivation de Google Analytics proposé par Google.
+              <p className="mt-3">
+                Strictement limitée à la production de statistiques anonymes pour le seul compte
+                de l&apos;association, cette mesure relève de l&apos;exemption de consentement
+                prévue par la CNIL pour la mesure d&apos;audience. Vous pouvez néanmoins vous y
+                opposer en nous écrivant à{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>,
+                ou en paramétrant votre navigateur pour bloquer le stockage local.
               </p>
             </div>
 

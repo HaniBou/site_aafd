@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { StatistiquesVisites } from '@/components/admin/StatistiquesVisites';
 import {
   getActualitesAdmin,
   getVentesAdmin,
@@ -6,6 +7,7 @@ import {
   getTemoignagesAdmin,
   getMomentsAdmin,
 } from '@/lib/firebase/fetchers';
+import { getStatistiquesVisites } from '@/lib/statistiques';
 
 export const dynamic = 'force-dynamic';
 
@@ -76,12 +78,13 @@ const COLOR: Record<string, { bg: string; text: string; badge: string }> = {
 };
 
 export default async function AdminDashboard() {
-  const [ventes, actualites, temoignages, moments, reservations] = await Promise.all([
+  const [ventes, actualites, temoignages, moments, reservations, stats] = await Promise.all([
     getVentesAdmin(),
     getActualitesAdmin(),
     getTemoignagesAdmin(),
     getMomentsAdmin(),
     getReservationsAdmin(),
+    getStatistiquesVisites(),
   ]);
 
   const counts = [
@@ -134,6 +137,8 @@ export default async function AdminDashboard() {
         })}
       </div>
 
+      <StatistiquesVisites stats={stats} />
+
       <div className="bg-gradient-to-br from-blue-50 to-blue-50 border border-blue-100 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shrink-0">
@@ -177,6 +182,14 @@ export default async function AdminDashboard() {
                 'Les commandes arrivent automatiquement',
                 'Bouton "Tableau Excel" pour télécharger la liste',
                 '"Annuler" remet la quantité en stock',
+              ],
+            },
+            {
+              title: 'Fréquentation du site',
+              steps: [
+                'Le compteur en haut de cette page se met à jour tout seul',
+                'Une "visite" = une personne venue sur le site',
+                'Passez la souris sur une barre pour voir le jour exact',
               ],
             },
             {

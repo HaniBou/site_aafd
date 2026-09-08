@@ -38,12 +38,6 @@ export const ASSOCIATION_ADDRESS = {
 export const GOOGLE_SITE_VERIFICATION =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "";
 
-// Identifiant de mesure Google Analytics 4 (format G-XXXXXXXXXX). Vide en
-// développement ou en préproduction : tout le code d'analytics devient alors
-// inerte, seule la bannière cookies disparaît de l'écran.
-export const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
-
 export const MAIL_FROM = {
   contact: `${ASSOCIATION_NAME} Contact <${CONTACT_EMAIL}>`,
   reservations: `${ASSOCIATION_NAME} Réservations <${CONTACT_EMAIL}>`,
