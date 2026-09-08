@@ -69,7 +69,7 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
                     src={actuALaUne.image}
                     alt={actuALaUne.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                     sizes="(max-width: 768px) 100vw, 60vw"
                   />
                 ) : (
@@ -147,7 +147,7 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
                         src={actu.image}
                         alt={actu.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (

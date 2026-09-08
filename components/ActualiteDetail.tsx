@@ -49,18 +49,23 @@ export default function ActualiteDetail({ actualite }: { actualite: Actualite })
               </span>
             </div>
 
+            {/* Pas de hauteur imposee ni de recadrage ici : l'image s'affiche
+                dans son ratio d'origine. Une affiche d'evenement (format
+                portrait, avec du texte) reste lisible en entier, la ou un
+                object-cover dans une boite fixe l'aurait tronquee. Les
+                dimensions passees a next/image ne servent qu'a reserver la
+                place avant chargement. */}
             {actualite.image && actualite.image !== 'none' && (
-              <div className="float-right ml-8 mb-6 w-full md:w-1/2 lg:w-2/5">
-                <div className="relative h-[300px] md:h-[400px] bg-gray-200 flex items-center justify-center rounded-xl overflow-hidden shadow-lg">
-                  <Image
-                    src={actualite.image}
-                    alt={actualite.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                  />
-                </div>
-              </div>
+              <figure className="float-right ml-8 mb-6 w-full md:w-1/2 lg:w-2/5">
+                <Image
+                  src={actualite.image}
+                  alt={actualite.title}
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto rounded-xl shadow-lg bg-gray-100"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </figure>
             )}
 
             <div className="text-gray-800 text-base leading-relaxed whitespace-pre-line" style={{ textAlign: 'justify', lineHeight: '1.8' }}>
