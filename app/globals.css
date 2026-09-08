@@ -38,15 +38,16 @@
    orange ne se détacherait pas (WCAG 1.4.11 demande 3:1 avec la couleur voisine). */
 :root {
   --focus-ring: oklch(48.8% 0.243 264.376); /* blue-700 */
-  --footer-bleed: oklch(13% 0.028 261.692); /* gray-950, bas du degrade du pied de page */
 }
 
-/* overscroll-behavior ne pilote le defilement du document que depuis l'element
-   racine : pose sur body seul, il n'empechait pas le rebond tactile. */
+/* Regle unique pour l'element racine : c'est de lui, et de lui seul, que
+   overscroll-behavior est propage au defilement du document. Une seconde regle
+   html plus bas dans ce fichier le remettait a auto et annulait tout. */
 html {
   background: var(--background);
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -58,14 +59,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
-}
-
-/* Filet de securite pour les navigateurs qui rebondissent malgre tout (iOS
-   ancien) : une ombre sans flou peint la couleur du pied de page 50vh plus bas.
-   Elle n'ajoute aucune hauteur defilable mais couvre la zone blanche revelee
-   quand la page se decale vers le haut. */
-.footer-bleed {
-  box-shadow: 0 50vh 0 var(--footer-bleed);
 }
 
 @layer base {
@@ -100,11 +93,6 @@ body {
   .text-xs-custom {
     @apply text-[0.75rem] leading-[1.5];
   }
-}
-
-html {
-  overscroll-behavior-y: auto;
-  scroll-behavior: smooth;
 }
 
 button,
