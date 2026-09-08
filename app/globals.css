@@ -117,6 +117,37 @@ select:disabled,
   cursor: not-allowed !important;
 }
 
+/* Safari et iOS donnent aux champs date/heure une largeur native intrinsèque
+   qui ignore width:100%. Combinée au min-width:auto des cellules de grille,
+   elle faisait déborder le champ de sa carte sur téléphone (formulaires admin).
+   appearance:none les fait dimensionner sur leur boîte CSS ; le sélecteur
+   natif (roue iOS, calendrier Chrome) reste accessible. */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Sans apparence native, iOS n'alloue plus de hauteur au texte et aligne
+   la valeur à droite. */
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value,
+input[type="datetime-local"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.5em;
+}
+
+/* appearance:none masque l'icône du sélecteur sur certaines versions. */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  cursor: pointer;
+}
+
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

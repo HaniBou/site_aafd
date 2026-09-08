@@ -13,6 +13,14 @@ import {
 import { LIENS_UTILES, ACCENTS_LIENS, domaineLisible } from '@/lib/liensUtiles'
 import { Button } from '@/components/ui/Button';
 
+const ASSOCIATIONS_PARTENAIRES = [
+  { nom: 'Amitié et Solidarité en Val de Saône (ASVS)', email: 'asvs69@yahoo.fr' },
+  { nom: 'Habitat Saint Roch', email: 'habitatsaintroch@gmail.com' },
+  { nom: 'Restos du cœur Neuville', email: 'ad69.neuville@restosducoeur.org' },
+  { nom: 'Secours Catholique Neuville', email: 'sc.valdesaone@gmail.com' },
+  { nom: 'Secours populaire français Neuville', email: 'secours.populaire.neuville@orange.fr' },
+]
+
 export const metadata: Metadata = {
   title: 'Contact',
   description: "Contactez l'AAFD Val de Saône pour toute question, demande d'aide ou proposition de bénévolat. Téléphone, email, formulaire et liens vers d'autres sites utiles.",
@@ -200,6 +208,34 @@ export default function ContactPage() {
           <p className="mt-8 text-center text-sm text-gray-500">
             Ces sites sont indépendants de l&apos;AAFD. Les liens s&apos;ouvrent dans un nouvel onglet.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 py-16 md:py-24">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <span className="mb-4 block text-sm font-medium uppercase tracking-[0.2em] text-blue-900">
+              Partenaires
+            </span>
+            <h2 className="text-gray-900">Les associations partenaires du Val de Saône</h2>
+          </div>
+
+          <ul className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
+            {ASSOCIATIONS_PARTENAIRES.map((asso) => (
+              <li
+                key={asso.email}
+                className="rounded-2xl border border-gray-200 bg-white p-5"
+              >
+                <p className="mb-1 font-semibold text-gray-900">{asso.nom}</p>
+                <a
+                  href={`mailto:${asso.email}`}
+                  className="text-sm text-blue-700 underline underline-offset-2 break-all hover:text-blue-900"
+                >
+                  {asso.email}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </main>

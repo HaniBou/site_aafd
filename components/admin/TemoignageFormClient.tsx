@@ -285,7 +285,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Informations</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
+            <div className="min-w-0">
               <label htmlFor="nom" className="block text-sm font-semibold text-gray-700 mb-1.5">Nom *</label>
               <input id="nom" type="text" value={form.nom}
                 onChange={e => setForm({ ...form, nom: e.target.value })}
@@ -293,7 +293,7 @@ export default function TemoignageFormClient({ temoignage }: { temoignage?: Temo
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors"
                 required />
             </div>
-            <div>
+            <div className="min-w-0">
               <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
               <input id="date" type="date" value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}

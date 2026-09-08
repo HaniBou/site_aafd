@@ -88,8 +88,10 @@ export default function DateHeureField({
       </legend>
       {aide && <p className="text-sm text-gray-600 mb-3">{aide}</p>}
 
+      {/* min-w-0 : sans lui, la cellule de grille ne peut pas descendre sous la
+          largeur intrinsèque du champ natif et déborde sur téléphone. */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
+        <div className="min-w-0">
           <label htmlFor={`${baseId}-date`} className="block text-sm font-semibold text-gray-700 mb-1.5">
             Date
           </label>
@@ -102,7 +104,7 @@ export default function DateHeureField({
             required={requis}
           />
         </div>
-        <div>
+        <div className="min-w-0">
           <label htmlFor={`${baseId}-heure`} className="block text-sm font-semibold text-gray-700 mb-1.5">
             Heure
           </label>

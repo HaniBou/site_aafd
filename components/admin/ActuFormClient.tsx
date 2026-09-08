@@ -267,7 +267,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
+            <div className="min-w-0">
               <label htmlFor="categorie" className="block text-sm font-semibold text-gray-700 mb-1.5">Catégorie *</label>
               <select id="categorie" value={form.category}
                 onChange={e => setForm({ ...form, category: e.target.value })}
@@ -277,7 +277,7 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
-            <div>
+            <div className="min-w-0">
               <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1.5">Date *</label>
               <input id="date" type="date" value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}
