@@ -50,7 +50,7 @@ export default function VentePlatsPageClient({
             En achetant nos plats, vous soutenez directement les actions de l'AAFD"
         imageSrc="/images/hero_plats.webp"
         imageAlt="Nos plats cuisinés"
-        accentColor="bg-orange-400"
+        accentColor="bg-orange-700"
       />
 
       {!loadError && !vente && (

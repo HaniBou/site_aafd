@@ -9,45 +9,49 @@ interface PageHeroProps {
   titleTag?: 'h1' | 'p'
 }
 
+// Heros des pages interieures : bandeau photo panoramique, puis un chapeau
+// editorial sur deux colonnes. La structure differe de l'accueil (compose en
+// deux colonnes texte/photo), le vocabulaire reste le meme : carte arrondie,
+// accents au palier 700, texte sur blanc. Aucun texte n'est pose sur la photo.
 export function PageHero({
   title,
   description,
   imageSrc,
   imageAlt,
-  accentColor = 'bg-blue-400',
+  accentColor = 'bg-blue-700',
   titleTag = 'h1',
 }: PageHeroProps) {
   const Title = titleTag
 
   return (
-    <section className="relative h-[60svh] min-h-[400px] md:h-[68svh] flex flex-col justify-end overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section className="pt-24 lg:pt-28">
+      <div className="relative mx-5 h-[30svh] min-h-[220px] overflow-hidden rounded-3xl md:h-[38svh] lg:mx-6">
         <Image
           src={imageSrc}
           alt={imageAlt || title}
           fill
           className="object-cover"
+          sizes="100vw"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
       </div>
 
-      <div className="relative z-10 pb-12 md:pb-16">
-        <div className="mx-auto max-w-screen-2xl px-8 md:px-16">
-          <div className={`w-12 h-0.5 ${accentColor} mb-5 animate-hero-line`} />
+      <div className="px-8 py-10 md:px-16 md:py-14">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-16">
+          <div>
+            <div className={`w-16 h-1 rounded-full ${accentColor} mb-6 animate-hero-line`} />
 
-          <Title
-            className="font-bold text-white leading-tight tracking-tight mb-6 drop-shadow-2xl"
-            style={{ fontSize: 'clamp(2rem, 5vw, 3.75rem)' }}
-          >
-            {title}
-          </Title>
+            <Title
+              className="font-bold text-blue-900 leading-tight tracking-tight"
+              style={{ fontSize: 'clamp(2.25rem, 4.5vw, 3.75rem)' }}
+            >
+              {title}
+            </Title>
+          </div>
 
-          <div className="flex items-start gap-5 max-w-xl animate-hero-fade">
-            <div className={`w-px h-12 ${accentColor} opacity-60 shrink-0 mt-1`} />
-            <p className="text-white text-base md:text-lg leading-relaxed drop-shadow-lg">
+          <div className="flex items-start gap-6 animate-hero-fade lg:pb-2">
+            <div className={`w-px h-14 ${accentColor} opacity-40 shrink-0 mt-1`} />
+            <p className="text-gray-700 text-base md:text-lg leading-relaxed">
               {description}
             </p>
           </div>

@@ -19,7 +19,7 @@ export default function NousSoutenirPage() {
         description="Votre soutien est essentiel pour continuer à accompagner les familles en difficulté et développer nos actions sur le Val de Saône."
         imageSrc="/images/donate.webp"
         imageAlt="Nous soutenir"
-        accentColor="bg-emerald-400"
+        accentColor="bg-emerald-700"
       />
 
 <section className="py-20 bg-white">

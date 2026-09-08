@@ -2,39 +2,28 @@ import Image from 'next/image'
 import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 import { Button } from '@/components/ui/Button'
 
+// Hero scinde : le texte vit sur un panneau clair, la photo occupe sa propre
+// colonne. Aucun voile n'est necessaire puisque rien ne se superpose a l'image.
 export function MainHero() {
   return (
-    <section className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/hero_accueil.webp"
-          alt="AAFD - Accompagnement des familles"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
-      </div>
-
-      <div className="relative z-20 pb-16 md:pb-24">
-        <div className="mx-auto max-w-screen-2xl px-8 md:px-16">
-          <div className="w-16 h-0.5 bg-orange-700 mb-6 animate-hero-line" />
+    <section className="relative grid min-h-[100svh] pt-24 lg:pt-28 lg:grid-cols-2">
+      <div className="flex items-center bg-white px-8 pb-12 pt-6 md:px-16 lg:pb-20 lg:pt-0">
+        <div className="max-w-xl">
+          <div className="w-16 h-1 rounded-full bg-orange-700 mb-6 animate-hero-line" />
 
           <h1
-            className="font-bold text-white leading-tight tracking-tight mb-8 drop-shadow-2xl"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
+            className="font-bold text-blue-900 leading-tight tracking-tight mb-8"
+            style={{ fontSize: 'clamp(2.25rem, 4.2vw, 4rem)' }}
           >
             Association d&apos;Aide aux Familles
-            <span className="block text-orange-400 italic font-normal">en Difficulté.</span>
+            <span className="block text-orange-700 italic font-normal">en Difficulté.</span>
           </h1>
 
           <div className="flex items-start gap-6 max-w-lg mb-10 animate-hero-fade">
-            <div className="w-px h-14 bg-orange-700/50 shrink-0 mt-1" />
-            <p className="text-white text-base md:text-lg leading-relaxed drop-shadow-lg">
+            <div className="w-px h-14 bg-orange-700/40 shrink-0 mt-1" />
+            <p className="text-gray-700 text-base md:text-lg leading-relaxed">
               Accompagner, soutenir et créer du lien avec les{' '}
-              <span className="text-white font-semibold">familles réfugiées</span>{' '}
+              <span className="text-gray-900 font-semibold">familles réfugiées</span>{' '}
               depuis {ASSOCIATION_FOUNDING_YEAR}.
             </p>
           </div>
@@ -59,14 +48,25 @@ export function MainHero() {
         </div>
       </div>
 
-      <div
-        className="absolute bottom-10 right-10 z-30 flex flex-col items-center gap-3 animate-scroll-hint"
-        aria-hidden="true"
-      >
-        <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/60 to-transparent" />
-        <svg width="20" height="10" viewBox="0 0 14 8" fill="none">
-          <path d="M1 1L7 7L13 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+      <div className="relative mx-5 mb-5 min-h-[42svh] overflow-hidden rounded-3xl lg:mx-6 lg:mb-6 lg:min-h-0">
+        <Image
+          src="/images/hero_accueil.webp"
+          alt="AAFD - Accompagnement des familles"
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          priority
+        />
+
+        <div
+          className="absolute bottom-8 right-8 z-10 flex flex-col items-center gap-3 animate-scroll-hint"
+          aria-hidden="true"
+        >
+          <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/70 to-transparent" />
+          <svg width="20" height="10" viewBox="0 0 14 8" fill="none">
+            <path d="M1 1L7 7L13 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
       </div>
     </section>
   )
