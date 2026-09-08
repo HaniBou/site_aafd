@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingDonButton } from "@/components/FloatingDonButton";
 import { JsonLd } from "@/components/JsonLd";
+import { CookieConsent } from "@/components/CookieConsent";
 import {
   SITE_URL,
   CONTACT_EMAIL,
@@ -72,6 +73,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <div className="hidden md:block">
         <FloatingDonButton />
       </div>
+      {/* Monté ici et non dans le layout racine : l'espace bénévoles (/admin)
+          ne doit pas être mesuré. */}
+      <CookieConsent />
     </>
   );
 }

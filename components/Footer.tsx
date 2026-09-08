@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { CONTACT_EMAIL, CONTACT_PHONE, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/siteConfig'
+import { CookiePreferencesButton } from '@/components/CookiePreferencesButton'
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+  GA_MEASUREMENT_ID,
+} from '@/lib/siteConfig'
 
 export function Footer() {
   return (
@@ -113,6 +120,12 @@ export function Footer() {
         Mentions légales
       </Link>
       <span className="text-gray-700">|</span>
+      {GA_MEASUREMENT_ID && (
+        <>
+          <CookiePreferencesButton className="hover:text-blue-400 transition-colors" />
+          <span className="text-gray-700">|</span>
+        </>
+      )}
       <Link
         href="/admin"
         rel="nofollow"
