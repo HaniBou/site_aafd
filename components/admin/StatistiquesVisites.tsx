@@ -183,8 +183,6 @@ export function StatistiquesVisites({ stats }: { stats: Stats }) {
           {stats.depuis && (
             <p className="text-xs text-gray-400 mt-6 mb-0">
               Mesure anonyme, sans cookie, depuis le {libelleJour(stats.depuis)}.
-              {' '}Une « visite » = une personne venue sur le site ;{' '}
-              {nf.format(stats.totalVues)} pages ont été consultées au total.
             </p>
           )}
         </>
