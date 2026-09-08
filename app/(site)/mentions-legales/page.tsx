@@ -27,7 +27,7 @@ export default function MentionsLegalesPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Éditeur du site</h2>
               <p>Le présent site est édité par :</p>
               <ul className="list-none pl-0 space-y-1 mt-3">
-                <li><strong>Dénomination :</strong> Association d&apos;Aide aux Familles en Difficulté (AAFD Val de Saône)</li>
+                <li><strong>Dénomination :</strong> Association d&apos;Aide aux Familles en Difficulté en Val de Saône (AAFD Val de Saône)</li>
                 <li><strong>Forme juridique :</strong> Association loi 1901 à but non lucratif</li>
                 <li>
                   <strong>Siège social :</strong>{' '}
@@ -35,8 +35,7 @@ export default function MentionsLegalesPage() {
                   {ASSOCIATION_ADDRESS.addressLocality}
                 </li>
                 <li>
-                  <strong>Numéro RNA / SIRET :</strong>{' '}
-                  <span className="text-orange-700 font-semibold">[Numéro à compléter]</span>
+                  <strong>Numéro RNA / SIRET :</strong>{'50465383300013 '}
                 </li>
                 <li>
                   <strong>Téléphone :</strong>{' '}
@@ -147,7 +146,7 @@ export default function MentionsLegalesPage() {
             </div>
 
             <p className="text-sm text-gray-600 border-t pt-6">
-              Dernière mise à jour : mai 2026
+              Dernière mise à jour : septembre 2026
             </p>
 
           </div>
