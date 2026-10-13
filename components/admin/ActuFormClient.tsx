@@ -293,6 +293,9 @@ export default function ActuFormClient({ actualite }: { actualite?: Actualite })
               rows={6} placeholder="Décrivez l'actualité en détail…"
               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-gray-50 focus:bg-white outline-none transition-colors resize-none"
               required />
+            <p className="text-xs text-gray-500 mt-1.5">
+              Les liens (https://…, www.…) et les adresses e-mail deviennent cliquables automatiquement sur le site.
+            </p>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { PageHero } from '@/components/PageHero'
+import { getPhotosSite } from '@/lib/firebase/fetchers'
 import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 import { Button } from '@/components/ui/Button'
 import { CtaBand } from '@/components/ui/CtaBand'
@@ -12,13 +13,16 @@ export const metadata: Metadata = {
   openGraph: { title: 'Notre association | AAFD Val de Saône', description: "Depuis 2007, l'accompagnement des familles réfugiées sur le Val de Saône.", url: '/notre-association' },
 }
 
-export default function NotreAssociationPage() {
+export const revalidate = 60
+
+export default async function NotreAssociationPage() {
+  const photos = await getPhotosSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Notre association"
         description={`Depuis ${ASSOCIATION_FOUNDING_YEAR}, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône.`}
-        imageSrc="/images/hero_nous_connaitre.webp"
+        imageSrc={photos.bandeau_notre_association}
         imageAlt="Notre association AAFD"
       />
 

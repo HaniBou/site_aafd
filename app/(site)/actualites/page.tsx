@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import ActualitesPageClient from '@/components/ActualitesPageClient'
-import { getActualitesAdmin } from '@/lib/firebase/fetchers'
+import { getActualitesAdmin, getPhotosSite } from '@/lib/firebase/fetchers'
 import type { Actualite } from '@/types'
 
 export const revalidate = 60
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 export default async function ActualitesPage() {
   let actualites: Actualite[] = []
   let loadError = false
+  const photosPromise = getPhotosSite()
 
   try {
     actualites = await getActualitesAdmin()
@@ -29,5 +30,12 @@ export default async function ActualitesPage() {
     loadError = true
   }
 
-  return <ActualitesPageClient actualites={actualites} loadError={loadError} />
+  const { bandeau_actualites } = await photosPromise
+  return (
+    <ActualitesPageClient
+      actualites={actualites}
+      photoBandeau={bandeau_actualites}
+      loadError={loadError}
+    />
+  )
 }

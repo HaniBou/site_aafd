@@ -1,6 +1,7 @@
 import { adminDb } from './admin';
 import { buildSlug } from '@/lib/slug';
 import { retraitAVenir } from '@/lib/vente';
+import { completerPhotos, lirePhotosPersonnalisees, type PhotosSite } from '@/lib/photosSite';
 import type { Plat, Actualite, Temoignage, Reservation, Moment, Vente } from '@/types';
 
 function serializeDoc(data: Record<string, unknown>): Record<string, unknown> {
@@ -146,6 +147,22 @@ export async function getReservationsAdmin(): Promise<Reservation[]> {
     (a, b) =>
       new Date(b.dateReservation).getTime() - new Date(a.dateReservation).getTime(),
   );
+}
+
+export async function getPhotosPersonnalisees(): Promise<Partial<PhotosSite>> {
+  const doc = await adminDb.collection('config').doc('photosSite').get();
+  return lirePhotosPersonnalisees(doc.data());
+}
+
+// Pour les pages publiques : en cas d'erreur Firestore, on retombe sur les
+// photos d'origine plutot que de casser la page.
+export async function getPhotosSite(): Promise<PhotosSite> {
+  try {
+    return completerPhotos(await getPhotosPersonnalisees());
+  } catch (error) {
+    console.error('[photos du site] chargement', error);
+    return completerPhotos({});
+  }
 }
 
 export async function getMomentByIdAdmin(id: string): Promise<Moment | null> {

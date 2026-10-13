@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import TemoignagesPageClient from '@/components/TemoignagesPageClient'
-import { getTemoignagesAdmin, getMomentsAdmin } from '@/lib/firebase/fetchers'
+import { getTemoignagesAdmin, getMomentsAdmin, getPhotosSite } from '@/lib/firebase/fetchers'
 import type { Temoignage, Moment } from '@/types'
 
 export const revalidate = 60
@@ -22,6 +22,7 @@ export default async function TemoignagesPage() {
   let temoignages: Temoignage[] = []
   let moments: Moment[] = []
   let loadError = false
+  const photosPromise = getPhotosSite()
 
   try {
     const [temoins, photos] = await Promise.all([
@@ -39,6 +40,7 @@ export default async function TemoignagesPage() {
     <TemoignagesPageClient
       temoignages={temoignages}
       moments={moments}
+      photoBandeau={(await photosPromise).bandeau_temoignages}
       loadError={loadError}
     />
   )

@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
+import { getPhotosSite } from '@/lib/firebase/fetchers'
 import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
@@ -28,13 +29,16 @@ export const metadata: Metadata = {
   openGraph: { title: 'Contact | AAFD Val de Saône', description: "Contactez l'AAFD pour toute question ou proposition de bénévolat.", url: '/contact' },
 }
 
-export default function ContactPage() {
+export const revalidate = 60
+
+export default async function ContactPage() {
+  const photos = await getPhotosSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Contactez-nous"
         description="Nous sommes là pour vous écouter et vous accompagner."
-        imageSrc="/images/hero_contact.webp"
+        imageSrc={photos.bandeau_contact}
         imageAlt="Contactez-nous"
       />
 

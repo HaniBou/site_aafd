@@ -11,6 +11,7 @@ const SECTION_LABELS: [string, string][] = [
   ['/admin/plats', 'Ventes de plats'],
   ['/admin/temoignages', 'Témoignages'],
   ['/admin/moments', 'Moments partagés'],
+  ['/admin/photos', 'Photos du site'],
   ['/admin/reservations', 'Réservations'],
 ];
 

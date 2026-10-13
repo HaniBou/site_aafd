@@ -8,6 +8,7 @@ import {
   getMomentsAdmin,
 } from '@/lib/firebase/fetchers';
 import { getStatistiquesVisites } from '@/lib/statistiques';
+import { EMPLACEMENTS_PHOTOS } from '@/lib/photosSite';
 
 export const dynamic = 'force-dynamic';
 
@@ -57,6 +58,17 @@ const SECTIONS = [
     ),
   },
   {
+    href: '/admin/photos',
+    label: 'Photos du site',
+    desc: "Photos de l'accueil et bandeaux des pages",
+    addLabel: null,
+    color: 'rose',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9zM15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+    ),
+  },
+  {
     href: '/admin/reservations',
     label: 'Réservations',
     desc: 'Commandes de plats reçues',
@@ -75,6 +87,7 @@ const COLOR: Record<string, { bg: string; text: string; badge: string }> = {
   emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-700' },
   purple:  { bg: 'bg-purple-50',  text: 'text-purple-700',  badge: 'bg-purple-700' },
   teal:    { bg: 'bg-teal-50',    text: 'text-teal-700',    badge: 'bg-teal-700' },
+  rose:    { bg: 'bg-rose-50',    text: 'text-rose-700',    badge: 'bg-rose-700' },
 };
 
 export default async function AdminDashboard() {
@@ -92,6 +105,7 @@ export default async function AdminDashboard() {
     ventes.length,
     temoignages.length,
     moments.length,
+    EMPLACEMENTS_PHOTOS.length,
     reservations.length,
   ];
 
@@ -199,6 +213,15 @@ export default async function AdminDashboard() {
                 'Ajoutez-lui ses plats (ou dupliquez la vente précédente)',
                 'Cliquez "Mettre en ligne" : la page Nos plats s\'active',
                 'Après la distribution, cliquez "Clôturer"',
+              ],
+            },
+            {
+              title: 'Changer une photo du site',
+              steps: [
+                'Ouvrez "Photos du site"',
+                'Cliquez "Changer la photo" sous l\'image à remplacer',
+                'Choisissez la photo : elle est en ligne dans la minute',
+                '"Remettre la photo d\'origine" annule le changement',
               ],
             },
           ].map(block => (

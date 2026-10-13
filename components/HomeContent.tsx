@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { MainHero } from '@/components/MainHero'
 import { getCategoryStyles } from '@/lib/categoryStyles'
 import type { Actualite, Moment, Plat, Vente } from '@/types'
+import type { PhotosSite } from '@/lib/photosSite'
 import { actualiteHref } from '@/lib/slug'
 import { formatDateJour } from '@/lib/vente'
 import {
@@ -30,11 +31,13 @@ export default function HomeContent({
   platsDuMoment,
   venteEnCours = null,
   moments = [],
+  photos,
 }: {
   actualites: Actualite[];
   platsDuMoment: Plat[];
   venteEnCours?: Vente | null;
   moments?: Moment[];
+  photos: PhotosSite;
 }) {
   const photosInstagram = [
     ...moments
@@ -69,7 +72,7 @@ export default function HomeContent({
 
   return (
     <main className="min-h-screen bg-white">
-      <MainHero />
+      <MainHero imageSrc={photos.accueil_hero} />
 
       {featuredActu && (
         <section className="py-12 md:py-16 bg-gray-50">
@@ -181,7 +184,7 @@ export default function HomeContent({
               </div>
               <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src="/images/v4.webp"
+                  src={photos.accueil_qui_sommes_nous}
                   alt="L'AAFD en action"
                   fill
                   className="object-cover"
@@ -248,17 +251,17 @@ export default function HomeContent({
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                image: '/images/help.webp',
+                image: photos.accueil_sensibiliser,
                 titre: 'Sensibiliser',
                 texte: "Sensibiliser sur la question de l'immigration et comprendre les raisons de l'exil",
               },
               {
-                image: '/images/v5.webp',
+                image: photos.accueil_creer_du_lien,
                 titre: 'Créer du lien',
                 texte: 'Créer des liens amicaux et festifs entre la population locale et les familles réfugiées',
               },
               {
-                image: '/images/donate.webp',
+                image: photos.accueil_recolter_des_fonds,
                 titre: 'Récolter des fonds',
                 texte: "Développer l'aide matérielle : transports, assurances, avocats, hébergement...",
               },

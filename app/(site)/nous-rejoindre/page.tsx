@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 
 import { PageHero } from '@/components/PageHero'
+import { getPhotosSite } from '@/lib/firebase/fetchers'
 import { Button } from '@/components/ui/Button'
 import { CtaBand } from '@/components/ui/CtaBand'
 
@@ -11,13 +12,16 @@ export const metadata: Metadata = {
   openGraph: { title: 'Devenir bénévole | AAFD Val de Saône', description: "Rejoignez notre équipe de bénévoles et participez à nos actions de solidarité.", url: '/nous-rejoindre' },
 }
 
-export default function NousRejoindre() {
+export const revalidate = 60
+
+export default async function NousRejoindre() {
+  const photos = await getPhotosSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Nous rejoindre"
         description="Rejoignez une équipe de bénévoles engagés et participez à des actions concrètes de solidarité sur le Val de Saône."
-        imageSrc="/images/hero_nous_rejoindre.webp"
+        imageSrc={photos.bandeau_nous_rejoindre}
         imageAlt="Nous rejoindre"
       />
 

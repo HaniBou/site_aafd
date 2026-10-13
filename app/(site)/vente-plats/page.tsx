@@ -4,6 +4,7 @@ import {
   getVenteEnCours,
   getPlatsByVenteAdmin,
   getProchaineVenteAnnoncee,
+  getPhotosSite,
 } from '@/lib/firebase/fetchers'
 import { venteEstOuverte } from '@/lib/vente'
 import type { Plat, Vente } from '@/types'
@@ -28,6 +29,7 @@ export default async function VentePlatsPage() {
   let plats: Plat[] = []
   let prochaineVente: Vente | null = null
   let loadError = false
+  const photosPromise = getPhotosSite()
 
   try {
     vente = await getVenteEnCours()
@@ -47,6 +49,7 @@ export default async function VentePlatsPage() {
       plats={plats}
       prochaineVente={prochaineVente}
       commandesOuvertes={venteEstOuverte(vente)}
+      photoBandeau={(await photosPromise).bandeau_vente_plats}
       loadError={loadError}
     />
   )

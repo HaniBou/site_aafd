@@ -1,19 +1,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { PageHero } from "@/components/PageHero";
+import { TexteAvecLiens } from '@/components/TexteAvecLiens';
 import { getCategoryStyles } from '@/lib/categoryStyles';
 import type { Actualite } from '@/types';
 import { INSTAGRAM_URL } from '@/lib/siteConfig';
 import { Button } from '@/components/ui/Button';
 import { CtaBand } from '@/components/ui/CtaBand';
 
-export default function ActualiteDetail({ actualite }: { actualite: Actualite }) {
+export default function ActualiteDetail({
+  actualite,
+  photoBandeau,
+}: {
+  actualite: Actualite;
+  photoBandeau: string;
+}) {
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Actualités"
         description="Suivez nos actions, événements et témoignages tout au long de l'année"
-        imageSrc="/images/hero_actu.webp"
+        imageSrc={photoBandeau}
         imageAlt="Actualités"
         titleTag="p"
       />
@@ -69,7 +76,7 @@ export default function ActualiteDetail({ actualite }: { actualite: Actualite })
             )}
 
             <div className="text-gray-800 text-base leading-relaxed whitespace-pre-line" style={{ textAlign: 'justify', lineHeight: '1.8' }}>
-              {actualite.content}
+              <TexteAvecLiens texte={actualite.content} />
             </div>
 
             {actualite.category === "Vente de plats" && (

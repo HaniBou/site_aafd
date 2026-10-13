@@ -14,6 +14,7 @@ import { CtaBand } from '@/components/ui/CtaBand';
 
 type Props = {
   actualites: Actualite[];
+  photoBandeau: string;
   loadError?: boolean;
 };
 
@@ -25,7 +26,7 @@ const formatDate = (dateStr: string) =>
 const truncate = (text: string, max: number) =>
   text.length > max ? text.substring(0, max) + "…" : text;
 
-export default function ActualitesPageClient({ actualites, loadError = false }: Props) {
+export default function ActualitesPageClient({ actualites, photoBandeau, loadError = false }: Props) {
   const [activeCategory, setActiveCategory] = useState("Tout");
 
   const { actuALaUne, autresActus } = useMemo(() => {
@@ -48,7 +49,7 @@ export default function ActualitesPageClient({ actualites, loadError = false }: 
       <PageHero
         title="Actualités"
         description="Suivez nos actions, événements et témoignages tout au long de l'année"
-        imageSrc="/images/hero_actu.webp"
+        imageSrc={photoBandeau}
         imageAlt="Actualités"
       />
 

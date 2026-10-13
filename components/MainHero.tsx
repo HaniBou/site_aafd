@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 
 // Hero scinde : le texte vit sur un panneau clair, la photo occupe sa propre
 // colonne. Aucun voile n'est necessaire puisque rien ne se superpose a l'image.
-export function MainHero() {
+export function MainHero({ imageSrc }: { imageSrc: string }) {
   return (
     <section className="relative grid min-h-[100svh] pt-24 lg:pt-28 lg:grid-cols-2">
       <div className="flex items-center bg-white px-8 pb-12 pt-6 md:px-16 lg:pb-20 lg:pt-0">
@@ -50,7 +50,7 @@ export function MainHero() {
 
       <div className="relative mx-5 mb-5 min-h-[42svh] overflow-hidden rounded-3xl lg:mx-6 lg:mb-6 lg:min-h-0">
         <Image
-          src="/images/hero_accueil.webp"
+          src={imageSrc}
           alt="AAFD - Accompagnement des familles"
           fill
           className="object-cover"

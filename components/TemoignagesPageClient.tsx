@@ -12,10 +12,11 @@ import { CtaBand } from '@/components/ui/CtaBand';
 type Props = {
   temoignages: Temoignage[];
   moments: Moment[];
+  photoBandeau: string;
   loadError?: boolean;
 };
 
-export default function TemoignagesPageClient({ temoignages, moments, loadError = false }: Props) {
+export default function TemoignagesPageClient({ temoignages, moments, photoBandeau, loadError = false }: Props) {
   const familyFallbacks = [
     { container: "bg-gradient-to-br from-blue-100 to-blue-200 text-blue-300", quote: "text-blue-900" },
     { container: "bg-gradient-to-br from-orange-100 to-orange-200 text-orange-300", quote: "text-orange-700" },
@@ -46,7 +47,7 @@ export default function TemoignagesPageClient({ temoignages, moments, loadError 
       <PageHero
         title="Témoignages"
         description="Ils ont été accompagnés par l'AAFD ou se sont engagés comme bénévoles. Découvrez leurs histoires et leurs parcours."
-        imageSrc="/images/hero_temoignages.webp"
+        imageSrc={photoBandeau}
         imageAlt="Témoignages"
       />
 

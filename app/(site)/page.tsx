@@ -5,6 +5,7 @@ import {
   getMomentsAdmin,
   getVenteEnCours,
   getPlatsByVenteAdmin,
+  getPhotosSite,
 } from '@/lib/firebase/fetchers'
 import { venteEstOuverte } from '@/lib/vente'
 import type { Actualite, Moment, Plat, Vente } from '@/types'
@@ -31,6 +32,7 @@ export default async function HomePage() {
   let platsDuMoment: Plat[] = []
   let venteEnCours: Vente | null = null
   let moments: Moment[] = []
+  const photosPromise = getPhotosSite()
 
   try {
     const [actus, vente, momentsGalerie] = await Promise.all([
@@ -57,6 +59,7 @@ export default async function HomePage() {
       platsDuMoment={platsDuMoment}
       venteEnCours={venteEnCours}
       moments={moments}
+      photos={await photosPromise}
     />
   )
 }

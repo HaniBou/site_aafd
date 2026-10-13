@@ -17,6 +17,7 @@ type Props = {
   plats: Plat[];
   prochaineVente: Vente | null;
   commandesOuvertes: boolean;
+  photoBandeau: string;
   loadError?: boolean;
 };
 
@@ -27,6 +28,7 @@ export default function VentePlatsPageClient({
   plats,
   prochaineVente,
   commandesOuvertes,
+  photoBandeau,
   loadError = false,
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,7 +50,7 @@ export default function VentePlatsPageClient({
         title="Nos Plats Cuisinés"
         description="Nos bénévoles préparent plusieurs fois par an des plats faits maison que vous pouvez réserver.
             En achetant nos plats, vous soutenez directement les actions de l'AAFD"
-        imageSrc="/images/hero_plats.webp"
+        imageSrc={photoBandeau}
         imageAlt="Nos plats cuisinés"
         accentColor="bg-orange-700"
       />
