@@ -1,10 +1,11 @@
 import Image from 'next/image'
-import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
+import { HELLOASSO_URL } from '@/lib/siteConfig'
+import { TitreMisEnValeur } from '@/components/TexteMisEnForme'
 import { Button } from '@/components/ui/Button'
 
 // Hero scinde : le texte vit sur un panneau clair, la photo occupe sa propre
 // colonne. Aucun voile n'est necessaire puisque rien ne se superpose a l'image.
-export function MainHero({ imageSrc }: { imageSrc: string }) {
+export function MainHero({ imageSrc, accroche }: { imageSrc: string; accroche: string }) {
   return (
     <section className="relative grid min-h-[100svh] pt-24 lg:pt-28 lg:grid-cols-2">
       <div className="flex items-center bg-white px-8 pb-12 pt-6 md:px-16 lg:pb-20 lg:pt-0">
@@ -22,9 +23,7 @@ export function MainHero({ imageSrc }: { imageSrc: string }) {
           <div className="flex items-start gap-6 max-w-lg mb-10 animate-hero-fade">
             <div className="w-px h-14 bg-orange-700/40 shrink-0 mt-1" />
             <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-              Accompagner, soutenir et créer du lien avec les{' '}
-              <span className="text-gray-900 font-semibold">familles réfugiées</span>{' '}
-              depuis {ASSOCIATION_FOUNDING_YEAR}.
+              <TitreMisEnValeur texte={accroche} classeValeur="text-gray-900 font-semibold" />
             </p>
           </div>
 

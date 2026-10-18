@@ -1,7 +1,7 @@
 import { adminDb } from './admin';
 import { buildSlug } from '@/lib/slug';
 import { retraitAVenir } from '@/lib/vente';
-import { completerPhotos, lirePhotosPersonnalisees, type PhotosSite } from '@/lib/photosSite';
+import { completerContenu, lireContenuPersonnalise, type ContenuSite } from '@/lib/contenuSite';
 import type { Plat, Actualite, Temoignage, Reservation, Moment, Vente } from '@/types';
 
 function serializeDoc(data: Record<string, unknown>): Record<string, unknown> {
@@ -149,19 +149,23 @@ export async function getReservationsAdmin(): Promise<Reservation[]> {
   );
 }
 
-export async function getPhotosPersonnalisees(): Promise<Partial<PhotosSite>> {
-  const doc = await adminDb.collection('config').doc('photosSite').get();
-  return lirePhotosPersonnalisees(doc.data());
+export async function getContenuPersonnalise(): Promise<Partial<ContenuSite>> {
+  const config = adminDb.collection('config');
+  const [photos, textes] = await Promise.all([
+    config.doc('photosSite').get(),
+    config.doc('textesSite').get(),
+  ]);
+  return lireContenuPersonnalise({ ...photos.data(), ...textes.data() });
 }
 
 // Pour les pages publiques : en cas d'erreur Firestore, on retombe sur les
-// photos d'origine plutot que de casser la page.
-export async function getPhotosSite(): Promise<PhotosSite> {
+// textes et photos d'origine plutot que de casser la page.
+export async function getContenuSite(): Promise<ContenuSite> {
   try {
-    return completerPhotos(await getPhotosPersonnalisees());
+    return completerContenu(await getContenuPersonnalise());
   } catch (error) {
-    console.error('[photos du site] chargement', error);
-    return completerPhotos({});
+    console.error('[contenu du site] chargement', error);
+    return completerContenu({});
   }
 }
 

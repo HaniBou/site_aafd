@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { MainHero } from '@/components/MainHero'
 import { getCategoryStyles } from '@/lib/categoryStyles'
 import type { Actualite, Moment, Plat, Vente } from '@/types'
-import type { PhotosSite } from '@/lib/photosSite'
+import type { ContenuSite } from '@/lib/contenuSite'
 import { actualiteHref } from '@/lib/slug'
 import { formatDateJour } from '@/lib/vente'
 import {
@@ -14,6 +14,7 @@ import {
 } from '@/lib/siteConfig'
 import { Reveal } from '@/components/Reveal'
 import { CountUp } from '@/components/CountUp'
+import { Paragraphes } from '@/components/TexteMisEnForme'
 import { Button } from '@/components/ui/Button'
 import { CtaBand } from '@/components/ui/CtaBand'
 
@@ -26,18 +27,26 @@ const PHOTOS_INSTAGRAM_PAR_DEFAUT = [
   { src: '/images/distribution.webp', alt: 'Distribution d’aide matérielle' },
 ];
 
+// « 10+ », « 100% » : le nombre s'anime, le signe qui suit reste tel quel.
+// Une valeur qui ne commence pas par un nombre est affichee sans animation.
+function Chiffre({ valeur }: { valeur: string }) {
+  const nombre = valeur.trim().match(/^(\d+)([^]*)$/);
+  if (!nombre) return <>{valeur}</>;
+  return <CountUp value={Number(nombre[1])} suffix={nombre[2]} />;
+}
+
 export default function HomeContent({
   actualites,
   platsDuMoment,
   venteEnCours = null,
   moments = [],
-  photos,
+  contenu,
 }: {
   actualites: Actualite[];
   platsDuMoment: Plat[];
   venteEnCours?: Vente | null;
   moments?: Moment[];
-  photos: PhotosSite;
+  contenu: ContenuSite;
 }) {
   const photosInstagram = [
     ...moments
@@ -72,7 +81,7 @@ export default function HomeContent({
 
   return (
     <main className="min-h-screen bg-white">
-      <MainHero imageSrc={photos.accueil_hero} />
+      <MainHero imageSrc={contenu.accueil_hero} accroche={contenu.accueil_accroche} />
 
       {featuredActu && (
         <section className="py-12 md:py-16 bg-gray-50">
@@ -160,17 +169,7 @@ export default function HomeContent({
               <div>
                 <h2 className="text-gray-900 mb-6">Qui sommes-nous ?</h2>
                 <div className="prose prose-xl text-gray-600 text-justify space-y-4">
-                  <p>
-                    Nous accompagnons des <strong>familles réfugiées</strong> originaires d&apos;Albanie, du Kosovo,
-                    de Bosnie, d&apos;Arménie, d&apos;Algérie, de Guinée, de République Démocratique du Congo et d&apos;autres pays.
-                  </p>
-                  <p>
-                    Nous soutenons également des <strong>jeunes isolés</strong> localisés sur le Val de Saône
-                    dans les difficultés matérielles ou administratives qu&apos;ils rencontrent.
-                  </p>
-                  <p>
-                    Les jeunes et les familles sont <strong>associés et participent</strong> activement à nos événements.
-                  </p>
+                  <Paragraphes texte={contenu.accueil_qui_texte} />
                 </div>
                 <Link
                   href="/notre-association"
@@ -184,7 +183,7 @@ export default function HomeContent({
               </div>
               <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src={photos.accueil_qui_sommes_nous}
+                  src={contenu.accueil_qui_sommes_nous}
                   alt="L'AAFD en action"
                   fill
                   className="object-cover"
@@ -244,29 +243,29 @@ export default function HomeContent({
               Ce qui nous anime
             </h2>
             <p className="text-body-large text-gray-600 max-w-3xl mx-auto">
-              Accompagner, soutenir et créer du lien avec les familles réfugiées
+              {contenu.accueil_anime_intro}
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                image: photos.accueil_sensibiliser,
-                titre: 'Sensibiliser',
-                texte: "Sensibiliser sur la question de l'immigration et comprendre les raisons de l'exil",
+                image: contenu.accueil_sensibiliser,
+                titre: contenu.accueil_anime1_titre,
+                texte: contenu.accueil_anime1_texte,
               },
               {
-                image: photos.accueil_creer_du_lien,
-                titre: 'Créer du lien',
-                texte: 'Créer des liens amicaux et festifs entre la population locale et les familles réfugiées',
+                image: contenu.accueil_creer_du_lien,
+                titre: contenu.accueil_anime2_titre,
+                texte: contenu.accueil_anime2_texte,
               },
               {
-                image: photos.accueil_recolter_des_fonds,
-                titre: 'Récolter des fonds',
-                texte: "Développer l'aide matérielle : transports, assurances, avocats, hébergement...",
+                image: contenu.accueil_recolter_des_fonds,
+                titre: contenu.accueil_anime3_titre,
+                texte: contenu.accueil_anime3_texte,
               },
             ].map((carte, i) => (
-              <Reveal key={carte.titre} delay={i * 110} className="h-full">
+              <Reveal key={i} delay={i * 110} className="h-full">
                 <div className="group h-full rounded-2xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                   <div className="relative h-80 w-full overflow-hidden">
                     <Image
@@ -298,14 +297,15 @@ export default function HomeContent({
               <div className="mb-2 text-5xl font-bold text-orange-400">{ASSOCIATION_FOUNDING_YEAR}</div>
               <div className="text-lg text-blue-100">année de création</div>
             </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400"><CountUp value={10} suffix="+" /></div>
-              <div className="text-lg text-blue-100">nationalités accompagnées</div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-5xl font-bold text-orange-400"><CountUp value={100} suffix="%" /></div>
-              <div className="text-lg text-blue-100">bénévoles</div>
-            </div>
+            {[
+              { valeur: contenu.accueil_chiffre2_valeur, libelle: contenu.accueil_chiffre2_libelle },
+              { valeur: contenu.accueil_chiffre3_valeur, libelle: contenu.accueil_chiffre3_libelle },
+            ].map(({ valeur, libelle }, i) => (
+              <div key={i} className="text-center">
+                <div className="mb-2 text-5xl font-bold text-orange-400"><Chiffre valeur={valeur} /></div>
+                <div className="text-lg text-blue-100">{libelle}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -396,11 +396,7 @@ export default function HomeContent({
               <p className="mb-4 text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 bg-clip-text text-transparent">
                 {INSTAGRAM_HANDLE}
               </p>
-              <p className="text-body-large text-gray-600">
-                Les coulisses des ventes de plats, les sorties avec les familles, les appels à
-                bénévoles : on y raconte le quotidien de l&apos;association, en photos.
-                Abonnez-vous et faites-nous connaître autour de vous.
-              </p>
+              <Paragraphes texte={contenu.accueil_instagram_texte} className="text-body-large text-gray-600" />
             </div>
           </Reveal>
 
@@ -458,8 +454,8 @@ export default function HomeContent({
       </section>
 
       <CtaBand
-        title="Rejoignez notre communauté"
-        description="Que vous souhaitiez devenir bénévole, faire un don ou simplement en savoir plus, nous serions ravis de vous accueillir."
+        title={contenu.accueil_cta_titre}
+        description={contenu.accueil_cta_texte}
       >
         <Button href="/nous-rejoindre" variant="primary" size="lg">
           Devenir bénévole

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
-import { getPhotosSite } from '@/lib/firebase/fetchers'
+import { getContenuSite } from '@/lib/firebase/fetchers'
 import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function ContactPage() {
-  const photos = await getPhotosSite()
+  const contenu = await getContenuSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Contactez-nous"
         description="Nous sommes là pour vous écouter et vous accompagner."
-        imageSrc={photos.bandeau_contact}
+        imageSrc={contenu.bandeau_contact}
         imageAlt="Contactez-nous"
       />
 

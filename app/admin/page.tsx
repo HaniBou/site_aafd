@@ -8,7 +8,7 @@ import {
   getMomentsAdmin,
 } from '@/lib/firebase/fetchers';
 import { getStatistiquesVisites } from '@/lib/statistiques';
-import { EMPLACEMENTS_PHOTOS } from '@/lib/photosSite';
+import { PAGES_SITE } from '@/lib/contenuSite';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,14 +58,14 @@ const SECTIONS = [
     ),
   },
   {
-    href: '/admin/photos',
-    label: 'Photos du site',
-    desc: "Photos de l'accueil et bandeaux des pages",
+    href: '/admin/pages',
+    label: 'Pages du site',
+    desc: 'Textes et photos de chaque page',
     addLabel: null,
     color: 'rose',
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9zM15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     ),
   },
   {
@@ -105,7 +105,7 @@ export default async function AdminDashboard() {
     ventes.length,
     temoignages.length,
     moments.length,
-    EMPLACEMENTS_PHOTOS.length,
+    PAGES_SITE.length,
     reservations.length,
   ];
 
@@ -216,12 +216,12 @@ export default async function AdminDashboard() {
               ],
             },
             {
-              title: 'Changer une photo du site',
+              title: 'Modifier un texte ou une photo du site',
               steps: [
-                'Ouvrez "Photos du site"',
-                'Cliquez "Changer la photo" sous l\'image à remplacer',
-                'Choisissez la photo : elle est en ligne dans la minute',
-                '"Remettre la photo d\'origine" annule le changement',
+                'Ouvrez "Pages du site" et choisissez la page',
+                'Changez les textes ou cliquez "Changer la photo"',
+                'Cliquez "Enregistrer" en bas : c\'est en ligne dans la minute',
+                '"Remettre l\'original" revient au contenu de départ',
               ],
             },
           ].map(block => (

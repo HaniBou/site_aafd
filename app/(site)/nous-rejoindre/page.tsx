@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 import { PageHero } from '@/components/PageHero'
-import { getPhotosSite } from '@/lib/firebase/fetchers'
+import { getContenuSite } from '@/lib/firebase/fetchers'
 import { Button } from '@/components/ui/Button'
 import { CtaBand } from '@/components/ui/CtaBand'
 
@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function NousRejoindre() {
-  const photos = await getPhotosSite()
+  const contenu = await getContenuSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Nous rejoindre"
         description="Rejoignez une équipe de bénévoles engagés et participez à des actions concrètes de solidarité sur le Val de Saône."
-        imageSrc={photos.bandeau_nous_rejoindre}
+        imageSrc={contenu.bandeau_nous_rejoindre}
         imageAlt="Nous rejoindre"
       />
 

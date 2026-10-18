@@ -3,7 +3,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import {
   getActualiteBySlugAdmin,
   getActualiteByIdAdmin,
-  getPhotosSite,
+  getContenuSite,
 } from '@/lib/firebase/fetchers'
 import ActualiteDetail from '@/components/ActualiteDetail'
 import { looksLikeFirestoreId } from '@/lib/slug'
@@ -71,9 +71,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ActualiteDetailPage({ params }: Props) {
   const { slug } = await params
-  const [{ actualite, redirectTo }, photos] = await Promise.all([
+  const [{ actualite, redirectTo }, contenu] = await Promise.all([
     resolveActualite(slug),
-    getPhotosSite(),
+    getContenuSite(),
   ])
 
   if (redirectTo) permanentRedirect(redirectTo)
@@ -116,7 +116,7 @@ export default async function ActualiteDetailPage({ params }: Props) {
     <>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <ActualiteDetail actualite={actualite} photoBandeau={photos.bandeau_actualites} />
+      <ActualiteDetail actualite={actualite} photoBandeau={contenu.bandeau_actualites} />
     </>
   )
 }

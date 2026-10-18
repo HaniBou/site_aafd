@@ -1,9 +1,6 @@
-import { getPhotosPersonnalisees } from '@/lib/firebase/fetchers';
-import PhotosSiteClient from '@/components/admin/PhotosSiteClient';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-export default async function AdminPhotosPage() {
-  const personnalisees = await getPhotosPersonnalisees();
-  return <PhotosSiteClient personnalisees={personnalisees} />;
+// Ancienne adresse de la gestion des photos, remplacee par « Pages du site ».
+export default function AdminPhotosPage() {
+  redirect('/admin/pages');
 }

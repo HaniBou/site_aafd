@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { PageHero } from '@/components/PageHero'
-import { getPhotosSite } from '@/lib/firebase/fetchers'
+import { Paragraphes, TitreMisEnValeur } from '@/components/TexteMisEnForme'
+import { getContenuSite } from '@/lib/firebase/fetchers'
 import { ASSOCIATION_FOUNDING_YEAR, HELLOASSO_URL } from '@/lib/siteConfig'
 import { Button } from '@/components/ui/Button'
 import { CtaBand } from '@/components/ui/CtaBand'
@@ -15,14 +16,70 @@ export const metadata: Metadata = {
 
 export const revalidate = 60
 
+// Les textes et photos viennent de l'admin (« Pages du site »), voir lib/contenuSite.ts.
 export default async function NotreAssociationPage() {
-  const photos = await getPhotosSite()
+  const contenu = await getContenuSite()
+
+  const actions = [
+    {
+      surtitre: contenu.asso_action1_surtitre,
+      couleurSurtitre: 'text-orange-700',
+      titre: contenu.asso_action1_titre,
+      texte: contenu.asso_action1_texte,
+      photo: contenu.asso_action1_photo,
+      classePhoto: 'object-cover',
+      bouton: { href: '/vente-plats', label: 'Commander nos plats' },
+    },
+    {
+      surtitre: contenu.asso_action2_surtitre,
+      couleurSurtitre: 'text-blue-700',
+      titre: contenu.asso_action2_titre,
+      texte: contenu.asso_action2_texte,
+      photo: contenu.asso_action2_photo,
+      classePhoto: 'object-cover',
+      bouton: null,
+    },
+    {
+      surtitre: contenu.asso_action3_surtitre,
+      couleurSurtitre: 'text-emerald-600',
+      titre: contenu.asso_action3_titre,
+      texte: contenu.asso_action3_texte,
+      photo: contenu.asso_action3_photo,
+      classePhoto: 'object-cover object-bottom',
+      bouton: null,
+    },
+  ]
+
+  const accompagnement = [
+    {
+      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+      title: contenu.asso_accomp1_titre,
+      desc: contenu.asso_accomp1_texte,
+    },
+    {
+      icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+      title: contenu.asso_accomp2_titre,
+      desc: contenu.asso_accomp2_texte,
+    },
+    {
+      icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+      title: contenu.asso_accomp3_titre,
+      desc: contenu.asso_accomp3_texte,
+    },
+  ]
+
+  const valeurs = [
+    { title: contenu.asso_valeur1_titre, desc: contenu.asso_valeur1_texte },
+    { title: contenu.asso_valeur2_titre, desc: contenu.asso_valeur2_texte },
+    { title: contenu.asso_valeur3_titre, desc: contenu.asso_valeur3_texte },
+  ]
+
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         title="Notre association"
         description={`Depuis ${ASSOCIATION_FOUNDING_YEAR}, l'AAFD accompagne des familles réfugiées et des jeunes isolés sur le Val de Saône.`}
-        imageSrc={photos.bandeau_notre_association}
+        imageSrc={contenu.bandeau_notre_association}
         imageAlt="Notre association AAFD"
       />
 
@@ -33,26 +90,16 @@ export default async function NotreAssociationPage() {
               <span className="text-blue-900 font-medium tracking-[0.2em] uppercase text-sm mb-4 block">Depuis {ASSOCIATION_FOUNDING_YEAR}</span>
               <h2 className="text-gray-900 mb-6">Notre histoire</h2>
               <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
-                <p>
-                  Depuis <strong>{ASSOCIATION_FOUNDING_YEAR}</strong>, l&apos;Association d&apos;Aide aux Familles en Difficulté
-                  œuvre sur le territoire du Val de Saône pour accompagner les personnes en situation de précarité.
-                </p>
-                <p>
-                  Nous aidons des familles originaires d&apos;<strong>Albanie, du Kosovo, de Bosnie, d&apos;Arménie,
-                  d&apos;Algérie, de Guinée, de République Démocratique du Congo</strong> et d&apos;autres pays.
-                </p>
-                <p>
-                  Nos bénévoles accompagnent également des <strong>jeunes isolés</strong> localisés sur le Val de Saône
-                  dans les difficultés matérielles ou administratives qu&apos;ils rencontrent au quotidien.
-                </p>
+                <Paragraphes texte={contenu.asso_histoire_texte} />
               </div>
             </div>
             <div className="relative h-[420px] rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="/images/distribution.webp"
+                src={contenu.asso_histoire_photo}
                 alt="Notre histoire AAFD"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
             </div>
@@ -66,9 +113,10 @@ export default async function NotreAssociationPage() {
             <div className="relative group w-56 md:w-72 flex-shrink-0">
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-lg">
                 <Image
-                  src="/images/hero_actu.webp"
-                  alt="Portrait de la Présidente"
+                  src={contenu.asso_edito_photo}
+                  alt={`Portrait de ${contenu.asso_edito_nom}`}
                   fill
+                  sizes="(max-width: 768px) 14rem, 18rem"
                   className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -77,26 +125,17 @@ export default async function NotreAssociationPage() {
 
             <div className="flex-1 mt-4 text-center md:text-left">
               <span className="text-blue-900 font-medium tracking-[0.2em] uppercase text-sm mb-6 block">
-                L&apos;édito de la présidente
+                {contenu.asso_edito_rubrique}
               </span>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-8">
-                « Au cœur de notre engagement,{' '}
-                <span className="text-blue-900">l&apos;humain avant tout.</span> »
+                « <TitreMisEnValeur texte={contenu.asso_edito_titre} classeValeur="text-blue-900" /> »
               </h2>
               <div className="max-w-2xl mx-auto md:mx-0 space-y-6 text-gray-600 text-lg leading-relaxed font-normal italic">
-                <p>
-                  Depuis {ASSOCIATION_FOUNDING_YEAR}, l&apos;AAFD n&apos;est pas seulement une structure d&apos;aide, c&apos;est un trait d&apos;union.
-                  Nous ne nous contentons pas d&apos;accompagner, nous tissons des liens de fraternité qui
-                  dépassent les frontières et les parcours de vie.
-                </p>
-                <p>
-                  Chaque rencontre est une leçon de courage, chaque projet une pierre ajoutée à notre édifice
-                  commun du Val de Saône. Nous vous invitons à partager cette aventure humaine avec nous.
-                </p>
+                <Paragraphes texte={contenu.asso_edito_texte} />
               </div>
               <div className="mt-10 flex flex-col items-center md:items-start">
-                <p className="text-xl font-semibold text-gray-900">[Prénom Nom]</p>
-                <p className="text-gray-500 font-normal tracking-wide">Présidente de l&apos;AAFD</p>
+                <p className="text-xl font-semibold text-gray-900">{contenu.asso_edito_nom}</p>
+                <p className="text-gray-500 font-normal tracking-wide">{contenu.asso_edito_fonction}</p>
                 <div className="mt-4 w-12 h-px bg-blue-900/30" />
               </div>
             </div>
@@ -114,76 +153,31 @@ export default async function NotreAssociationPage() {
           </div>
 
           <div className="space-y-24">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <span className="text-orange-700 font-bold tracking-widest uppercase text-xs mb-3 block">Environ tous les 2 mois</span>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ventes de plats traditionnels</h3>
-                <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
-                  <p>
-                    Environ tous les deux mois, nous organisons des <strong>ventes de plats traditionnels</strong> cuisinés
-                    par les familles que nous accompagnons.
-                  </p>
-                  <p>
-                    Une occasion de découvrir les saveurs d&apos;<strong>Albanie, du Kosovo, de Bosnie, d&apos;Arménie,
-                    d&apos;Algérie, de Guinée</strong> et d&apos;autres pays, tout en soutenant concrètement nos actions.
-                  </p>
+            {actions.map((action, i) => {
+              // Une action sur deux a sa photo a gauche sur ordinateur.
+              const photoAGauche = i % 2 === 1
+              return (
+                <div key={i} className="grid md:grid-cols-2 gap-12 items-center">
+                  <div className={photoAGauche ? 'order-1 md:order-2' : undefined}>
+                    <span className={`${action.couleurSurtitre} font-bold tracking-widest uppercase text-xs mb-3 block`}>
+                      {action.surtitre}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{action.titre}</h3>
+                    <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
+                      <Paragraphes texte={action.texte} />
+                    </div>
+                    {action.bouton && (
+                      <Button href={action.bouton.href} variant="primary" size="sm" className="mt-6">
+                        {action.bouton.label}
+                      </Button>
+                    )}
+                  </div>
+                  <div className={`relative h-[380px] rounded-2xl overflow-hidden shadow-xl ${photoAGauche ? 'order-2 md:order-1' : ''}`}>
+                    <Image src={action.photo} alt={action.titre} fill className={action.classePhoto} sizes="(max-width: 768px) 100vw, 50vw" />
+                  </div>
                 </div>
-                <Button href="/vente-plats" variant="primary" size="sm" className="mt-6">
-                  Commander nos plats
-                </Button>
-              </div>
-              <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl">
-                <Image src="/images/plats.webp" alt="Ventes de plats" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl order-2 md:order-1">
-                <Image src="/images/evenement.webp" alt="Événements festifs" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-              </div>
-              <div className="order-1 md:order-2">
-                <span className="text-blue-700 font-bold tracking-widest uppercase text-xs mb-3 block">Tout au long de l&apos;année</span>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Événements festifs et sportifs</h3>
-                <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
-                  <p>
-                    Tout au long de l&apos;année, nous organisons des <strong>événements conviviaux</strong> qui
-                    rassemblent habitants du Val de Saône, familles réfugiées et sympathisants.
-                  </p>
-                  <p>
-                    Ces moments festifs permettent de créer du lien et de sensibiliser le grand public à la question
-                    de l&apos;immigration dans une ambiance chaleureuse.
-                  </p>
-                  <p>
-                    Les fonds récoltés sont intégralement reversés pour financer l&apos;aide matérielle aux familles :
-                    transports, assurances, frais d&apos;avocats, hébergement...
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <span className="text-emerald-600 font-bold tracking-widest uppercase text-xs mb-3 block">Engagement territorial</span>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Nettoyons notre Val de Saône</h3>
-                <div className="prose prose-lg text-gray-600 space-y-4 text-justify">
-                  <p>
-                    Au-delà de l&apos;aide aux familles, nous sommes engagés pour notre territoire à travers des
-                    <strong> actions de nettoyage</strong> participatives.
-                  </p>
-                  <p>
-                    Ces journées citoyennes permettent de rassembler habitants et familles autour d&apos;un projet commun :
-                    <strong> préserver notre cadre de vie</strong>.
-                  </p>
-                  <p>
-                    C&apos;est aussi une occasion de montrer que les familles réfugiées sont actrices du territoire
-                    et souhaitent contribuer positivement à la vie locale.
-                  </p>
-                </div>
-              </div>
-              <div className="relative h-[380px] rounded-2xl overflow-hidden shadow-xl">
-                <Image src="/images/nettoyons_1.webp" alt="Nettoyage Val de Saône" fill className="object-cover object-bottom" sizes="(max-width: 768px) 100vw, 50vw" />
-              </div>
-            </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -197,24 +191,8 @@ export default async function NotreAssociationPage() {
             </p>
           </div>
           <div className="max-w-3xl mx-auto divide-y divide-white/10">
-            {[
-              {
-                icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-                title: 'Aide aux tâches administratives',
-                desc: 'Aide aux démarches administratives de nos familles et accompagnement aux rendez-vous officiels.',
-              },
-              {
-                icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-                title: 'Logements',
-                desc: 'Recherche de logements et aide au financement des cautions et des loyers.',
-              },
-              {
-                icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-                title: 'Scolarité des enfants',
-                desc: 'Suivi de la scolarité des enfants et lien avec les établissements du Val de Saône.',
-              },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} className="flex items-start gap-5 py-6">
+            {accompagnement.map(({ icon, title, desc }, i) => (
+              <div key={i} className="flex items-start gap-5 py-6">
                 <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-orange-700/20">
                   <svg className="h-5 w-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
@@ -234,17 +212,13 @@ export default async function NotreAssociationPage() {
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div className="relative h-[420px] rounded-2xl overflow-hidden shadow-xl">
-              <Image src="/images/ensemble.webp" alt="Nos valeurs" fill className="object-cover" />
+              <Image src={contenu.asso_valeurs_photo} alt="Nos valeurs" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
             <div>
               <h2 className="text-gray-900 mb-8">Nos valeurs</h2>
               <div className="space-y-8">
-                {[
-                  { title: 'Solidarité', desc: 'Nous croyons en l\'importance de l\'entraide et du soutien mutuel pour construire une société plus juste.' },
-                  { title: 'Respect', desc: 'Chaque personne est unique et mérite d\'être traitée avec dignité, quelles que soient ses origines.' },
-                  { title: 'Participation', desc: 'Les jeunes et les familles sont associés et participent activement aux événements de l\'association.' },
-                ].map(({ title, desc }) => (
-                  <div key={title} className="flex items-start gap-5">
+                {valeurs.map(({ title, desc }, i) => (
+                  <div key={i} className="flex items-start gap-5">
                     <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-900 text-white text-lg font-bold">
                       ✓
                     </div>
