@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { rateLimit } from '@/lib/rateLimit';
 import { escapeHtml } from '@/lib/escapeHtml';
-import { CONTACT_EMAIL, MAIL_FROM, SITE_DOMAIN, SITE_URL } from '@/lib/siteConfig';
+import { MAIL_FROM, SITE_DOMAIN, SITE_URL } from '@/lib/siteConfig';
+import { getContenuSite } from '@/lib/firebase/fetchers';
 
 export const runtime = 'nodejs';
 
@@ -36,10 +37,11 @@ export async function POST(request: NextRequest) {
       message: escapeHtml(message),
     };
     const subjetHeader = String(sujet).replace(/[\r\n]+/g, ' ').slice(0, 150);
+    const { contact_email: emailAsso } = await getContenuSite();
 
     const { data, error } = await resend.emails.send({
       from: MAIL_FROM.contact,
-      to: [CONTACT_EMAIL],
+      to: [emailAsso],
       replyTo: email,
       subject: `[Contact AAFD] ${subjetHeader}`,
       html: `
@@ -240,7 +242,7 @@ export async function POST(request: NextRequest) {
                     En attendant notre réponse, vous pouvez également :
                   </p>
                   <p style="margin: 0; font-size: 14px; color: #666">
-                    📧 Nous écrire directement à <a href="mailto:${CONTACT_EMAIL}" style="color: #ea580c; text-decoration: none">${CONTACT_EMAIL}</a>
+                    📧 Nous écrire directement à <a href="mailto:${emailAsso}" style="color: #ea580c; text-decoration: none">${emailAsso}</a>
                   </p>
                 </div>
 

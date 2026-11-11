@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '@/lib/firebase/admin';
 import { rateLimit } from '@/lib/rateLimit';
@@ -9,7 +10,7 @@ import type { Vente } from '@/types';
 export const runtime = 'nodejs';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const MAX_QUANTITE = 10;
+const MAX_QUANTITE = 4;
 
 function clean(value: unknown, maxLength: number): string {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
@@ -35,7 +36,6 @@ export async function POST(request: NextRequest) {
   const clientNom = clean(body.clientNom, 120);
   const clientEmail = clean(body.clientEmail, 200);
   const clientTelephone = clean(body.clientTelephone, 40);
-  const message = clean(body.message, 2000);
   const quantite = Number(body.quantite);
 
   if (!platId || !clientNom || !clientTelephone) {
@@ -93,7 +93,6 @@ export async function POST(request: NextRequest) {
         clientEmail,
         clientTelephone,
         quantite,
-        message,
         emailEnvoye: false,
         emailErreur: null,
         dateReservation: FieldValue.serverTimestamp(),
@@ -111,6 +110,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Le stock affiche sur les pages publiques (mises en cache) doit suivre.
+  revalidatePath('/vente-plats');
+  revalidatePath('/');
+
   const vente = venteRetenue as Vente | null;
 
   const emails = await sendReservationEmails({
@@ -119,7 +122,6 @@ export async function POST(request: NextRequest) {
     clientEmail,
     clientTelephone,
     quantite,
-    message,
     venteTitre: vente?.titre,
     dateRetrait: vente?.dateRetrait,
     lieuRetrait: vente?.lieuRetrait,

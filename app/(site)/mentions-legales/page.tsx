@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
+import { getContenuSite } from '@/lib/firebase/fetchers'
+import { lienTelephone } from '@/lib/contenuSite'
 import {
-  CONTACT_EMAIL,
-  CONTACT_PHONE,
   ASSOCIATION_ADDRESS,
   ASSOCIATION_NAME,
   ASSOCIATION_FULL_NAME,
@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage() {
+  const { contact_email: email, contact_telephone: telephone } = await getContenuSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
@@ -49,13 +50,15 @@ export default function MentionsLegalesPage() {
                 <li>
                   <strong>Numéro SIRET :</strong> 504 653 833 00013
                 </li>
-                <li>
-                  <strong>Téléphone :</strong>{' '}
-                  <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="text-blue-900 hover:underline">{CONTACT_PHONE}</a>
-                </li>
+                {telephone && (
+                  <li>
+                    <strong>Téléphone :</strong>{' '}
+                    <a href={lienTelephone(telephone)} className="text-blue-900 hover:underline">{telephone}</a>
+                  </li>
+                )}
                 <li>
                   <strong>Email :</strong>{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>
+                  <a href={`mailto:${email}`} className="text-blue-900 hover:underline">{email}</a>
                 </li>
               </ul>
             </div>
@@ -145,7 +148,7 @@ export default function MentionsLegalesPage() {
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Vos droits</h3>
               <p>
                 Pour exercer vos droits (accès, rectification, suppression, opposition), contactez-nous à{' '}
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>.
+                <a href={`mailto:${email}`} className="text-blue-900 hover:underline">{email}</a>.
                 En cas de difficulté, vous pouvez adresser une réclamation à la{' '}
                 <strong>CNIL</strong> (Commission Nationale de l&apos;Informatique et des Libertés).
               </p>
@@ -201,7 +204,7 @@ export default function MentionsLegalesPage() {
                 de l&apos;association, cette mesure relève de l&apos;exemption de consentement
                 prévue par la CNIL pour la mesure d&apos;audience. Vous pouvez néanmoins vous y
                 opposer en nous écrivant à{' '}
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-900 hover:underline">{CONTACT_EMAIL}</a>,
+                <a href={`mailto:${email}`} className="text-blue-900 hover:underline">{email}</a>,
                 ou en paramétrant votre navigateur pour bloquer le stockage local.
               </p>
             </div>

@@ -3,10 +3,9 @@ import { Footer } from "@/components/Footer";
 import { FloatingDonButton } from "@/components/FloatingDonButton";
 import { JsonLd } from "@/components/JsonLd";
 import { CompteurVisites } from "@/components/CompteurVisites";
+import { getContenuSite } from "@/lib/firebase/fetchers";
 import {
   SITE_URL,
-  CONTACT_EMAIL,
-  CONTACT_PHONE_E164,
   INSTAGRAM_URL,
   ASSOCIATION_NAME,
   ASSOCIATION_FULL_NAME,
@@ -15,6 +14,8 @@ import {
   HELLOASSO_URL,
 } from "@/lib/siteConfig";
 
+// Les coordonnees (email, telephone) sont ajoutees dans SiteLayout : elles se
+// modifient depuis l'admin.
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "NGO",
@@ -30,21 +31,12 @@ const organizationSchema = {
     width: 512,
     height: 512,
   },
-  email: CONTACT_EMAIL,
-  telephone: CONTACT_PHONE_E164,
   foundingDate: String(ASSOCIATION_FOUNDING_YEAR),
   areaServed: {
     "@type": "AdministrativeArea",
     name: "Val de Saône, France",
   },
   knowsLanguage: ["fr-FR"],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer support",
-    email: CONTACT_EMAIL,
-    telephone: CONTACT_PHONE_E164,
-    availableLanguage: ["French"],
-  },
   address: { "@type": "PostalAddress", ...ASSOCIATION_ADDRESS },
   sameAs: [INSTAGRAM_URL, HELLOASSO_URL],
 };
@@ -59,17 +51,31 @@ const webSiteSchema = {
   publisher: { "@id": `${SITE_URL}/#organisation` },
 };
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const { contact_email: email, contact_telephone: telephone } = await getContenuSite();
+  const coordonnees = { email, ...(telephone && { telephone }) };
+
   return (
     <>
-      <JsonLd data={organizationSchema} />
+      <JsonLd
+        data={{
+          ...organizationSchema,
+          ...coordonnees,
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            ...coordonnees,
+            availableLanguage: ["French"],
+          },
+        }}
+      />
       <JsonLd data={webSiteSchema} />
       <noscript>
         <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
       </noscript>
       <Header />
       {children}
-      <Footer />
+      <Footer telephone={telephone} email={email} />
       <div className="hidden md:block">
         <FloatingDonButton />
       </div>

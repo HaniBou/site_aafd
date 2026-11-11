@@ -3,10 +3,8 @@ import Image from 'next/image'
 import ContactForm from '@/components/ContactForm'
 import { PageHero } from '@/components/PageHero'
 import { getContenuSite } from '@/lib/firebase/fetchers'
+import { lienTelephone } from '@/lib/contenuSite'
 import {
-  CONTACT_EMAIL,
-  CONTACT_PHONE,
-  CONTACT_PERSON,
   INSTAGRAM_HANDLE,
   INSTAGRAM_URL,
   HELLOASSO_URL,
@@ -55,6 +53,7 @@ export default async function ContactPage() {
   </p>
 
   <div className="space-y-8">
+    {contenu.contact_telephone && (
     <div className="flex items-center gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -63,14 +62,15 @@ export default async function ContactPage() {
       </div>
       <div>
         <p className="text-xs uppercase tracking-wider font-bold text-gray-600 mb-0.5">Appelez-nous</p>
-        <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
-          {CONTACT_PHONE}
+        <a href={lienTelephone(contenu.contact_telephone)} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
+          {contenu.contact_telephone}
         </a>
-        {CONTACT_PERSON && (
-          <p className="text-sm text-gray-600 mt-0.5">{CONTACT_PERSON}</p>
+        {contenu.contact_personne && (
+          <p className="text-sm text-gray-600 mt-0.5">{contenu.contact_personne}</p>
         )}
       </div>
     </div>
+    )}
 
     <div className="flex items-center gap-4 group">
       <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-700 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
@@ -80,8 +80,8 @@ export default async function ContactPage() {
       </div>
       <div>
         <p className="text-xs uppercase tracking-wider font-bold text-gray-600 mb-0.5">Écrivez-nous</p>
-        <a href={`mailto:${CONTACT_EMAIL}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors">
-          {CONTACT_EMAIL}
+        <a href={`mailto:${contenu.contact_email}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors break-all">
+          {contenu.contact_email}
         </a>
       </div>
     </div>

@@ -1,10 +1,7 @@
+// Adresse d'envoi des emails du site (domaine verifie dans Resend). C'est aussi
+// l'email affiche par defaut ; l'email et le telephone affiches se modifient
+// dans l'admin (Pages du site > Contact), voir lib/contenuSite.ts.
 export const CONTACT_EMAIL = "contact@entraide-aafd-valdesaone.fr";
-
-export const CONTACT_PHONE = "06 81 21 80 24";
-
-export const CONTACT_PERSON = "Sylvie Orgeret";
-
-export const CONTACT_PHONE_E164 = "+33681218024";
 
 export const INSTAGRAM_HANDLE = "@aafd_asso";
 export const INSTAGRAM_URL = "https://www.instagram.com/aafd_asso/";

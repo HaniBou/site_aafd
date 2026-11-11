@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/escapeHtml';
 import { formatDateHeure } from '@/lib/vente';
-import { CONTACT_EMAIL, MAIL_FROM, SITE_DOMAIN, SITE_URL } from '@/lib/siteConfig';
+import { MAIL_FROM, SITE_DOMAIN, SITE_URL } from '@/lib/siteConfig';
+import { getContenuSite } from '@/lib/firebase/fetchers';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -46,6 +47,7 @@ export async function sendReservationEmails({
   const sujetNom = String(clientNom).replace(/\s+/g, ' ').slice(0, 100);
 
   const aRetrait = Boolean(safe.dateRetrait || safe.lieuRetrait);
+  const { contact_email: emailAsso } = await getContenuSite();
 
   const blocRetrait = aRetrait
     ? `<div style="border-left: 3px solid #ea580c; background-color: #fff7ed; padding: 16px 20px; margin: 0 0 24px">
@@ -102,7 +104,7 @@ export async function sendReservationEmails({
             </div>
             <div style="border-top: 1px solid #e5e5e5; padding: 24px 32px; background-color: #fafafa">
               <p style="margin: 0 0 8px; font-size: 13px; color: #999">Des questions ?</p>
-              <p style="margin: 0; font-size: 13px"><a href="mailto:${CONTACT_EMAIL}" style="color: #ea580c; text-decoration: none">${CONTACT_EMAIL}</a></p>
+              <p style="margin: 0; font-size: 13px"><a href="mailto:${emailAsso}" style="color: #ea580c; text-decoration: none">${emailAsso}</a></p>
             </div>
           </div>
           <div style="max-width: 560px; margin: 16px auto; text-align: center"><p style="margin: 0; color: #999; font-size: 11px">Association AAFD — Val de Saône</p></div>
@@ -134,7 +136,7 @@ export async function sendReservationEmails({
 
   const { error } = await resend.emails.send({
     from: MAIL_FROM.reservations,
-    to: [CONTACT_EMAIL],
+    to: [emailAsso],
     replyTo: clientEmail,
     subject: `[Réservation] ${sujetPlat} - ${sujetNom}`,
     html: `

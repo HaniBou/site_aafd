@@ -4,7 +4,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '@/lib/firebase/admin';
 import { requireSession } from '@/lib/auth/requireSession';
 import { deleteCloudinaryImage } from '@/lib/cloudinary';
-import { champsDePage, trouverPage, TEXTE_MAX } from '@/lib/contenuSite';
+import { champsDePage, erreurTexte, trouverPage } from '@/lib/contenuSite';
 
 export const runtime = 'nodejs';
 
@@ -49,11 +49,9 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: `Texte invalide : ${champ.nom}` }, { status: 400 });
     }
     const texte = brut?.trim() ?? null;
-    if (texte === '') {
-      return NextResponse.json({ error: `« ${champ.nom} » ne peut pas être vide` }, { status: 400 });
-    }
-    if (texte && texte.length > TEXTE_MAX) {
-      return NextResponse.json({ error: `« ${champ.nom} » est trop long` }, { status: 400 });
+    const erreur = texte === null ? null : erreurTexte(champ, texte);
+    if (erreur) {
+      return NextResponse.json({ error: `« ${champ.nom} » : ${erreur}` }, { status: 400 });
     }
     textes[cle] = texte === null || texte === champ.defaut ? FieldValue.delete() : texte;
   }
@@ -76,6 +74,8 @@ export async function PUT(request: NextRequest) {
   }
 
   revalidatePath(page.chemin);
+  // Les coordonnees apparaissent aussi dans le pied de page de tout le site.
+  if (page.id === 'contact') revalidatePath('/', 'layout');
   if (page.id === 'actualites') revalidatePath('/actualites/[slug]', 'page');
   revalidatePath('/admin/pages');
   return NextResponse.json({ success: true });

@@ -1,4 +1,4 @@
-import { ASSOCIATION_FOUNDING_YEAR } from '@/lib/siteConfig';
+import { ASSOCIATION_FOUNDING_YEAR, CONTACT_EMAIL } from '@/lib/siteConfig';
 
 // Textes et photos du site modifiables depuis l'admin (« Pages du site »),
 // ranges par page puis par section, dans l'ordre ou ils apparaissent.
@@ -13,6 +13,9 @@ import { ASSOCIATION_FOUNDING_YEAR } from '@/lib/siteConfig';
 // Mise en forme des textes (voir components/TexteMisEnForme.tsx) :
 // - 'paragraphes' : une ligne vide separe deux paragraphes, **mot** = gras ;
 // - 'texte' : une seule ligne ; dans un titre, **mot** = partie en couleur.
+//
+// Un champ 'optionnel' peut etre vide : l'element est alors masque sur le site.
+// 'verification' controle le format saisi (email, numero de telephone).
 
 type DefChamp<Cle extends string = string> =
   | {
@@ -29,6 +32,8 @@ type DefChamp<Cle extends string = string> =
       nom: string;
       aide?: string;
       defaut: string;
+      optionnel?: boolean;
+      verification?: 'email' | 'telephone';
     };
 
 type DefPage<Cle extends string = string> = {
@@ -328,6 +333,36 @@ const DEFINITIONS = [
           { cle: 'bandeau_contact', type: 'photo', format: 'bandeau', nom: 'Bandeau', aide: AIDE_BANDEAU, defaut: '/images/hero_contact.webp' },
         ],
       },
+      {
+        titre: 'Coordonnées',
+        champs: [
+          {
+            cle: 'contact_telephone',
+            type: 'texte',
+            nom: 'Numéro de téléphone',
+            aide: 'Affiché sur la page Contact, en bas de toutes les pages et dans les mentions légales. Laissez vide pour ne plus afficher de numéro.',
+            defaut: '06 81 21 80 24',
+            optionnel: true,
+            verification: 'telephone',
+          },
+          {
+            cle: 'contact_personne',
+            type: 'texte',
+            nom: 'Personne à appeler',
+            aide: 'Nom affiché sous le numéro, sur la page Contact. Laissez vide pour ne pas l’afficher.',
+            defaut: 'Sylvie Orgeret',
+            optionnel: true,
+          },
+          {
+            cle: 'contact_email',
+            type: 'texte',
+            nom: 'Adresse email',
+            aide: 'Affichée partout sur le site. Les messages du formulaire de contact et les avis de réservation sont aussi envoyés à cette adresse.',
+            defaut: CONTACT_EMAIL,
+            verification: 'email',
+          },
+        ],
+      },
     ],
   },
 ] as const satisfies readonly DefPage[];
@@ -354,14 +389,43 @@ export function trouverPage(id: string): PageSite | undefined {
   return PAGES_SITE.find(page => page.id === id);
 }
 
+function estOptionnel(champ: ChampContenu): boolean {
+  return champ.type !== 'photo' && !!champ.optionnel;
+}
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const TELEPHONE_REGEX = /^\+?[\d\s.()-]{6,20}$/;
+
+// Message d'erreur pour un texte saisi dans l'admin (deja nettoye des espaces
+// autour), ou null s'il est valide.
+export function erreurTexte(champ: ChampContenu, texte: string): string | null {
+  if (champ.type === 'photo') return null;
+  if (!texte) {
+    return champ.optionnel ? null : "Ce champ ne peut pas être vide. Cliquez « Remettre l'original » si besoin.";
+  }
+  if (texte.length > TEXTE_MAX) return `Texte trop long (${TEXTE_MAX} caractères maximum).`;
+  if (champ.verification === 'email' && !EMAIL_REGEX.test(texte)) {
+    return 'Adresse email invalide (exemple : contact@exemple.fr).';
+  }
+  if (champ.verification === 'telephone' && !TELEPHONE_REGEX.test(texte)) {
+    return 'Numéro invalide (exemple : 06 12 34 56 78).';
+  }
+  return null;
+}
+
+export function lienTelephone(numero: string): string {
+  return `tel:${numero.replace(/[^\d+]/g, '')}`;
+}
+
 // Garde uniquement les valeurs modifiees valides d'un document Firestore brut.
+// Une valeur vide n'est gardee que pour un champ optionnel (element masque).
 export function lireContenuPersonnalise(
   data: Record<string, unknown> | undefined,
 ): Partial<ContenuSite> {
   const out: Partial<ContenuSite> = {};
-  for (const { cle } of TOUS_LES_CHAMPS) {
-    const valeur = data?.[cle];
-    if (typeof valeur === 'string' && valeur) out[cle] = valeur;
+  for (const champ of TOUS_LES_CHAMPS) {
+    const valeur = data?.[champ.cle];
+    if (typeof valeur === 'string' && (valeur || estOptionnel(champ))) out[champ.cle] = valeur;
   }
   return out;
 }

@@ -6,6 +6,8 @@ import type { Plat, Vente } from "@/types";
 import { formatDateHeure } from "@/lib/vente";
 import { Button } from "@/components/ui/Button";
 
+const MAX_QUANTITE = 4;
+
 type ReservationModalProps = {
   isOpen: boolean;
   plat: Plat | null;
@@ -18,8 +20,7 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
     nom: "",
     email: "",
     telephone: "",
-    quantite: 1,
-    message: ""
+    quantite: 1
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | "warning" | null>(null);
@@ -68,7 +69,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
           clientEmail: formData.email,
           clientTelephone: formData.telephone,
           quantite: formData.quantite,
-          message: formData.message || "",
         }),
       });
 
@@ -187,7 +187,7 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
               onChange={(e) => setFormData({ ...formData, quantite: parseInt(e.target.value) })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
             >
-              {Array.from({ length: Math.min(plat.quantite, 10) }, (_, i) => i + 1).map(num => (
+              {Array.from({ length: Math.min(plat.quantite, MAX_QUANTITE) }, (_, i) => i + 1).map(num => (
                 <option key={num} value={num}>{num}</option>
               ))}
             </select>
@@ -216,20 +216,6 @@ export default function ReservationModal({ isOpen, plat, vente, onClose }: Reser
               {vente.lieuRetrait && <p className="text-sm text-gray-600 mt-0.5">{vente.lieuRetrait}</p>}
             </div>
           )}
-
-          <div>
-            <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
-              Message (optionnel)
-            </label>
-            <textarea
-              id="message"
-              rows={3}
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
-              placeholder="Précisions, allergies, demandes particulières..."
-            />
-          </div>
 
           {submitStatus === "success" && (
             <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-3">

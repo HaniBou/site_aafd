@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { CONTACT_EMAIL, CONTACT_PHONE, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/siteConfig'
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/siteConfig'
+import { lienTelephone } from '@/lib/contenuSite'
 
-export function Footer() {
+// Coordonnees modifiables depuis l'admin (page Contact) ; telephone vide = masque.
+export function Footer({ telephone, email }: { telephone: string; email: string }) {
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
       <div className="mx-auto max-w-screen-2xl px-4 py-12 sm:px-6 lg:px-8">
@@ -65,21 +67,23 @@ export function Footer() {
 <div>
   <h3 className="mb-4 text-lg font-semibold text-blue-400">Contact</h3>
   <ul className="space-y-4 text-sm text-gray-300">
+    {telephone && (
     <li className="flex items-center gap-3">
       <svg className="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
       </svg>
-      <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} className="hover:text-blue-400 transition-colors">
-        {CONTACT_PHONE}
+      <a href={lienTelephone(telephone)} className="hover:text-blue-400 transition-colors">
+        {telephone}
       </a>
     </li>
+    )}
 
     <li className="flex items-center gap-3">
       <svg className="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
-      <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-blue-400 transition-colors">
-        {CONTACT_EMAIL}
+      <a href={`mailto:${email}`} className="hover:text-blue-400 transition-colors break-all">
+        {email}
       </a>
     </li>
 

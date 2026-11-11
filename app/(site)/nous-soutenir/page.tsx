@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { PageHero } from '@/components/PageHero'
-import { CONTACT_EMAIL } from '@/lib/siteConfig'
+import { getContenuSite } from '@/lib/firebase/fetchers'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Nous soutenir | AAFD Val de Saône', description: "Faites un don (66% déductible), devenez partenaire ou participez à nos événements.", url: '/nous-soutenir' },
 }
 
-export default function NousSoutenirPage() {
+export default async function NousSoutenirPage() {
+  const { contact_email: email } = await getContenuSite()
   return (
     <main className="min-h-screen bg-white">
       <PageHero
@@ -114,7 +115,7 @@ export default function NousSoutenirPage() {
                 <p className="text-sm text-blue-900 font-semibold mb-2">Contact pour les dons</p>
                 <p className="text-blue-800">
                   <strong>Email :</strong>{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}`} className="hover:underline">{CONTACT_EMAIL}</a>
+                  <a href={`mailto:${email}`} className="hover:underline break-all">{email}</a>
                 </p>
               </div>
             </div>

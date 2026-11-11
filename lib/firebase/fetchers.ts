@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { adminDb } from './admin';
 import { buildSlug } from '@/lib/slug';
 import { retraitAVenir } from '@/lib/vente';
@@ -160,14 +161,16 @@ export async function getContenuPersonnalise(): Promise<Partial<ContenuSite>> {
 
 // Pour les pages publiques : en cas d'erreur Firestore, on retombe sur les
 // textes et photos d'origine plutot que de casser la page.
-export async function getContenuSite(): Promise<ContenuSite> {
+// cache() : une seule lecture par requete, meme si le pied de page et la page
+// le demandent tous les deux.
+export const getContenuSite = cache(async (): Promise<ContenuSite> => {
   try {
     return completerContenu(await getContenuPersonnalise());
   } catch (error) {
     console.error('[contenu du site] chargement', error);
     return completerContenu({});
   }
-}
+});
 
 export async function getMomentByIdAdmin(id: string): Promise<Moment | null> {
   const doc = await adminDb.collection('moments').doc(id).get();

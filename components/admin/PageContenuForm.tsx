@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
   champsDePage,
+  erreurTexte,
   trouverPage,
-  TEXTE_MAX,
   type ChampContenu,
   type ContenuSite,
 } from '@/lib/contenuSite';
@@ -99,10 +99,8 @@ export default function PageContenuForm({
 
     const nouvellesErreurs: Record<string, string> = {};
     for (const champ of modifies) {
-      if (champ.type === 'photo') continue;
-      const texte = valeurs[champ.cle].trim();
-      if (!texte) nouvellesErreurs[champ.cle] = "Ce champ ne peut pas être vide. Cliquez « Remettre l'original » si besoin.";
-      else if (texte.length > TEXTE_MAX) nouvellesErreurs[champ.cle] = `Texte trop long (${TEXTE_MAX} caractères maximum).`;
+      const erreur = erreurTexte(champ, valeurs[champ.cle].trim());
+      if (erreur) nouvellesErreurs[champ.cle] = erreur;
     }
     if (Object.keys(nouvellesErreurs).length > 0) {
       setErreurs(nouvellesErreurs);
