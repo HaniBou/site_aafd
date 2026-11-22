@@ -39,8 +39,10 @@ export default async function AdminPagesSitePage() {
                 <h2 className="text-base font-bold text-gray-900 leading-snug mb-1">{page.nom}</h2>
                 <p className="text-sm text-gray-600 mb-2">{page.description}</p>
                 <p className="text-xs text-gray-500 mb-0">
-                  {nbTextes > 0 && `${nbTextes} texte${nbTextes > 1 ? 's' : ''} · `}
-                  {nbPhotos} photo{nbPhotos > 1 ? 's' : ''}
+                  {[
+                    nbTextes > 0 && `${nbTextes} texte${nbTextes > 1 ? 's' : ''}`,
+                    nbPhotos > 0 && `${nbPhotos} photo${nbPhotos > 1 ? 's' : ''}`,
+                  ].filter(Boolean).join(' · ')}
                   {nbModifies > 0 && (
                     <span className="ml-2 inline-block rounded-full bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700">
                       {nbModifies} modifié{nbModifies > 1 ? 's' : ''}

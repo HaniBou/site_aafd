@@ -24,7 +24,7 @@ export function Footer({ telephone, email }: { telephone: string; email: string 
             <p className="text-gray-300 text-sm leading-relaxed mb-4">
               Association d&apos;Aide aux Familles en Difficulté
               <br />
-              Accompagnement des familles réfugiées sur le Val de Saône
+              Accompagnement des familles demandeuses d&apos;asile sur le Val de Saône
             </p>
           </div>
 

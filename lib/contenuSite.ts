@@ -1,4 +1,10 @@
-import { ASSOCIATION_FOUNDING_YEAR, CONTACT_EMAIL } from '@/lib/siteConfig';
+import {
+  ASSOCIATION_ADDRESS,
+  ASSOCIATION_FOUNDING_YEAR,
+  ASSOCIATION_FULL_NAME,
+  ASSOCIATION_NAME,
+  CONTACT_EMAIL,
+} from '@/lib/siteConfig';
 
 // Textes et photos du site modifiables depuis l'admin (« Pages du site »),
 // ranges par page puis par section, dans l'ordre ou ils apparaissent.
@@ -46,6 +52,12 @@ type DefPage<Cle extends string = string> = {
 
 const AIDE_BANDEAU =
   'Bandeau très large en haut de la page : choisissez une photo en largeur, le haut et le bas seront rognés.';
+
+// Mentions legales : voir TexteStructure dans components/TexteMisEnForme.tsx.
+const AIDE_RUBRIQUE_LEGALE =
+  'Une ligne vide sépare deux paragraphes. Commencez des lignes par « - » pour faire une liste. ' +
+  'Un paragraphe entier entre ** devient un sous-titre. Écrivez [email] pour afficher l’adresse email ' +
+  'de contact (celle de la page Contact). Laissez vide pour retirer la rubrique : les numéros se décalent tout seuls.';
 
 const DEFINITIONS = [
   {
@@ -360,6 +372,172 @@ const DEFINITIONS = [
             aide: 'Affichée partout sur le site. Les messages du formulaire de contact et les avis de réservation sont aussi envoyés à cette adresse.',
             defaut: CONTACT_EMAIL,
             verification: 'email',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mentions-legales',
+    nom: 'Mentions légales',
+    chemin: '/mentions-legales',
+    description: 'Éditeur, hébergeur, données personnelles, cookies',
+    sections: [
+      {
+        titre: 'Rubrique — Éditeur du site',
+        champs: [
+          { cle: 'ml_editeur_titre', type: 'texte', nom: 'Titre', defaut: 'Éditeur du site' },
+          {
+            cle: 'ml_editeur_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: 'Le téléphone et l’email de la page Contact sont ajoutés automatiquement à la fin. Revenez à la ligne pour chaque information.',
+            defaut:
+              `Le présent site est édité par :\n\n` +
+              `**Dénomination :** ${ASSOCIATION_FULL_NAME} (${ASSOCIATION_NAME} Val de Saône)\n` +
+              `**Forme juridique :** Association loi 1901 à but non lucratif\n` +
+              `**Siège social :** ${ASSOCIATION_ADDRESS.streetAddress}, ${ASSOCIATION_ADDRESS.postalCode} ${ASSOCIATION_ADDRESS.addressLocality}\n` +
+              `**Numéro RNA :** W691069843\n` +
+              `**Numéro SIRET :** 504 653 833 00013`,
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Direction de la publication',
+        champs: [
+          { cle: 'ml_publication_titre', type: 'texte', nom: 'Titre', defaut: 'Directrice de la publication' },
+          {
+            cle: 'ml_publication_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: 'À mettre à jour à chaque changement de présidence.',
+            defaut: "La directrice de la publication est **Marie Claude ACKER**, en sa qualité de présidente de l'association.",
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Hébergement',
+        champs: [
+          { cle: 'ml_hebergement_titre', type: 'texte', nom: 'Titre', defaut: 'Hébergement' },
+          {
+            cle: 'ml_hebergement_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: AIDE_RUBRIQUE_LEGALE,
+            optionnel: true,
+            defaut:
+              `Le site est hébergé par :\n\n` +
+              `**Société :** Vercel Inc.\n` +
+              `**Adresse :** 340 Pine Street, Suite 1200, San Francisco, CA 94104, États-Unis\n` +
+              `**Site web :** vercel.com`,
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Propriété intellectuelle',
+        champs: [
+          { cle: 'ml_propriete_titre', type: 'texte', nom: 'Titre', defaut: 'Propriété intellectuelle' },
+          {
+            cle: 'ml_propriete_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: AIDE_RUBRIQUE_LEGALE,
+            optionnel: true,
+            defaut:
+              `Les textes et le logo de ce site sont la propriété de l'AAFD Val de Saône et sont protégés par les lois françaises et internationales relatives à la propriété intellectuelle. Toute reproduction sans autorisation préalable écrite est interdite.\n\n` +
+              `La majorité des photographies utilisées sur ce site proviennent de **Pexels** (pexels.com), plateforme de photos libres de droits, et sont utilisées conformément à la licence Pexels.`,
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Données personnelles',
+        champs: [
+          { cle: 'ml_donnees_titre', type: 'texte', nom: 'Titre', defaut: 'Protection des données personnelles' },
+          {
+            cle: 'ml_donnees_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: AIDE_RUBRIQUE_LEGALE,
+            optionnel: true,
+            defaut:
+              `Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement (UE) 2016/679) et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant.\n\n` +
+              `**Données collectées**\n\n` +
+              `Ce site collecte les données que vous nous transmettez volontairement via :\n\n` +
+              `- Le **formulaire de contact** : nom, adresse e-mail, message. Ces données sont utilisées exclusivement pour répondre à votre demande.\n` +
+              `- Le **formulaire de réservation de plats** : nom, adresse e-mail, quantités commandées. Ces données servent uniquement à traiter et confirmer votre commande.\n\n` +
+              `Ces données sont transmises via **Resend** (service d'envoi d'e-mails) et stockées temporairement sur **Firebase** (Google). Elles ne sont jamais cédées à des tiers à des fins commerciales.\n\n` +
+              `Une **mesure de fréquentation anonyme** est par ailleurs réalisée, sans cookie et sans donnée personnelle (voir la rubrique Cookies ci-dessous).\n\n` +
+              `**Bases légales**\n\n` +
+              `- Formulaires de contact et de réservation : exécution de mesures précontractuelles et intérêt légitime de l'association à répondre à votre demande.\n` +
+              `- Mesure de fréquentation : intérêt légitime de l'association à connaître l'usage de son site, au moyen de statistiques anonymes.\n\n` +
+              `**Durée de conservation**\n\n` +
+              `Les données du formulaire de contact sont conservées le temps nécessaire au traitement de votre demande, puis supprimées. Les données de réservation de plats sont supprimées à l'issue de chaque vente.\n\n` +
+              `**Vos droits**\n\n` +
+              `Pour exercer vos droits (accès, rectification, suppression, opposition), contactez-nous à [email]. En cas de difficulté, vous pouvez adresser une réclamation à la **CNIL** (Commission Nationale de l'Informatique et des Libertés).`,
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Cookies',
+        champs: [
+          { cle: 'ml_cookies_titre', type: 'texte', nom: 'Titre', defaut: 'Cookies' },
+          {
+            cle: 'ml_cookies_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: `Décrit le fonctionnement technique du site : à faire relire par la personne qui gère le site avant de modifier. ${AIDE_RUBRIQUE_LEGALE}`,
+            optionnel: true,
+            defaut:
+              `Ce site **n'utilise aucun cookie publicitaire, de traçage ou de mesure d'audience tierce**. Il ne fait appel à aucun service d'analyse externe : ni Google Analytics, ni équivalent. C'est pourquoi aucune bannière de consentement ne vous est présentée.\n\n` +
+              `**Cookies strictement nécessaires**\n\n` +
+              `Un seul cookie est susceptible d'être déposé, exempté de consentement car indispensable au fonctionnement du site :\n\n` +
+              `- admin_session — maintient la connexion à l'espace bénévoles. Déposé uniquement après authentification d'un membre de l'association. Les visiteurs du site public ne le reçoivent jamais.\n\n` +
+              `**Compteur de fréquentation anonyme**\n\n` +
+              `L'association utilise son propre compteur de visites, hébergé avec le site et sans aucun service tiers. Seuls des **totaux** sont enregistrés : nombre de visites par jour, nombre de consultations par page, et nom de domaine du site par lequel vous êtes arrivé (par exemple « Google » ou « Instagram »).\n\n` +
+              `Aucune adresse IP, aucun identifiant de visiteur, aucun parcours individuel et aucune adresse complète de provenance ne sont conservés. Ces statistiques ne permettent pas de vous identifier, ne sont recoupées avec aucun autre traitement et ne sont transmises à personne.\n\n` +
+              `Un simple marqueur technique (aafd_visite_comptee) est placé dans la mémoire de session de votre navigateur, uniquement pour ne pas compter deux fois la même visite. Il ne contient aucune valeur identifiante et disparaît dès la fermeture de l'onglet.\n\n` +
+              `Strictement limitée à la production de statistiques anonymes pour le seul compte de l'association, cette mesure relève de l'exemption de consentement prévue par la CNIL pour la mesure d'audience. Vous pouvez néanmoins vous y opposer en nous écrivant à [email], ou en paramétrant votre navigateur pour bloquer le stockage local.`,
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Liens hypertextes',
+        champs: [
+          { cle: 'ml_liens_titre', type: 'texte', nom: 'Titre', defaut: 'Liens hypertextes' },
+          {
+            cle: 'ml_liens_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: AIDE_RUBRIQUE_LEGALE,
+            optionnel: true,
+            defaut: "Le site peut contenir des liens vers des sites tiers. L'AAFD Val de Saône ne saurait être tenue responsable du contenu de ces sites ou des pratiques de confidentialité de leurs éditeurs.",
+          },
+        ],
+      },
+      {
+        titre: 'Rubrique — Droit applicable',
+        champs: [
+          { cle: 'ml_droit_titre', type: 'texte', nom: 'Titre', defaut: 'Droit applicable' },
+          {
+            cle: 'ml_droit_texte',
+            type: 'paragraphes',
+            nom: 'Texte',
+            aide: AIDE_RUBRIQUE_LEGALE,
+            optionnel: true,
+            defaut: 'Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents.',
+          },
+        ],
+      },
+      {
+        titre: 'Bas de page',
+        champs: [
+          {
+            cle: 'ml_mise_a_jour',
+            type: 'texte',
+            nom: 'Date de dernière mise à jour',
+            aide: 'Affichée « Dernière mise à jour : … ». Pensez à la changer après chaque modification. Laissez vide pour ne pas l’afficher.',
+            defaut: 'septembre 2026',
+            optionnel: true,
           },
         ],
       },
