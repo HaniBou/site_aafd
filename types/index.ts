@@ -47,16 +47,25 @@ export type Temoignage = {
   date: string;
 };
 
+export type LigneCommande = {
+  platId: string;
+  platNom: string;
+  quantite: number;
+  prixUnitaire?: number;
+};
+
+// Une commande (document de la collection « reservations ») peut contenir
+// plusieurs plats. Les anciennes reservations a un seul plat sont converties
+// en une ligne a la lecture (voir lignesDeCommande dans lib/commande.ts).
 export type Reservation = {
   id: string;
-  platNom: string;
-  platId: string;
   venteId?: string;
   venteTitre?: string;
   clientNom: string;
   clientEmail: string;
   clientTelephone: string;
-  quantite: number;
+  lignes: LigneCommande[];
+  total?: number;
   message?: string;
   dateReservation: string;
   emailEnvoye?: boolean;

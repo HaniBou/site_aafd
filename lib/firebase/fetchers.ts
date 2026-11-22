@@ -3,6 +3,7 @@ import { adminDb } from './admin';
 import { buildSlug } from '@/lib/slug';
 import { retraitAVenir } from '@/lib/vente';
 import { completerContenu, lireContenuPersonnalise, type ContenuSite } from '@/lib/contenuSite';
+import { lignesDeCommande } from '@/lib/commande';
 import type { Plat, Actualite, Temoignage, Reservation, Moment, Vente } from '@/types';
 
 function serializeDoc(data: Record<string, unknown>): Record<string, unknown> {
@@ -141,8 +142,12 @@ export async function getTemoignagesAdmin(): Promise<Temoignage[]> {
 export async function getReservationsAdmin(): Promise<Reservation[]> {
   const snap = await adminDb.collection('reservations').get();
   const items = snap.docs.map(doc => {
+    // Les champs d'une ancienne reservation a un seul plat passent dans « lignes ».
     const data = serializeDoc(doc.data());
-    return { id: doc.id, ...data } as Reservation;
+    delete data.platId;
+    delete data.platNom;
+    delete data.quantite;
+    return { id: doc.id, ...data, lignes: lignesDeCommande(doc.data()) } as Reservation;
   });
   return items.sort(
     (a, b) =>

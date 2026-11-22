@@ -177,9 +177,8 @@ app/
     actualites/[slug]/  détail d'un article (URL parlante)
   admin/            back-office
   api/
-    reservations/   création de réservation (transaction serveur)
+    reservations/   création d'une commande de plusieurs plats (transaction serveur + emails)
     send-contact/   email du formulaire de contact
-    send-reservation/ emails de confirmation
     admin/          CRUD protégé + upload
 components/         composants UI
 lib/

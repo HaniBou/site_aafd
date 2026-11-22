@@ -25,7 +25,8 @@ export default async function AdminVentePage({
 
   const platIds = new Set(plats.map(plat => plat.id));
   const commandes = reservations.filter(
-    reservation => reservation.venteId === id || platIds.has(reservation.platId),
+    reservation =>
+      reservation.venteId === id || reservation.lignes.some(ligne => platIds.has(ligne.platId)),
   );
 
   return (

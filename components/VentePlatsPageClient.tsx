@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
-import ReservationModal from "@/components/ReservationModal";
+import ReservationModal, { type LignePanier } from "@/components/ReservationModal";
+import { MAX_PAR_PLAT, formatPrix } from "@/lib/commande";
 import { PageHero } from "@/components/PageHero";
 import PlatCard from "@/components/PlatCard";
 import type { Plat, Vente } from "@/types";
@@ -23,6 +24,38 @@ type Props = {
 
 const PLAT_ICONS = ["🍝", "🥘", "🍰", "🍲", "🥗", "🍛", "🍕", "🥙"];
 
+// Panier stocke dans le navigateur. Si le stockage est indisponible
+// (navigation privee stricte...), il reste en memoire le temps de la visite.
+const EVENEMENT_PANIER = "aafd-panier";
+const panierEnMemoire = new Map<string, string>();
+
+function lirePanierBrut(cle: string): string {
+  try {
+    return localStorage.getItem(cle) ?? "{}";
+  } catch {
+    return panierEnMemoire.get(cle) ?? "{}";
+  }
+}
+
+function ecrirePanierBrut(cle: string, valeur: string) {
+  try {
+    localStorage.setItem(cle, valeur);
+  } catch {
+    panierEnMemoire.set(cle, valeur);
+  }
+  window.dispatchEvent(new Event(EVENEMENT_PANIER));
+}
+
+// « storage » : le panier suit aussi les changements faits dans un autre onglet.
+function abonnerPanier(rappel: () => void) {
+  window.addEventListener("storage", rappel);
+  window.addEventListener(EVENEMENT_PANIER, rappel);
+  return () => {
+    window.removeEventListener("storage", rappel);
+    window.removeEventListener(EVENEMENT_PANIER, rappel);
+  };
+}
+
 export default function VentePlatsPageClient({
   vente,
   plats,
@@ -32,16 +65,47 @@ export default function VentePlatsPageClient({
   loadError = false,
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
+  // Panier : platId -> quantite, garde dans le navigateur (par vente) pour ne
+  // pas perdre sa selection en rechargeant la page.
+  const clePanier = vente ? `aafd_panier_${vente.id}` : '';
+  const panierBrut = useSyncExternalStore(
+    abonnerPanier,
+    () => (clePanier ? lirePanierBrut(clePanier) : '{}'),
+    () => '{}',
+  );
+  const panier = useMemo<Record<string, number>>(() => {
+    try {
+      const valeur = JSON.parse(panierBrut);
+      return valeur && typeof valeur === 'object' ? valeur : {};
+    } catch {
+      return {};
+    }
+  }, [panierBrut]);
 
-  const openModal = (plat: Plat) => {
-    setSelectedPlat(plat);
-    setIsModalOpen(true);
+  const enregistrerPanier = (nouveau: Record<string, number>) => {
+    if (clePanier) ecrirePanierBrut(clePanier, JSON.stringify(nouveau));
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedPlat(null);
+  const quantiteMax = (plat: Plat) => Math.min(plat.quantite, MAX_PAR_PLAT);
+
+  // Calcule a partir des plats affiches : un plat retire ou dont le stock a
+  // baisse entre-temps est ignore ou ramene au maximum possible.
+  const lignes: LignePanier[] = commandesOuvertes
+    ? plats
+        .map(plat => ({ plat, quantite: Math.min(panier[plat.id] ?? 0, quantiteMax(plat)) }))
+        .filter(ligne => ligne.quantite > 0)
+    : [];
+  const nbPortions = lignes.reduce((somme, ligne) => somme + ligne.quantite, 0);
+  const total = lignes.reduce((somme, ligne) => somme + ligne.plat.prix * ligne.quantite, 0);
+
+  const changerQuantite = (platId: string, quantite: number) => {
+    const plat = plats.find(p => p.id === platId);
+    if (!plat) return;
+    const nouveau = { ...panier };
+    const bornee = Math.max(0, Math.min(quantite, quantiteMax(plat)));
+    if (bornee === 0) delete nouveau[platId];
+    else nouveau[platId] = bornee;
+    enregistrerPanier(nouveau);
   };
 
   return (
@@ -194,7 +258,9 @@ export default function VentePlatsPageClient({
                     >
                       <PlatCard
                         plat={plat}
-                        onReserve={openModal}
+                        quantiteCommandee={lignes.find(ligne => ligne.plat.id === plat.id)?.quantite ?? 0}
+                        quantiteMax={quantiteMax(plat)}
+                        onChangerQuantite={quantite => changerQuantite(plat.id, quantite)}
                         reservationOuverte={commandesOuvertes}
                         iconFallback={PLAT_ICONS[index % PLAT_ICONS.length]}
                       />
@@ -218,22 +284,22 @@ export default function VentePlatsPageClient({
             <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
               {[
                 {
-                  titre: 'Choisissez votre plat',
+                  titre: 'Choisissez vos plats',
                   texte: vente
-                    ? 'Parcourez les plats de la vente et cliquez sur « Réserver ce plat »'
+                    ? `Ajoutez à votre commande les plats et desserts qui vous font envie (${MAX_PAR_PLAT} maximum par plat)`
                     : 'Dès qu’une vente est ouverte, les plats s’affichent sur cette page',
                 },
                 {
-                  titre: 'Réservez en ligne',
+                  titre: 'Validez votre commande',
                   texte: vente?.dateLimiteCommande
-                    ? `Remplissez le formulaire avec vos coordonnées, avant le ${formatDateJour(vente.dateLimiteCommande)}`
-                    : 'Remplissez le formulaire avec vos coordonnées, avant la date limite',
+                    ? `Cliquez sur « Ma commande » et indiquez vos coordonnées, avant le ${formatDateJour(vente.dateLimiteCommande)}`
+                    : 'Cliquez sur « Ma commande » et indiquez vos coordonnées, avant la date limite',
                 },
                 {
                   titre: 'Venez retirer',
                   texte: vente?.dateRetrait
-                    ? `Récupérez votre plat le ${formatDateJour(vente.dateRetrait)} et réglez sur place`
-                    : 'Récupérez votre plat le jour du retrait et réglez sur place',
+                    ? `Récupérez votre commande le ${formatDateJour(vente.dateRetrait)} et réglez sur place`
+                    : 'Récupérez votre commande le jour du retrait et réglez sur place',
                 },
               ].map((etape, i) => (
                 <Reveal key={etape.titre} delay={i * 130}>
@@ -261,13 +327,44 @@ export default function VentePlatsPageClient({
         </section>
       )}
 
-      {isModalOpen && selectedPlat && (
+      {nbPortions > 0 && !isModalOpen && (
+        <>
+          {/* Espace pour que la barre ne cache pas le bas de la page. */}
+          <div className="h-24" aria-hidden="true" />
+          <div
+            className="fixed inset-x-0 bottom-0 z-[55] p-3 md:bottom-6 md:left-1/2 md:right-auto md:w-full md:max-w-md md:-translate-x-1/2 md:p-0"
+            style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+          >
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="w-full flex items-center justify-between gap-3 rounded-2xl bg-orange-700 px-5 py-3.5 text-white shadow-2xl hover:bg-orange-800 transition-colors"
+            >
+              <span className="text-left">
+                <span className="block text-xs font-medium text-orange-100">Ma commande</span>
+                <span className="block font-bold">
+                  {nbPortions} plat{nbPortions > 1 ? 's' : ''} · {formatPrix(total)}
+                </span>
+              </span>
+              <span className="flex items-center gap-1.5 rounded-xl bg-white px-4 py-2 text-sm font-bold text-orange-700">
+                Valider
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </>
+      )}
+
+      {isModalOpen && (
         <ReservationModal
-          key={selectedPlat.id}
-          isOpen
-          plat={selectedPlat}
+          lignes={lignes}
           vente={vente}
-          onClose={closeModal}
+          quantiteMax={quantiteMax}
+          onChangerQuantite={changerQuantite}
+          onCommandeEnregistree={() => enregistrerPanier({})}
+          onClose={() => setIsModalOpen(false)}
         />
       )}
 

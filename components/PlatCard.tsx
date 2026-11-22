@@ -7,14 +7,19 @@ import { Button } from "@/components/ui/Button";
 
 interface PlatCardProps {
   plat: Plat;
-  onReserve: (plat: Plat) => void;
+  // Quantite de ce plat dans la commande en cours, et maximum autorise.
+  quantiteCommandee: number;
+  quantiteMax: number;
+  onChangerQuantite: (quantite: number) => void;
   reservationOuverte?: boolean;
   iconFallback?: string;
 }
 
 export default function PlatCard({
   plat,
-  onReserve,
+  quantiteCommandee,
+  quantiteMax,
+  onChangerQuantite,
   reservationOuverte = true,
   iconFallback = "🍽️",
 }: PlatCardProps) {
@@ -132,24 +137,58 @@ export default function PlatCard({
             </div>
           )}
         </div>
-        <Button
-          variant="primary"
-          size="sm"
-          shape="rounded"
-          fullWidth
-          className="mt-1"
-          onClick={e => {
-            e.stopPropagation();
-            onReserve(plat);
-          }}
-          disabled={!reservationOuverte || plat.quantite === 0}
-        >
-          {!reservationOuverte
-            ? 'Réservations closes'
-            : plat.quantite > 0
-            ? 'Réserver ce plat'
-            : 'Non disponible'}
-        </Button>
+        {reservationOuverte && quantiteCommandee > 0 ? (
+          <div className="mt-1">
+            <div className="flex items-center justify-between gap-2 rounded-xl border-2 border-orange-700 bg-orange-50 p-1">
+              <button
+                type="button"
+                onClick={() => onChangerQuantite(quantiteCommandee - 1)}
+                aria-label={quantiteCommandee === 1 ? `Retirer ${plat.nom} de la commande` : `Un ${plat.nom} de moins`}
+                className="min-w-11 min-h-11 rounded-lg bg-white text-orange-700 text-xl font-bold hover:bg-orange-100 transition-colors"
+              >
+                −
+              </button>
+              <span className="text-sm font-semibold text-orange-900" aria-live="polite">
+                {quantiteCommandee} dans ma commande
+              </span>
+              <button
+                type="button"
+                onClick={() => onChangerQuantite(quantiteCommandee + 1)}
+                disabled={quantiteCommandee >= quantiteMax}
+                aria-label={`Un ${plat.nom} de plus`}
+                className="min-w-11 min-h-11 rounded-lg bg-white text-orange-700 text-xl font-bold hover:bg-orange-100 transition-colors disabled:opacity-40 disabled:hover:bg-white"
+              >
+                +
+              </button>
+            </div>
+            {quantiteCommandee >= quantiteMax && (
+              <p className="mt-1 text-xs text-gray-500">
+                {plat.quantite > quantiteMax
+                  ? `${quantiteMax} maximum par commande`
+                  : 'Plus de portions disponibles'}
+              </p>
+            )}
+          </div>
+        ) : (
+          <Button
+            variant="primary"
+            size="sm"
+            shape="rounded"
+            fullWidth
+            className="mt-1"
+            onClick={e => {
+              e.stopPropagation();
+              onChangerQuantite(1);
+            }}
+            disabled={!reservationOuverte || plat.quantite === 0}
+          >
+            {!reservationOuverte
+              ? 'Réservations closes'
+              : plat.quantite > 0
+              ? 'Ajouter à ma commande'
+              : 'Non disponible'}
+          </Button>
+        )}
       </div>
     </div>
   );

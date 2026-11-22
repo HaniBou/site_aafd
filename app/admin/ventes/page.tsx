@@ -16,7 +16,7 @@ export default async function AdminVentesPage() {
   const resumes: VenteResume[] = ventes.map(vente => {
     const commandes = reservations.filter(
       reservation =>
-        (reservation.venteId ?? venteIdParPlat.get(reservation.platId)) === vente.id,
+        (reservation.venteId ?? venteIdParPlat.get(reservation.lignes[0]?.platId ?? '')) === vente.id,
     );
     return {
       ...vente,

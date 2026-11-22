@@ -4,6 +4,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { revalidatePath } from 'next/cache';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/session';
+import { lignesDeCommande } from '@/lib/commande';
 
 export const runtime = 'nodejs';
 
@@ -42,21 +43,23 @@ export async function DELETE(
   }
 }
 
+// Annule toute la commande et remet chaque plat en stock (sauf ceux qui ont
+// ete supprimes entre-temps).
 async function cancelReservation(id: string, data: FirebaseFirestore.DocumentData) {
-  const platId = data.platId as string | undefined;
-  const quantite = Number(data.quantite);
+  const lignes = lignesDeCommande(data).filter(ligne => ligne.platId && ligne.quantite > 0);
 
-  let platExiste = false;
-  if (platId) {
-    platExiste = (await adminDb.collection('plats').doc(platId).get()).exists;
-  }
+  const platDocs = lignes.length > 0
+    ? await adminDb.getAll(...lignes.map(ligne => adminDb.collection('plats').doc(ligne.platId)))
+    : [];
+  const existants = new Set(platDocs.filter(doc => doc.exists).map(doc => doc.id));
 
   const batch = adminDb.batch();
   batch.delete(adminDb.collection('reservations').doc(id));
 
-  if (platExiste && Number.isFinite(quantite) && quantite > 0) {
-    batch.update(adminDb.collection('plats').doc(platId!), {
-      quantite: FieldValue.increment(quantite),
+  for (const ligne of lignes) {
+    if (!existants.has(ligne.platId)) continue;
+    batch.update(adminDb.collection('plats').doc(ligne.platId), {
+      quantite: FieldValue.increment(ligne.quantite),
     });
   }
 
@@ -64,5 +67,8 @@ async function cancelReservation(id: string, data: FirebaseFirestore.DocumentDat
 
   revalidatePath('/vente-plats');
   revalidatePath('/');
-  return NextResponse.json({ success: true, stockRestitue: platExiste });
+  return NextResponse.json({
+    success: true,
+    stockRestitue: existants.size === lignes.length,
+  });
 }
